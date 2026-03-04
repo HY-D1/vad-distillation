@@ -220,10 +220,10 @@ def find_audio_files(data_dir: str, compute_durations: bool = True,
             'speaker_id': speaker_id,
             'session': session,
             'utt_id': utt_id,
-            'path': str(wav_file.relative_to(Path.cwd())),
+            'path': str(wav_file),
             'duration': duration,
             'text': text,
-            'transcript_path': str(transcript_path.relative_to(Path.cwd())) if transcript_path else None,
+            'transcript_path': str(transcript_path) if transcript_path else None,
         })
     
     # Report corrupt files
