@@ -93,10 +93,13 @@ class DistillationLoss(nn.Module):
 class VADDataset(Dataset):
     """Dummy dataset for testing. Replace with actual TORGO dataset."""
     
-    def __init__(self, num_samples: int = 100, seq_len: int = 100, n_mels: int = 40):
+    def __init__(self, num_samples: int = 100, seq_len: int = 100, n_mels: int = 40, cnn_stride: int = 4):
         self.num_samples = num_samples
         self.seq_len = seq_len
         self.n_mels = n_mels
+        self.cnn_stride = cnn_stride
+        # Labels and teacher probs must match downsampled output length
+        self.label_len = seq_len // cnn_stride
     
     def __len__(self):
         return self.num_samples
@@ -105,12 +108,12 @@ class VADDataset(Dataset):
         # Random mel spectrogram
         mels = torch.randn(self.seq_len, self.n_mels)
         
-        # Random hard labels (0 or 1)
-        hard_labels = torch.rand(self.seq_len) > 0.5
+        # Random hard labels (0 or 1) - match downsampled length
+        hard_labels = torch.rand(self.label_len) > 0.5
         hard_labels = hard_labels.float()
         
-        # Random teacher probabilities
-        teacher_probs = torch.rand(self.seq_len)
+        # Random teacher probabilities - match downsampled length
+        teacher_probs = torch.rand(self.label_len)
         
         return {
             'mels': mels,
@@ -197,10 +200,14 @@ def main():
     print(f"Model size: {model.get_model_size_kb():.2f} KB")
     
     # Create dataset (dummy for smoke test)
+    # CNN stride = 2^num_cnn_layers (each pool halves the time dimension)
+    num_cnn_layers = len(config.get('model', {}).get('cnn_channels', [16, 32]))
+    cnn_stride = 2 ** num_cnn_layers
     dataset = VADDataset(
         num_samples=config.get('num_samples', 100),
         seq_len=config.get('seq_len', 100),
-        n_mels=config.get('model', {}).get('n_mels', 40)
+        n_mels=config.get('model', {}).get('n_mels', 40),
+        cnn_stride=cnn_stride
     )
     dataloader = DataLoader(
         dataset,

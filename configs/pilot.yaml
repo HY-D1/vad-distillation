@@ -10,8 +10,8 @@ device: cpu  # Use cpu for smoke test
 # Model architecture
 model:
   n_mels: 40
-  cnn_channels: [16, 32]
-  gru_hidden: 32
+  cnn_channels: [8, 16]    # Reduced for ≤500KB target (was [16, 32])
+  gru_hidden: 24           # Reduced for ≤500KB target (was 32)
   gru_layers: 2
   dropout: 0.0
 
