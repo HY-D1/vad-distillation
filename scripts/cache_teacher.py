@@ -96,41 +96,75 @@ def get_audio_duration(audio_path: str) -> float:
 
 def get_speech_probs(
     model,
+    utils,
     audio: torch.Tensor,
     sampling_rate: int = 16000,
-    batch_size: int = 1,
 ) -> np.ndarray:
     """
     Get frame-level speech probabilities from Silero VAD.
+    Uses VADIterator for proper chunked processing.
     
     Args:
         model: Silero VAD model
+        utils: Silero VAD utilities (get_speech_timestamps, etc.)
         audio: Audio tensor (samples,)
         sampling_rate: Sample rate
-        batch_size: Unused (for compatibility)
     
     Returns:
         probs: Speech probabilities (num_frames,)
     """
+    # Get utility functions
+    (get_speech_timestamps,
+     save_audio,
+     read_audio,
+     VADIterator,
+     collect_chunks) = utils
+    
+    device = next(model.parameters()).device
+    
+    # Convert to numpy for processing
+    if isinstance(audio, torch.Tensor):
+        audio_np = audio.cpu().numpy()
+    else:
+        audio_np = audio
+    
+    # Silero VAD processes audio in chunks and returns timestamps
+    # We'll use get_speech_timestamps which internally collects probabilities
     model.reset_states()
     
     with torch.no_grad():
-        # Silero expects shape (batch, samples) or (samples,)
-        if audio.dim() == 1:
-            audio = audio.unsqueeze(0)
-        
-        # Move to same device as model
-        device = next(model.parameters()).device
-        audio = audio.to(device)
-        
-        # Get probabilities
-        probs = model(audio, sampling_rate)
-        
-        # Ensure output is 1D
-        if probs.dim() > 1:
-            probs = probs.squeeze()
-        
-        return probs.cpu().numpy()
+        # Get timestamps - this processes the audio in proper chunks
+        speech_timestamps = get_speech_timestamps(
+            torch.tensor(audio_np).to(device),
+            model,
+            sampling_rate=sampling_rate,
+            threshold=0.5,
+            min_speech_duration_ms=250,
+            max_speech_duration_s=float('inf'),
+            min_silence_duration_ms=100,
+        )
+    
+    # Now compute frame-level probabilities by processing in chunks
+    window_size_samples = 512 if sampling_rate == 16000 else 256  # 32ms chunks
+    
+    model.reset_states()
+    speech_probs = []
+    
+    with torch.no_grad():
+        for i in range(0, len(audio_np), window_size_samples):
+            chunk = audio_np[i: i + window_size_samples]
+            
+            # Pad the last chunk if needed
+            if len(chunk) < window_size_samples:
+                chunk = np.pad(chunk, (0, window_size_samples - len(chunk)))
+            
+            chunk_tensor = torch.tensor(chunk, dtype=torch.float32).unsqueeze(0).to(device)
+            
+            # Get probability for this chunk
+            prob = model(chunk_tensor, sampling_rate).item()
+            speech_probs.append(prob)
+    
+    return np.array(speech_probs, dtype=np.float32)
 
 
 def get_cache_filename(row: Dict) -> str:
@@ -166,6 +200,7 @@ def process_single_file(
     row: Dict,
     output_dir: Path,
     model,
+    utils,
     verify: bool = False,
 ) -> Tuple[str, Optional[str]]:
     """
@@ -175,6 +210,7 @@ def process_single_file(
         row: Manifest row
         output_dir: Output directory
         model: Silero VAD model
+        utils: Silero VAD utilities
         verify: Verify cached files
     
     Returns:
@@ -182,9 +218,13 @@ def process_single_file(
     """
     audio_path = Path(row['path'])
     
-    # Make absolute if relative
+    # Handle relative paths - manifest paths already include 'data/' prefix
     if not audio_path.is_absolute():
-        audio_path = Path('data') / audio_path
+        # Check if path already starts with 'data/'
+        if str(audio_path).startswith('data/'):
+            audio_path = audio_path  # Already correct
+        else:
+            audio_path = Path('data') / audio_path
     
     cache_filename = get_cache_filename(row)
     cache_path = output_dir / cache_filename
@@ -198,7 +238,7 @@ def process_single_file(
         audio = load_audio(str(audio_path), SILERO_SR)
         
         # Get speech probabilities
-        probs = get_speech_probs(model, audio, SILERO_SR)
+        probs = get_speech_probs(model, utils, audio, SILERO_SR)
         
         if probs is None or len(probs) == 0:
             return 'failed', "No probabilities returned"
@@ -217,6 +257,7 @@ def process_batch(
     rows: List[Dict],
     output_dir: Path,
     model,
+    utils,
     device: str = 'cpu',
 ) -> Tuple[int, int, List[str]]:
     """
@@ -226,6 +267,7 @@ def process_batch(
         rows: List of manifest rows
         output_dir: Output directory
         model: Silero VAD model
+        utils: Silero VAD utilities
         device: Device string
     
     Returns:
@@ -240,9 +282,13 @@ def process_batch(
     for row in rows:
         audio_path = Path(row['path'])
         
-        # Make absolute if relative
+        # Handle relative paths - manifest paths already include 'data/' prefix
         if not audio_path.is_absolute():
-            audio_path = Path('data') / audio_path
+            # Check if path already starts with 'data/'
+            if str(audio_path).startswith('data/'):
+                audio_path = audio_path  # Already correct
+            else:
+                audio_path = Path('data') / audio_path
         
         cache_filename = get_cache_filename(row)
         cache_path = output_dir / cache_filename
@@ -258,7 +304,7 @@ def process_batch(
             
             # Get speech probabilities
             with torch.no_grad():
-                probs = get_speech_probs(model, audio, SILERO_SR)
+                probs = get_speech_probs(model, utils, audio, SILERO_SR)
             
             # Save
             cache_path.parent.mkdir(parents=True, exist_ok=True)
@@ -378,7 +424,7 @@ def process_teacher_manifest(
         if is_interrupted_func and is_interrupted_func():
             break
         
-        status, error = process_single_file(row, output_dir, model, verify)
+        status, error = process_single_file(row, output_dir, model, utils, verify)
         
         if status == 'success':
             success_count += 1

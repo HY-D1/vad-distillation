@@ -44,12 +44,28 @@ def get_speech_probs(model, utils, audio_path: str, sampling_rate: int = 16000):
     wav = read_audio(audio_path, sampling_rate=sampling_rate)
     
     # Get speech probabilities
-    # Silero internally processes in 32ms frames
+    # Silero processes audio in 512-sample chunks for 16kHz (32ms frames)
     model.reset_states()
     with torch.no_grad():
-        probs = model(wav, sampling_rate)
+        # Process in chunks of 512 samples
+        chunk_size = 512
+        num_chunks = (len(wav) + chunk_size - 1) // chunk_size
+        
+        probs = []
+        for i in range(num_chunks):
+            start = i * chunk_size
+            end = min(start + chunk_size, len(wav))
+            chunk = wav[start:end]
+            
+            # Pad last chunk if needed
+            if len(chunk) < chunk_size:
+                chunk = torch.nn.functional.pad(chunk, (0, chunk_size - len(chunk)))
+            
+            # Get probability for this chunk
+            prob = model(chunk.unsqueeze(0), sampling_rate)
+            probs.append(prob.item())
     
-    return probs.numpy()
+    return np.array(probs)
 
 
 def process_manifest(manifest_path: str, output_dir: str, model, utils):
