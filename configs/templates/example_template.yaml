@@ -1,0 +1,45 @@
+# Example experiment template for VAD distillation
+# 
+# This template defines a grid search over alpha (distillation weight)
+# and temperature (softmax temperature) hyperparameters.
+#
+# Usage:
+#   python scripts/generate_experiment_matrix.py \
+#       --from-template configs/templates/example_template.yaml \
+#       --output configs/week2_matrix.json
+
+# Prefix for all experiment names
+name_prefix: "week2"
+
+# Base configuration file to use
+base_config: "configs/pilot.yaml"
+
+# Parameter grid to sweep
+parameters:
+  alpha: [0.3, 0.5, 0.7, 0.9]          # Distillation weight
+  temperature: [1.0, 2.0, 3.0, 5.0]    # Softmax temperature
+  fold: [F01, M01, FC01, MC01]         # LOSO folds to evaluate
+
+# Optional: Include specific custom experiments
+include:
+  # Baseline without distillation (hard labels only)
+  - name: "baseline_alpha_0.0_F01"
+    config: "configs/pilot.yaml"
+    fold: "F01"
+    overrides:
+      alpha: 0.0
+      temperature: 1.0
+  
+  # Baseline without distillation for another fold
+  - name: "baseline_alpha_0.0_M01"
+    config: "configs/pilot.yaml"
+    fold: "M01"
+    overrides:
+      alpha: 0.0
+      temperature: 1.0
+
+# Optional: Exclude specific parameter combinations
+# Uncomment below to exclude very high alpha with very high temperature
+# exclude:
+#   - alpha: 0.9
+#     temperature: 5.0

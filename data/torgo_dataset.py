@@ -5,6 +5,8 @@ TORGO dataset class for VAD knowledge distillation.
 This module provides a PyTorch Dataset for loading TORGO dysarthric speech data
 with mel spectrograms, hard labels (from transcripts), and teacher probabilities
 (from a pre-trained teacher model).
+
+Enhanced with comprehensive caching support.
 """
 
 import logging
@@ -219,12 +221,20 @@ class TORGODataset(Dataset):
     Loads mel spectrograms, hard labels (from transcripts), and teacher probabilities
     for training a student VAD model.
     
+    Enhanced caching features:
+    - Check for cached features first (new structure with session)
+    - Fall back to on-the-fly computation
+    - Optionally auto-cache computed features
+    - Support for multiple cache types (mel, mfcc, raw)
+    
     Example usage:
         >>> dataset = TORGODataset(
         ...     manifest_path='manifests/torgo_pilot.csv',
         ...     teacher_probs_dir='teacher_probs',
         ...     fold_config='splits/fold_F01.json',
-        ...     mode='train'
+        ...     mode='train',
+        ...     cache_dir='cached_features',  # Enable caching
+        ...     auto_cache=True,  # Auto-save computed features
         ... )
         >>> dataloader = DataLoader(dataset, batch_size=8, collate_fn=collate_fn)
     """
@@ -239,6 +249,7 @@ class TORGODataset(Dataset):
         n_mels: int = 40,
         max_seq_len: Optional[int] = None,
         cache_dir: Optional[Union[str, Path]] = None,
+        auto_cache: bool = False,
         sr: int = 16000,
         hop_length: int = 160,
     ):
@@ -261,7 +272,8 @@ class TORGODataset(Dataset):
             feature_type: Type of features ('mel' or 'teacher_probs')
             n_mels: Number of mel frequency bins
             max_seq_len: Maximum sequence length (truncate/pad to this)
-            cache_dir: Optional directory to cache mel spectrograms
+            cache_dir: Optional directory to cache features (e.g., 'cached_features')
+            auto_cache: Whether to automatically cache computed features
             sr: Sample rate for audio loading
             hop_length: Hop length for STFT (affects time resolution)
         
@@ -284,12 +296,15 @@ class TORGODataset(Dataset):
         self.n_mels = n_mels
         self.max_seq_len = max_seq_len
         self.cache_dir = Path(cache_dir) if cache_dir else None
+        self.auto_cache = auto_cache
         self.sr = sr
         self.hop_length = hop_length
         
-        # Create cache directory if specified
+        # Create cache directories if specified
         if self.cache_dir:
-            self.cache_dir.mkdir(parents=True, exist_ok=True)
+            (self.cache_dir / 'mel').mkdir(parents=True, exist_ok=True)
+            (self.cache_dir / 'mfcc').mkdir(parents=True, exist_ok=True)
+            (self.cache_dir / 'raw').mkdir(parents=True, exist_ok=True)
         
         # Load manifest
         if not self.manifest_path.exists():
@@ -367,13 +382,20 @@ class TORGODataset(Dataset):
         
         return filtered
     
+    def _get_cache_filename(self, row: pd.Series) -> str:
+        """Generate cache filename from manifest row."""
+        speaker_id = row['speaker_id']
+        utt_id = row['utt_id']
+        session = row.get('session', 'unknown')
+        return f"{speaker_id}_{session}_{int(utt_id):04d}.npy"
+    
     def _get_teacher_prob_path(self, speaker_id: str, utt_id: str, session: str = None) -> Path:
         """
         Get path to teacher probability file.
         
         Tries multiple naming conventions:
-        1. {speaker_id}_{session}_{utt_id}.npy
-        2. {speaker_id}_{utt_id}.npy
+        1. {speaker_id}_{session}_{utt_id}.npy (new format)
+        2. {speaker_id}_{utt_id}.npy (legacy format)
         """
         # Format utterance ID with leading zeros
         utt_id_str = str(int(utt_id)).zfill(4)
@@ -444,32 +466,99 @@ class TORGODataset(Dataset):
             logger.warning(f"Failed to load teacher probs {prob_path}: {e}. Using zeros.")
             return np.zeros(expected_frames, dtype=np.float32)
     
-    def _get_mel_cache_path(self, audio_path: Path) -> Optional[Path]:
-        """Get cache path for mel spectrogram."""
+    def _get_cached_feature_path(self, row: pd.Series, feature_type: str = 'mel') -> Optional[Path]:
+        """
+        Get path to cached features.
+        
+        Args:
+            row: Manifest row
+            feature_type: Type of features ('mel', 'mfcc', 'raw')
+        
+        Returns:
+            Path to cached file or None if not cached
+        """
         if self.cache_dir is None:
             return None
         
-        # Create cache key from audio path
-        audio_hash = f"{audio_path.stem}_{self.n_mels}_{self.hop_length}.npy"
-        return self.cache_dir / audio_hash
+        cache_file = self._get_cache_filename(row)
+        cache_path = self.cache_dir / feature_type / cache_file
+        
+        if cache_path.exists():
+            return cache_path
+        
+        # Try legacy naming (without session)
+        speaker_id = row['speaker_id']
+        utt_id = row['utt_id']
+        legacy_file = f"{speaker_id}_{int(utt_id):04d}.npy"
+        legacy_path = self.cache_dir / feature_type / legacy_file
+        
+        if legacy_path.exists():
+            return legacy_path
+        
+        return None
     
-    def _load_mel(self, audio_path: Path) -> np.ndarray:
+    def _load_cached_features(self, row: pd.Series, feature_type: str = 'mel') -> Optional[np.ndarray]:
+        """
+        Load features from cache if available.
+        
+        Args:
+            row: Manifest row
+            feature_type: Type of features
+        
+        Returns:
+            Features array or None if not cached
+        """
+        cache_path = self._get_cached_feature_path(row, feature_type)
+        
+        if cache_path is None:
+            return None
+        
+        try:
+            features = np.load(cache_path).astype(np.float32)
+            logger.debug(f"Loaded cached {feature_type} from {cache_path}")
+            return features
+        except Exception as e:
+            logger.warning(f"Failed to load cached features from {cache_path}: {e}")
+            return None
+    
+    def _save_features_to_cache(self, features: np.ndarray, row: pd.Series, feature_type: str = 'mel'):
+        """
+        Save computed features to cache.
+        
+        Args:
+            features: Feature array
+            row: Manifest row
+            feature_type: Type of features
+        """
+        if self.cache_dir is None:
+            return
+        
+        try:
+            cache_file = self._get_cache_filename(row)
+            cache_path = self.cache_dir / feature_type / cache_file
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            np.save(cache_path, features)
+            logger.debug(f"Saved {feature_type} features to cache: {cache_path}")
+        except Exception as e:
+            logger.warning(f"Failed to save features to cache: {e}")
+    
+    def _load_mel(self, audio_path: Path, row: pd.Series) -> np.ndarray:
         """
         Load mel spectrogram, using cache if available.
         
         Args:
             audio_path: Path to audio file
+            row: Manifest row
         
         Returns:
             mel_spec: Mel spectrogram (time, n_mels)
         """
-        # Check cache
-        cache_path = self._get_mel_cache_path(audio_path)
-        if cache_path and cache_path.exists():
-            try:
-                return np.load(cache_path).astype(np.float32)
-            except Exception:
-                pass  # Fall through to recomputation
+        # Try to load from cache first
+        mel_spec = self._load_cached_features(row, 'mel')
+        
+        if mel_spec is not None:
+            return mel_spec
         
         # Compute mel spectrogram
         mel_spec = load_mel_spectrogram(
@@ -479,9 +568,9 @@ class TORGODataset(Dataset):
             sr=self.sr
         )
         
-        # Save to cache
-        if cache_path:
-            np.save(cache_path, mel_spec)
+        # Save to cache if auto_cache is enabled
+        if self.auto_cache:
+            self._save_features_to_cache(mel_spec, row, 'mel')
         
         return mel_spec
     
@@ -517,9 +606,9 @@ class TORGODataset(Dataset):
             # Try relative to manifest directory
             audio_path = self.manifest_path.parent / audio_path
         
-        # Load mel spectrogram
+        # Load mel spectrogram (with caching)
         try:
-            mel_spec = self._load_mel(audio_path)
+            mel_spec = self._load_mel(audio_path, row)
         except Exception as e:
             logger.error(f"Failed to load audio {audio_path}: {e}")
             # Return dummy data on failure
@@ -550,6 +639,28 @@ class TORGODataset(Dataset):
             'speaker_id': speaker_id,
         }
     
+    def get_cache_stats(self) -> Dict:
+        """
+        Get statistics about cache usage.
+        
+        Returns:
+            Dict with cache statistics
+        """
+        if self.cache_dir is None:
+            return {'enabled': False}
+        
+        stats = {'enabled': True, 'auto_cache': self.auto_cache, 'types': {}}
+        
+        for feature_type in ['mel', 'mfcc', 'raw']:
+            cache_subdir = self.cache_dir / feature_type
+            if cache_subdir.exists():
+                num_files = len(list(cache_subdir.glob('*.npy')))
+                stats['types'][feature_type] = num_files
+            else:
+                stats['types'][feature_type] = 0
+        
+        return stats
+    
     def get_statistics(self) -> Dict:
         """
         Compute dataset statistics.
@@ -566,6 +677,9 @@ class TORGODataset(Dataset):
             'num_speakers': self.manifest['speaker_id'].nunique(),
             'speakers': sorted(self.manifest['speaker_id'].unique().tolist()),
         }
+        
+        # Add cache stats
+        stats['cache'] = self.get_cache_stats()
         
         # Duration statistics
         if 'duration' in self.manifest.columns:
@@ -655,6 +769,7 @@ if __name__ == '__main__':
     manifest_path = Path("../manifests/torgo_pilot.csv")
     teacher_probs_dir = Path("../teacher_probs")
     fold_config_path = Path("../splits/fold_F01.json")
+    cache_dir = Path("../cached_features")
     
     # Check if files exist (handle both absolute and relative paths)
     if not manifest_path.exists():
@@ -666,14 +781,16 @@ if __name__ == '__main__':
     print("TORGO Dataset Testing")
     print("=" * 60)
     
-    # Test 1: Basic dataset creation
-    print("\n1. Testing basic dataset creation...")
+    # Test 1: Basic dataset creation with caching
+    print("\n1. Testing basic dataset creation with caching...")
     try:
         dataset = TORGODataset(
             manifest_path=manifest_path,
             teacher_probs_dir=teacher_probs_dir,
             n_mels=40,
             max_seq_len=500,  # ~5 seconds at 10ms hop
+            cache_dir=cache_dir if cache_dir.exists() else None,
+            auto_cache=False,  # Don't auto-cache in test
         )
         print(f"   ✓ Dataset created with {len(dataset)} utterances")
         
@@ -686,9 +803,15 @@ if __name__ == '__main__':
         if 'label_distribution' in stats:
             ld = stats['label_distribution']
             print(f"   ✓ Labels: speech={ld['speech_ratio']:.2%}, silence={ld['silence_ratio']:.2%}")
+        if stats['cache']['enabled']:
+            print(f"   ✓ Cache: {stats['cache']['types']}")
+        else:
+            print(f"   ⚠ Cache: Not enabled (directory not found)")
     
     except Exception as e:
         print(f"   ✗ Failed: {e}")
+        import traceback
+        traceback.print_exc()
         dataset = None
     
     # Test 2: Load individual samples
@@ -706,6 +829,8 @@ if __name__ == '__main__':
             print(f"     - teacher_probs range: [{sample['teacher_probs'].min():.3f}, {sample['teacher_probs'].max():.3f}]")
         except Exception as e:
             print(f"   ✗ Failed: {e}")
+            import traceback
+            traceback.print_exc()
     
     # Test 3: Fold-based split
     print("\n3. Testing fold-based split...")
@@ -717,6 +842,7 @@ if __name__ == '__main__':
                 fold_config=fold_config_path,
                 mode='train',
                 n_mels=40,
+                cache_dir=cache_dir if cache_dir.exists() else None,
             )
             dataset_val = TORGODataset(
                 manifest_path=manifest_path,
@@ -724,6 +850,7 @@ if __name__ == '__main__':
                 fold_config=fold_config_path,
                 mode='val',
                 n_mels=40,
+                cache_dir=cache_dir if cache_dir.exists() else None,
             )
             dataset_test = TORGODataset(
                 manifest_path=manifest_path,
@@ -731,6 +858,7 @@ if __name__ == '__main__':
                 fold_config=fold_config_path,
                 mode='test',
                 n_mels=40,
+                cache_dir=cache_dir if cache_dir.exists() else None,
             )
             print(f"   ✓ Train: {len(dataset_train)} utterances")
             print(f"   ✓ Val: {len(dataset_val)} utterances")
@@ -753,6 +881,8 @@ if __name__ == '__main__':
             print(f"   ⚠ Fold config not found: {fold_config_path}")
     except Exception as e:
         print(f"   ✗ Failed: {e}")
+        import traceback
+        traceback.print_exc()
     
     # Test 4: DataLoader with collate function
     if dataset and len(dataset) > 0:
@@ -766,6 +896,7 @@ if __name__ == '__main__':
                 mode='train',
                 n_mels=40,
                 max_seq_len=200,  # Short sequences for testing
+                cache_dir=cache_dir if cache_dir.exists() else None,
             )
             
             if len(test_dataset) > 0:
@@ -806,6 +937,7 @@ if __name__ == '__main__':
             manifest_path=manifest_path,
             teacher_probs_dir=temp_dir,
             n_mels=40,
+            cache_dir=cache_dir if cache_dir.exists() else None,
         )
         if len(test_dataset) > 0:
             sample = test_dataset[0]
@@ -818,6 +950,8 @@ if __name__ == '__main__':
         shutil.rmtree(temp_dir, ignore_errors=True)
     except Exception as e:
         print(f"   ✗ Failed: {e}")
+        import traceback
+        traceback.print_exc()
     
     print("\n" + "=" * 60)
     print("Testing complete!")
