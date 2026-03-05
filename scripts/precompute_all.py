@@ -426,8 +426,8 @@ Examples:
     # Processing options
     parser.add_argument('--parallel', type=int, default=4,
                         help='Number of parallel workers for feature caching')
-    parser.add_argument('--device', type=str, default='cuda',
-                        help='Device for teacher inference (cuda/cpu)')
+    parser.add_argument('--device', type=str, default=None,
+                        help='Device for teacher inference (cpu/cuda, default: auto-detect)')
     parser.add_argument('--batch-size', type=int, default=8,
                         help='Batch size for teacher inference')
     
@@ -444,6 +444,14 @@ Examples:
                         help='Save report to JSON file')
     
     args = parser.parse_args()
+    
+    # Auto-detect device if not specified
+    import torch
+    if args.device is None:
+        args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    elif args.device == 'cuda' and not torch.cuda.is_available():
+        print("Warning: CUDA not available, falling back to CPU")
+        args.device = 'cpu'
     
     # Validate manifest
     manifest_path = Path(args.manifest)

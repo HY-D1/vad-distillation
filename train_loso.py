@@ -389,6 +389,10 @@ def validate(model: nn.Module,
     """
     Validate model on validation set.
     
+    Supports both:
+    - TinyVAD: single-class output (sigmoid probabilities)
+    - 2-class models: softmax output with 2 classes
+    
     Returns:
         Dictionary with validation metrics.
     """
@@ -403,26 +407,52 @@ def validate(model: nn.Module,
         labels = batch['hard_labels'].to(device)
         
         # Forward pass
-        logits = model(features)
+        output = model(features)
         
-        # Get probabilities and predictions
-        probs = torch.softmax(logits, dim=-1)
-        predictions = torch.argmax(probs, dim=-1)
+        # Handle time dimension mismatch (e.g., from CNN downsampling in TinyVAD)
+        # If model output is shorter than labels, pool the labels
+        if output.shape[1] != labels.shape[1]:
+            import torch.nn.functional as F
+            target_len = output.shape[1]
+            # Pool labels: [batch, seq_len] -> [batch, target_len]
+            labels_pooled = F.adaptive_avg_pool1d(
+                labels.unsqueeze(1).float(), target_len
+            ).squeeze(1)
+            labels = (labels_pooled > 0.5).long()  # Convert back to binary
+        
+        # Determine output type: TinyVAD outputs single probabilities (sigmoid)
+        # while 2-class models output logits for 2 classes (softmax)
+        if output.dim() == 2:
+            # TinyVAD: output is (batch, time) single probabilities from sigmoid
+            probs = output
+            predictions = (probs > threshold).long()
+        else:
+            # 2-class model: output is (batch, time, 2) logits
+            probs = torch.softmax(output, dim=-1)
+            predictions = torch.argmax(probs, dim=-1)
         
         # Collect for metric computation
         # Handle sequence dimension
         if predictions.dim() == 2:
             predictions = predictions.cpu().numpy().flatten()
-            labels = labels.cpu().numpy().flatten()
-            probs = probs[:, :, 1].cpu().numpy().flatten()  # Probability of speech
+            labels_np = labels.cpu().numpy().flatten()
+            if output.dim() == 2:
+                # TinyVAD: probs is already (batch, time) of speech probabilities
+                probs_np = probs.cpu().numpy().flatten()
+            else:
+                # 2-class: get probability of speech (class 1)
+                probs_np = probs[:, :, 1].cpu().numpy().flatten()
         else:
             predictions = predictions.cpu().numpy()
-            labels = labels.cpu().numpy()
-            probs = probs[:, 1].cpu().numpy()
+            labels_np = labels.cpu().numpy()
+            if output.dim() == 1:
+                probs_np = probs.cpu().numpy()
+            else:
+                probs_np = probs[:, 1].cpu().numpy()
         
         all_predictions.append(predictions)
-        all_labels.append(labels)
-        all_probs.append(probs)
+        all_labels.append(labels_np)
+        all_probs.append(probs_np)
     
     # Concatenate all batches
     all_predictions = np.concatenate(all_predictions)
@@ -683,10 +713,32 @@ def main():
                         help='Run test mode only (dry-run)')
     parser.add_argument('--device', type=str, default=None,
                         help='Device to use (cuda/cpu). Auto-detected if not specified.')
+    parser.add_argument('--epochs', type=int, default=None,
+                        help='Number of epochs (overrides config)')
+    parser.add_argument('--patience', type=int, default=None,
+                        help='Early stopping patience (overrides config)')
     
     args = parser.parse_args()
     
     # Load configuration
+    print(f"Loading configuration from {args.config}")
+    with open(args.config, 'r') as f:
+        config = yaml.safe_load(f)
+    
+    # Override config with command-line arguments
+    if args.epochs is not None:
+        if 'training' not in config:
+            config['training'] = {}
+        config['training']['num_epochs'] = args.epochs
+        print(f"Overriding num_epochs to {args.epochs}")
+    
+    if args.patience is not None:
+        if 'training' not in config:
+            config['training'] = {}
+        config['training']['early_stopping_patience'] = args.patience
+        print(f"Overriding early_stopping_patience to {args.patience}")
+    
+    # Set device
     print(f"Loading configuration from {args.config}")
     with open(args.config, 'r') as f:
         config = yaml.safe_load(f)
@@ -756,7 +808,7 @@ def main():
     scheduler_type = training_config.get('scheduler', 'plateau')
     if scheduler_type == 'plateau':
         scheduler = ReduceLROnPlateau(
-            optimizer, mode='max', factor=0.5, patience=5, verbose=True
+            optimizer, mode='max', factor=0.5, patience=5
         )
     elif scheduler_type == 'cosine':
         scheduler = CosineAnnealingLR(
@@ -888,35 +940,34 @@ def main():
     all_predictions = []
     all_labels = []
     all_probs = []
-    all_file_ids = []
+    all_utt_ids = []
     
     for batch in test_loader:
-        features = batch['features'].to(device)
-        labels = batch['labels']
-        file_ids = batch['file_id']
+        mels = batch['mels'].to(device)
+        hard_labels = batch['hard_labels']
+        utt_ids = batch['utt_ids']
         
         with torch.no_grad():
-            logits = model(features)
-            probs = torch.softmax(logits, dim=-1)
-            predictions = torch.argmax(probs, dim=-1)
+            probs = model(mels)  # TinyVAD outputs probabilities directly
+            predictions = (probs > 0.5).long()
         
         # Handle sequence dimension
         if predictions.dim() == 2:
             predictions = predictions.cpu().numpy().flatten()
-            labels_np = labels.cpu().numpy().flatten()
-            probs_np = probs[:, :, 1].cpu().numpy().flatten()
+            labels_np = hard_labels.cpu().numpy().flatten()
+            probs_np = probs.cpu().numpy().flatten()
         else:
             predictions = predictions.cpu().numpy()
-            labels_np = labels.cpu().numpy()
-            probs_np = probs[:, 1].cpu().numpy()
+            labels_np = hard_labels.cpu().numpy()
+            probs_np = probs.cpu().numpy()
         
         all_predictions.extend(predictions)
         all_labels.extend(labels_np)
         all_probs.extend(probs_np)
-        # Repeat file_ids for each frame in sequence
-        for i, file_id in enumerate(file_ids):
-            seq_len = features.shape[1] if predictions.dim() == 1 else 1
-            all_file_ids.extend([file_id] * seq_len)
+        # Repeat utt_ids for each frame in sequence
+        for i, utt_id in enumerate(utt_ids):
+            seq_len = mels.shape[1] if predictions.ndim == 1 else 1
+            all_utt_ids.extend([utt_id] * seq_len)
     
     # Save predictions to file
     predictions_path = os.path.join(log_dir, f"fold_{fold_id}_predictions.npz")
@@ -924,15 +975,19 @@ def main():
              predictions=np.array(all_predictions),
              labels=np.array(all_labels),
              probs=np.array(all_probs),
-             file_ids=np.array(all_file_ids))
+             utt_ids=np.array(all_utt_ids))
     print(f"Predictions saved to: {predictions_path}")
     
-    # Save summary
+    # Save summary - handle both old and new fold config key formats
+    train_key = 'train_speakers' if 'train_speakers' in fold_config else 'train'
+    val_key = 'val_speaker' if 'val_speaker' in fold_config else 'val'
+    test_key = 'test_speaker' if 'test_speaker' in fold_config else 'test'
+    
     summary = {
         'fold_id': fold_id,
-        'train_speakers': fold_config['train'],
-        'val_speaker': fold_config['val'],
-        'test_speaker': fold_config['test'],
+        'train_speakers': fold_config[train_key],
+        'val_speaker': fold_config[val_key],
+        'test_speaker': fold_config[test_key],
         'num_parameters': num_params,
         'model_size_mb': model_size_mb,
         'best_val_auc': best_val_auc,

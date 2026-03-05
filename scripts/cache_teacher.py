@@ -16,6 +16,9 @@ Usage:
     
     # Test mode
     python scripts/cache_teacher.py --test
+
+Note: This script uses DASHES for argument names (e.g., --output-dir, NOT --output_dir)
+      This follows standard Unix conventions where argparse converts --output-dir to args.output_dir
 """
 
 import argparse
@@ -338,7 +341,9 @@ def group_by_length(
     for row in rows:
         audio_path = Path(row['path'])
         if not audio_path.is_absolute():
-            audio_path = Path('data') / audio_path
+            # Check if path already starts with 'data/'
+            if not str(audio_path).startswith('data/'):
+                audio_path = Path('data') / audio_path
         duration = get_audio_duration(str(audio_path))
         durations.append((duration, row))
     
@@ -474,6 +479,20 @@ def save_metadata(
 
 
 def main():
+    # Check for common user mistakes BEFORE argparse processes them
+    # This provides a more helpful error message than argparse's "unrecognized arguments"
+    for i, arg in enumerate(sys.argv):
+        if arg.startswith('--output_dir'):
+            print("\n" + "=" * 60)
+            print("ERROR: Invalid argument: --output_dir (underscore)")
+            print("       Use --output-dir (dash) instead")
+            print("=" * 60)
+            print("\nNote: Standard argparse uses DASHES for multi-word arguments:")
+            print("      --output-dir, --batch-size")
+            print("      (These become args.output_dir, args.batch_size in code)")
+            print("=" * 60 + "\n")
+            sys.exit(1)
+    
     parser = argparse.ArgumentParser(
         description="Cache Silero VAD teacher outputs",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -493,6 +512,14 @@ Examples:
   
   # Test mode (5 files)
   python scripts/cache_teacher.py --test
+  
+  # Custom output directory (note: use --output-dir with DASH, not underscore)
+  python scripts/cache_teacher.py --output-dir my_teacher_probs
+
+IMPORTANT:
+  Use DASHES for multi-word arguments: --output-dir, --batch-size
+  (NOT --output_dir, NOT --batch_size)
+  Argparse automatically converts --output-dir to args.output_dir in the code.
         """
     )
     
@@ -503,9 +530,9 @@ Examples:
                         help='Output directory for teacher probabilities')
     
     # Model
-    parser.add_argument('--device', type=str, default='cpu',
+    parser.add_argument('--device', type=str, default=None,
                         choices=['cpu', 'cuda'],
-                        help='Device for inference')
+                        help='Device for inference (default: auto-detect)')
     
     # Processing
     parser.add_argument('--batch-size', type=int, default=1,
@@ -521,8 +548,10 @@ Examples:
     
     args = parser.parse_args()
     
-    # Check CUDA availability
-    if args.device == 'cuda' and not torch.cuda.is_available():
+    # Auto-detect device if not specified
+    if args.device is None:
+        args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    elif args.device == 'cuda' and not torch.cuda.is_available():
         print("Warning: CUDA not available, falling back to CPU")
         args.device = 'cpu'
     

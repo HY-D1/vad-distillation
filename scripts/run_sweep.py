@@ -160,6 +160,18 @@ Examples:
         default=42,
         help='Random seed for reproducibility'
     )
+    parser.add_argument(
+        '--epochs',
+        type=int,
+        default=None,
+        help='Number of epochs to train (overrides config)'
+    )
+    parser.add_argument(
+        '--patience',
+        type=int,
+        default=None,
+        help='Early stopping patience (overrides config)'
+    )
     
     return parser.parse_args()
 
@@ -306,7 +318,9 @@ def load_base_config(config_path: str) -> Dict[str, Any]:
 
 def create_experiment_config(
     base_config: Dict[str, Any],
-    exp_params: Dict[str, Any]
+    exp_params: Dict[str, Any],
+    epochs: Optional[int] = None,
+    patience: Optional[int] = None
 ) -> Dict[str, Any]:
     """Create experiment config by overriding base config with sweep parameters."""
     config = base_config.copy()
@@ -316,6 +330,17 @@ def create_experiment_config(
         if key != 'fold':
             config[key] = value
     
+    # Override with command-line arguments if provided
+    if epochs is not None:
+        if 'training' not in config:
+            config['training'] = {}
+        config['training']['num_epochs'] = epochs
+    
+    if patience is not None:
+        if 'training' not in config:
+            config['training'] = {}
+        config['training']['early_stopping_patience'] = patience
+    
     return config
 
 
@@ -323,7 +348,9 @@ def run_single_experiment(
     exp_params: Dict[str, Any],
     base_config: Dict[str, Any],
     output_dir: str,
-    base_config_path: str
+    base_config_path: str,
+    epochs: Optional[int] = None,
+    patience: Optional[int] = None
 ) -> Dict[str, Any]:
     """
     Run a single experiment.
@@ -344,8 +371,12 @@ def run_single_experiment(
     # Create output directory
     os.makedirs(exp_output_dir, exist_ok=True)
     
+    # Get epochs and patience from parent scope (passed via partial)
+    sweep_epochs = exp_params.pop('_sweep_epochs', None)
+    sweep_patience = exp_params.pop('_sweep_patience', None)
+    
     # Create experiment config
-    exp_config = create_experiment_config(base_config, exp_params)
+    exp_config = create_experiment_config(base_config, exp_params, sweep_epochs, sweep_patience)
     exp_config['output_dir'] = exp_output_dir
     
     # Save experiment config
@@ -423,7 +454,9 @@ def run_sweep(
     output_dir: str,
     parallel: int = 1,
     resume: bool = False,
-    max_experiments: Optional[int] = None
+    max_experiments: Optional[int] = None,
+    epochs: Optional[int] = None,
+    patience: Optional[int] = None
 ) -> List[Dict[str, Any]]:
     """
     Run all experiments in the sweep.
@@ -455,12 +488,17 @@ def run_sweep(
     
     results = []
     
+    # Inject epochs and patience into each experiment for parallel processing
+    for exp in experiments:
+        exp['_sweep_epochs'] = epochs
+        exp['_sweep_patience'] = patience
+    
     if parallel == 1:
         # Sequential execution
         for i, exp in enumerate(experiments, 1):
             print(f"\n[{i}/{len(experiments)}] Running: alpha={exp.get('alpha', 'N/A'):.2f}, "
                   f"temperature={exp.get('temperature', 'N/A'):.2f}, fold={exp['fold']}")
-            result = run_single_experiment(exp, base_config, output_dir, base_config_path)
+            result = run_single_experiment(exp, base_config, output_dir, base_config_path, epochs, patience)
             results.append(result)
             
             if result['success']:
@@ -479,7 +517,9 @@ def run_sweep(
                     exp, 
                     base_config, 
                     output_dir, 
-                    base_config_path
+                    base_config_path,
+                    epochs,
+                    patience
                 ): exp for exp in experiments
             }
             
@@ -892,7 +932,9 @@ def main():
         args.output_dir,
         parallel=args.parallel,
         resume=args.resume,
-        max_experiments=args.max_experiments
+        max_experiments=args.max_experiments,
+        epochs=args.epochs,
+        patience=args.patience
     )
     sweep_duration = time.time() - start_time
     

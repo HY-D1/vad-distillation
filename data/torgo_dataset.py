@@ -601,10 +601,13 @@ class TORGODataset(Dataset):
         audio_path = Path(row['path'])
         text = row.get('text', '')
         
-        # Make audio path absolute if relative
+        # Ensure audio path is correct
+        # If path is relative and doesn't start with 'data/', prepend it
         if not audio_path.is_absolute():
-            # Try relative to manifest directory
-            audio_path = self.manifest_path.parent / audio_path
+            path_str = str(audio_path)
+            if not path_str.startswith('data/'):
+                # Try relative to manifest directory
+                audio_path = self.manifest_path.parent / audio_path
         
         # Load mel spectrogram (with caching)
         try:

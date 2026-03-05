@@ -325,9 +325,13 @@ def process_single_file(
     """
     audio_path = Path(row['path'])
     
-    # Make absolute if relative
+    # Ensure path is relative to project root
+    # If path already starts with 'data/', use it as-is
+    # Otherwise, prepend 'data/' for backward compatibility
     if not audio_path.is_absolute():
-        audio_path = Path('data') / audio_path
+        path_str = str(audio_path)
+        if not path_str.startswith('data/'):
+            audio_path = Path('data') / audio_path
     
     cache_filename = get_cache_filename(row)
     cache_path = output_dir / cache_filename
