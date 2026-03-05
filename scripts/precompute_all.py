@@ -31,6 +31,12 @@ from typing import Dict, List, Optional, Set
 
 import numpy as np
 
+# Setup path for imports when running from scripts/ directory
+script_dir = Path(__file__).parent.resolve()
+project_root = script_dir.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 
 # Default configuration
 DEFAULTS = {
@@ -199,7 +205,7 @@ def run_feature_caching(args, cache_mgr: CacheManager, rows: List[Dict]) -> Dict
     }
     
     # Import here to avoid loading if not needed
-    from cache_features import process_manifest_parallel, save_metadata
+    from scripts.cache_features import process_manifest_parallel, save_metadata
     
     for feature_type in args.features:
         if feature_type not in ['mel', 'mfcc', 'raw']:
@@ -270,7 +276,7 @@ def run_teacher_caching(args, cache_mgr: CacheManager, rows: List[Dict]) -> Dict
     print('=' * 60)
     
     # Import here to avoid loading if not needed
-    from cache_teacher import process_teacher_manifest
+    from scripts.cache_teacher import process_teacher_manifest
     
     # Filter already cached
     if not args.force:

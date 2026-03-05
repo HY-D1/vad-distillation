@@ -15,82 +15,94 @@ Develop a lightweight VAD (≤ 500 KB) that maintains competitive accuracy on at
 | CPU Latency | ≤ 10 ms/frame |
 | Atypical Miss Rate | Lower than Silero baseline |
 
-## Project Structure
-
-```
-├── data/                   # Dataset storage (local only, not in git)
-│   └── torgo_raw/         # TORGO audio files
-│   └── README.md          # Data acquisition instructions
-├── manifests/              # Dataset manifests (CSV)
-├── splits/                 # Train/test splits (LOSO folds)
-├── teacher_probs/          # Cached Silero outputs
-├── teacher_hard_labels/    # Thresholded teacher labels
-├── scripts/                # Utility scripts
-│   ├── build_torgo_manifest.py
-│   ├── run_silero_teacher.py
-│   ├── cache_features.py
-│   └── cache_teacher.py
-├── notebooks/              # Analysis notebooks
-│   ├── eda_torgo_sentences.ipynb
-│   └── baseline_silero_metrics.ipynb
-├── models/                 # Model architectures
-│   └── tinyvad_student.py
-├── configs/                # Training configurations
-│   └── pilot.yaml
-├── train.py                # Main training script
-├── requirements.txt        # Python dependencies
-└── README.md              # This file
-```
-
 ## Quick Start
 
-### 1. Data Setup
-
-See `data/README.md` for TORGO dataset acquisition and placement.
-
-### 2. Build Manifest
-
 ```bash
+# 1. Validate TORGO data setup
+python scripts/validate_torgo_setup.py
+
+# 2. Build dataset manifest
 python scripts/build_torgo_manifest.py \
     --data_dir data/torgo_raw \
     --output manifests/torgo_sentences.csv
+
+# 3. Train student (single fold smoke test)
+python train_loso.py --config configs/pilot.yaml --fold F01
 ```
 
-### 3. Create LOSO Splits
+## Hyperparameter Sweep
 
-Splits are generated as JSON files in `splits/` directory, one per held-out speaker.
-
-### 4. Run Baseline (Silero Teacher)
+Run the full 36-experiment sweep (3 α × 4 T × 3 folds):
 
 ```bash
-python scripts/run_silero_teacher.py \
-    --manifest manifests/torgo_sentences.csv \
-    --output_dir teacher_probs/
+python scripts/run_sweep.py \
+  --param alpha --values 0.5 0.7 0.9 \
+  --param temperature --values 1 2 3 5 \
+  --folds F01 M01 FC01 \
+  --base-config configs/pilot.yaml \
+  --output-dir outputs/week2_full \
+  --epochs 50 \
+  --patience 10
 ```
 
-### 5. Train Student (Smoke Test)
-
+Analyze results:
 ```bash
-python train.py --config configs/pilot.yaml
+python scripts/analyze_week2.py \
+  --results-dir outputs/week2_full \
+  --output-dir analysis/week2
 ```
 
-## Key Design Decisions
+## File Structure
 
-1. **Dataset Priority**: TORGO sentences (continuous speech) as primary dataset. Saarbruecken Voice Database (SVD) is secondary due to isolated vowels limitation.
+```
+├── configs/               # Training configurations
+│   ├── pilot.yaml        # Base config for experiments
+│   └── week2_matrix.json # 36 experiment definitions
+├── data/                  # TORGO dataset (not in git)
+│   └── torgo_raw/        # Raw audio files
+├── local/                 # 📚 Documentation
+│   ├── INDEX.md          # Master documentation index
+│   ├── week1_scope_and_eval.md
+│   ├── week2_execution_plan.md
+│   ├── data_setup.md     # TORGO setup guide
+│   └── CACHING.md        # Cache management
+├── manifests/             # Dataset manifests (CSV)
+├── models/                # Model architectures
+│   └── tinyvad_student.py
+├── notebooks/             # Analysis notebooks
+├── outputs/               # Training outputs
+├── scripts/               # Utility scripts
+│   ├── build_torgo_manifest.py
+│   ├── cache_features.py
+│   ├── cache_manager.py
+│   ├── cache_teacher.py
+│   ├── run_sweep.py      # Week 2 sweep runner
+│   └── analyze_week2.py  # Results analysis
+├── splits/                # LOSO splits (JSON)
+├── teacher_probs/         # Cached Silero outputs
+├── teacher_hard_labels/   # Thresholded teacher labels
+├── train_loso.py          # 🎯 Main training script
+└── requirements.txt
+```
 
-2. **Evaluation**: Speaker-independent via Leave-One-Speaker-Out (LOSO) cross-validation.
+## Key Scripts
 
-3. **Distillation**: Soft labels with temperature T (configurable), loss = (1-α)*BCE(hard) + α*BCE(soft).
+| Script | Purpose |
+|--------|---------|
+| `train_loso.py` | Main training script with LOSO support |
+| `scripts/run_sweep.py` | Hyperparameter sweep runner |
+| `scripts/analyze_week2.py` | Results analysis and visualization |
+| `scripts/cache_manager.py` | Cache status, verify, clean |
+| `scripts/build_torgo_manifest.py` | Generate dataset manifest |
+| `scripts/validate_torgo_setup.py` | Validate TORGO installation |
 
-4. **Architecture**: CNN + GRU style student (TinyVAD-inspired).
+## Design Decisions
 
-## Project Configuration
-
-Edit `configs/pilot.yaml` to adjust:
-- `alpha`: Weight for soft-label distillation loss (default: 0.5)
-- `temperature`: Temperature for softening teacher outputs (default: 3.0)
-- `model`: Student architecture parameters (channels, hidden dim, layers)
+1. **Dataset**: TORGO sentences (continuous speech) as primary dataset
+2. **Evaluation**: Speaker-independent via Leave-One-Speaker-Out (LOSO)
+3. **Distillation**: Soft labels with temperature T, loss = (1-α)×BCE(hard) + α×BCE(soft)
+4. **Architecture**: CNN + GRU style student (TinyVAD-inspired)
 
 ## License
 
-MIT License - See LICENSE
+MIT License - See [LICENSE](LICENSE)

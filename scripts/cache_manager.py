@@ -436,7 +436,7 @@ def cmd_rebuild(args):
     import subprocess
     
     cmd = [
-        sys.executable, "scripts/cache_features.py",
+        sys.executable, "-m", "scripts.cache_features",
         "--manifest", str(manifest_path),
         "--output_dir", "cached_features",
     ]
@@ -455,7 +455,7 @@ def cmd_rebuild(args):
     # Rebuild teacher
     print("\nStep 3: Rebuilding teacher cache...")
     cmd = [
-        sys.executable, "scripts/cache_teacher.py",
+        sys.executable, "-m", "scripts.cache_teacher",
         "--manifest", str(manifest_path),
         "--output_dir", "teacher_probs",
     ]

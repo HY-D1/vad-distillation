@@ -364,6 +364,8 @@ def run_single_experiment(
     
     try:
         # Use train_loso.py with our generated config
+        # Change to project root for execution
+        project_root = Path(__file__).parent.parent.resolve()
         cmd = [
             sys.executable, 'train_loso.py',
             '--config', exp_config_path,
@@ -374,7 +376,7 @@ def run_single_experiment(
         start_time = time.time()
         process = subprocess.run(
             cmd,
-            cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            cwd=str(project_root),
             capture_output=True,
             text=True,
             timeout=3600  # 1 hour timeout per experiment

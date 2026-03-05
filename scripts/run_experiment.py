@@ -238,6 +238,9 @@ def run_single_experiment(
         return False, error_msg, None
     
     # Prepare command
+    # Get project root for subprocess cwd
+    project_root = Path(__file__).parent.parent.resolve()
+    
     cmd = [
         sys.executable,
         'train_loso.py',
@@ -266,9 +269,10 @@ def run_single_experiment(
             log_f.write("=" * 60 + "\n\n")
             log_f.flush()
             
-            # Run subprocess
+            # Run subprocess from project root
             process = subprocess.Popen(
                 cmd,
+                cwd=str(project_root),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,

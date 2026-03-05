@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 LOSO-aware training script for VAD distillation.
 
@@ -22,92 +23,22 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau, StepLR
 from torch.utils.data import DataLoader
-from torch.optim.lr_scheduler import ReduceLROnPlateau, CosineAnnealingLR, StepLR
 import yaml
 
-# Add project root to path for imports
-project_root = Path(__file__).parent
-sys.path.insert(0, str(project_root))
+# Add project root to path for imports (works both from project root and scripts/)
+project_root = Path(__file__).parent.resolve()
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
 
 try:
-    from data.torgo_dataset import TORGODataset, collate_fn
+    from data import TORGODataset, collate_fn
+    from models.losses import DistillationLoss
 except ImportError as e:
-    print(f"Error importing TORGODataset: {e}")
-    print("Make sure data/torgo_dataset.py exists and is properly formatted.")
+    print(f"Error importing modules: {e}")
+    print("Make sure you're running from the project root or have proper PYTHONPATH set.")
     sys.exit(1)
-
-
-# =============================================================================
-# Loss Functions
-# =============================================================================
-
-class DistillationLoss(nn.Module):
-    """
-    Combined distillation loss: alpha * hard_loss + (1-alpha) * soft_loss
-    
-    Args:
-        alpha: Weight for hard loss (CE with ground truth). (1-alpha) for soft loss.
-        temperature: Temperature for softening probability distributions.
-    """
-    
-    def __init__(self, alpha: float = 0.5, temperature: float = 3.0):
-        super().__init__()
-        self.alpha = alpha
-        self.temperature = temperature
-        self.ce_loss = nn.CrossEntropyLoss()
-        self.kl_loss = nn.KLDivLoss(reduction='batchmean')
-    
-    def forward(self, student_logits: torch.Tensor, 
-                teacher_probs: torch.Tensor,
-                labels: torch.Tensor) -> Tuple[torch.Tensor, Dict[str, float]]:
-        """
-        Compute combined distillation loss.
-        
-        Args:
-            student_logits: Logits from student model [batch, seq_len, 2] or [batch, 2]
-            teacher_probs: Soft probabilities from teacher [batch, seq_len, 2] or [batch, 2]
-            labels: Hard labels [batch, seq_len] or [batch]
-        
-        Returns:
-            total_loss: Combined loss
-            loss_dict: Dictionary with individual loss components
-        """
-        # Handle both sequence and frame-level predictions
-        if student_logits.dim() == 3:
-            # Sequence-level: [batch, seq_len, num_classes]
-            batch_size, seq_len, num_classes = student_logits.shape
-            student_logits_flat = student_logits.reshape(-1, num_classes)
-            teacher_probs_flat = teacher_probs.reshape(-1, num_classes)
-            labels_flat = labels.reshape(-1)
-        else:
-            # Frame-level: [batch, num_classes]
-            student_logits_flat = student_logits
-            teacher_probs_flat = teacher_probs
-            labels_flat = labels
-        
-        # Hard loss: Cross-entropy with ground truth
-        hard_loss = self.ce_loss(student_logits_flat, labels_flat)
-        
-        # Soft loss: KL divergence with teacher predictions
-        # Apply temperature scaling
-        student_probs_soft = torch.log_softmax(student_logits_flat / self.temperature, dim=-1)
-        teacher_probs_soft = teacher_probs_flat.pow(1 / self.temperature)
-        teacher_probs_soft = teacher_probs_soft / teacher_probs_soft.sum(dim=-1, keepdim=True)
-        
-        soft_loss = self.kl_loss(student_probs_soft, teacher_probs_soft)
-        soft_loss = soft_loss * (self.temperature ** 2)  # Scale by T^2
-        
-        # Combined loss
-        total_loss = self.alpha * hard_loss + (1 - self.alpha) * soft_loss
-        
-        loss_dict = {
-            'hard_loss': hard_loss.item(),
-            'soft_loss': soft_loss.item(),
-            'total_loss': total_loss.item()
-        }
-        
-        return total_loss, loss_dict
 
 
 # =============================================================================
@@ -224,38 +155,50 @@ def create_dataloaders(config: Dict, fold_config: Dict) -> Tuple[DataLoader, Dat
     Returns:
         train_loader, val_loader, test_loader
     """
-    data_config = config['data']
-    training_config = config['training']
+    # Handle both flat and nested config structures
+    if 'data' in config:
+        data_config = config['data']
+        training_config = config.get('training', {})
+        manifest = data_config.get('manifest', data_config.get('manifest_path', 'manifests/torgo_pilot.csv'))
+        teacher_probs_dir = data_config.get('teacher_probs_dir', 'teacher_probs/')
+        n_mels = data_config.get('n_mels', 40)
+        batch_size = training_config.get('batch_size', 16)
+        num_workers = training_config.get('num_workers', 0)
+    else:
+        # Flat config (e.g., pilot.yaml)
+        manifest = config.get('manifest', 'manifests/torgo_pilot.csv')
+        teacher_probs_dir = config.get('teacher_probs_dir', 'teacher_probs/')
+        n_mels = config.get('n_mels', 40)
+        batch_size = config.get('batch_size', 8)
+        num_workers = config.get('num_workers', 0)
     
     # Common dataset arguments
     dataset_kwargs = {
-        'manifest_path': data_config['manifest'],
-        'teacher_probs_dir': data_config['teacher_probs_dir'],
-        'n_mels': data_config.get('n_mels', 40),
+        'manifest_path': manifest,
+        'teacher_probs_dir': teacher_probs_dir,
+        'n_mels': n_mels,
     }
     
-    # Create datasets
+    # Create datasets using fold_config
     train_dataset = TORGODataset(
-        speakers=fold_config['train'],
-        subset='train',
+        fold_config=fold_config,
+        mode='train',
         **dataset_kwargs
     )
     
     val_dataset = TORGODataset(
-        speakers=[fold_config['val']],
-        subset='val',
+        fold_config=fold_config,
+        mode='val',
         **dataset_kwargs
     )
     
     test_dataset = TORGODataset(
-        speakers=[fold_config['test']],
-        subset='test',
+        fold_config=fold_config,
+        mode='test',
         **dataset_kwargs
     )
     
-    # Create dataloaders
-    batch_size = training_config.get('batch_size', 16)
-    num_workers = training_config.get('num_workers', 4)
+    # Create dataloaders (batch_size and num_workers already set above)
     
     train_loader = DataLoader(
         train_dataset,
@@ -299,13 +242,26 @@ def create_model(config: Dict) -> nn.Module:
     """
     Create model from configuration.
     
-    Expects config['model'] to contain:
-        type: Model class name (e.g., 'TCN', 'LSTM')
-        params: Dictionary of model parameters
+    Supports both nested config (config['model']) and flat config.
     """
-    model_config = config['model']
-    model_type = model_config['type']
-    model_params = model_config.get('params', {})
+    from models.tinyvad_student import create_student_model
+    
+    # Handle both nested and flat config structures
+    if 'model' in config:
+        # Nested config with model section
+        model_config = config['model']
+        model_type = model_config.get('type', 'tinyvad')
+        model_params = model_config.get('params', model_config)
+    else:
+        # Flat config - use all model-related params directly
+        model_type = config.get('model_type', 'tinyvad')
+        model_params = {
+            'n_mels': config.get('n_mels', 40),
+            'cnn_channels': config.get('cnn_channels', [16, 24]),
+            'gru_hidden': config.get('gru_hidden', 24),
+            'gru_layers': config.get('gru_layers', 2),
+            'dropout': config.get('dropout', 0.0),
+        }
     
     # Import model dynamically
     try:
@@ -318,12 +274,14 @@ def create_model(config: Dict) -> nn.Module:
         elif model_type.lower() == 'mlp':
             from models.mlp import MLPAcousticVAD
             model = MLPAcousticVAD(**model_params)
+        elif model_type.lower() in ('tinyvad', 'student'):
+            model = create_student_model(model_params)
         else:
             raise ValueError(f"Unknown model type: {model_type}")
     except ImportError as e:
         print(f"Error importing model {model_type}: {e}")
-        print("Falling back to a simple LSTM model...")
-        model = SimpleVADModel(**model_params)
+        print("Falling back to TinyVAD student model...")
+        model = create_student_model(model_params)
     
     return model
 
@@ -380,9 +338,9 @@ def train_epoch(model: nn.Module,
     
     for batch_idx, batch in enumerate(train_loader):
         # Move to device
-        features = batch['features'].to(device)
+        features = batch['mels'].to(device)
         teacher_probs = batch['teacher_probs'].to(device)
-        labels = batch['labels'].to(device)
+        labels = batch['hard_labels'].to(device)
         
         # Forward pass
         optimizer.zero_grad()
@@ -441,8 +399,8 @@ def validate(model: nn.Module,
     all_probs = []
     
     for batch in val_loader:
-        features = batch['features'].to(device)
-        labels = batch['labels'].to(device)
+        features = batch['mels'].to(device)
+        labels = batch['hard_labels'].to(device)
         
         # Forward pass
         logits = model(features)
@@ -582,9 +540,18 @@ def test_mode(config: Dict, fold_config: Dict, device: torch.device):
     
     # 1. Check paths exist
     print("\n1. Checking paths...")
+    
+    # Handle both flat and nested config structures
+    if 'data' in config:
+        manifest_path = config['data'].get('manifest', config['data'].get('manifest_path', ''))
+        teacher_probs_path = config['data'].get('teacher_probs_dir', '')
+    else:
+        manifest_path = config.get('manifest', config.get('manifest_path', ''))
+        teacher_probs_path = config.get('teacher_probs_dir', '')
+    
     paths_to_check = [
-        config['data']['manifest'],
-        config['data']['teacher_probs_dir'],
+        manifest_path,
+        teacher_probs_path,
     ]
     
     all_exist = True
@@ -617,9 +584,9 @@ def test_mode(config: Dict, fold_config: Dict, device: torch.device):
         
         # Test forward pass with one batch
         batch = next(iter(train_loader))
-        features = batch['features'].to(device)
+        features = batch['mels'].to(device)
         teacher_probs = batch['teacher_probs'].to(device)
-        labels = batch['labels'].to(device)
+        labels = batch['hard_labels'].to(device)
         
         with torch.no_grad():
             logits = model(features)
@@ -741,18 +708,26 @@ def main():
         sys.exit(1)
     
     fold_config = load_fold_config(fold_path)
-    print(f"Train speakers: {fold_config['train']}")
-    print(f"Val speaker: {fold_config['val']}")
-    print(f"Test speaker: {fold_config['test']}")
+    # Handle both old and new fold config formats
+    train_key = 'train_speakers' if 'train_speakers' in fold_config else 'train'
+    val_key = 'val_speaker' if 'val_speaker' in fold_config else 'val'
+    test_key = 'test_speaker' if 'test_speaker' in fold_config else 'test'
+    print(f"Train speakers: {fold_config[train_key]}")
+    print(f"Val speaker: {fold_config[val_key]}")
+    print(f"Test speaker: {fold_config[test_key]}")
     
     # Test mode
     if args.test:
         success = test_mode(config, fold_config, device)
         sys.exit(0 if success else 1)
     
-    # Create output directories
-    checkpoint_dir = config['output']['checkpoint_dir']
-    log_dir = config['output']['log_dir']
+    # Create output directories - handle both flat and nested configs
+    if 'output' in config:
+        checkpoint_dir = config['output'].get('checkpoint_dir', 'outputs/checkpoints/')
+        log_dir = config['output'].get('log_dir', 'outputs/logs/')
+    else:
+        checkpoint_dir = config.get('output_dir', 'outputs/') + 'checkpoints/'
+        log_dir = config.get('output_dir', 'outputs/') + 'logs/'
     os.makedirs(checkpoint_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
     
@@ -768,8 +743,11 @@ def main():
     print(f"Model parameters: {num_params:,}")
     print(f"Model size: {model_size_mb:.2f} MB")
     
-    # Create optimizer
-    training_config = config['training']
+    # Create optimizer - handle both flat and nested configs
+    if 'training' in config:
+        training_config = config['training']
+    else:
+        training_config = config  # Flat config
     learning_rate = training_config.get('learning_rate', 0.001)
     weight_decay = training_config.get('weight_decay', 0.0)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
