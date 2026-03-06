@@ -58,3 +58,7 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
+analysis/comparison/
+outputs/baselines/
+outputs/pilot/frame_probs/
+teacher_probs_fixed/
