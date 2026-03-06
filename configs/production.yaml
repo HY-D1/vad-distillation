@@ -1,78 +1,32 @@
-# Production Training Configuration
-# Purpose: Full-scale training for final model deployment
-#
-# Usage:
-#   python train.py --config configs/production.yaml
-#
-# This configuration uses:
-# - Full TORGO dataset (all speakers)
-# - Larger model architecture
-# - More training epochs
-# - GPU acceleration if available
-
-# Random seed
 seed: 42
-
-# Device
-device: cuda  # Use GPU for production training (falls back to CPU if unavailable)
-
-# Model architecture (larger for better accuracy)
-# Target size: ≤500 KB
+device: mps
 model:
   n_mels: 40
-  cnn_channels: [16, 32]    # Larger CNN frontend
-  gru_hidden: 48            # Larger GRU capacity
+  cnn_channels:
+  - 16
+  - 32
+  gru_hidden: 48
   gru_layers: 2
-  dropout: 0.1              # Light regularization
-
-# Distillation hyperparameters
-# Tuned values based on sweep experiments
-alpha: 0.6                  # Slightly favor soft loss (trust teacher)
-temperature: 3.0            # Moderate softening (good default)
-
-# Training (full scale)
+  dropout: 0.1
+alpha: 0.6
+temperature: 3.0
 dataset: torgo_full
-num_samples: 2000           # Full training set
-seq_len: 150                # ~4.8 seconds @ 32ms frames
-batch_size: 16              # Larger batches for GPU
+num_samples: 2000
+seq_len: 150
+batch_size: 16
 learning_rate: 0.001
-num_epochs: 20              # Full training
-
-# Learning rate schedule
+num_epochs: 20
 lr_scheduler:
   type: ReduceLROnPlateau
   factor: 0.5
   patience: 3
   min_lr: 0.0001
-
-# Data paths
 manifest: manifests/torgo_sentences.csv
 teacher_probs_dir: teacher_probs/
-
-# Output
 output_dir: outputs/production/
-
-# Logging
-log_interval: 50            # Log every 50 batches
-save_interval: 5            # Save checkpoint every 5 epochs
-
-# Early stopping
+log_interval: 50
+save_interval: 5
 early_stopping:
   enabled: true
-  patience: 5               # Stop if no improvement for 5 epochs
+  patience: 5
   metric: val_loss
-
-# Expected Training Time:
-# - CPU: ~2-3 hours
-# - GPU (CUDA): ~20-30 minutes
-#
-# Expected Model Performance:
-# - Size: ~450 KB (within 500KB target)
-# - Parameters: ~120,000
-# - Training Loss: < 0.3
-# - Validation Accuracy: > 95%
-#
-# Post-Training Steps:
-# 1. Evaluate on test set: python evaluate.py --model outputs/production/student_model.pt
-# 2. Export to ONNX: python export.py --model outputs/production/student_model.pt
-# 3. Benchmark: python benchmark.py --model outputs/production/student_model.pt
