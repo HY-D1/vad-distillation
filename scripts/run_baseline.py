@@ -267,16 +267,9 @@ class EnergyVADRunner:
         
         if self.EnergyVAD is not None:
             # Use imported EnergyVAD if available
-            vad = self.EnergyVAD(
-                sample_rate=self.sample_rate,
-                frame_length=self.frame_length,
-                frame_shift=self.frame_length // 2  # 50% overlap
-            )
-            # Return normalized probabilities
-            energy = vad.compute_energy(waveform.numpy())
-            # Normalize to 0-1 range using sigmoid-like transformation
-            threshold = getattr(vad, 'energy_threshold', np.mean(energy))
-            probs = 1 / (1 + np.exp(-(energy - threshold) / (threshold + 1e-10)))
+            vad = self.EnergyVAD(frame_hop_ms=int(self.frame_hop_ms))
+            audio = waveform.numpy()
+            probs, _ = vad.get_frame_probs(audio, sr=self.sample_rate)
             return probs
         else:
             # Built-in simple energy-based VAD

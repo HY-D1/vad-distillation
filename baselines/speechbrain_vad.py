@@ -163,6 +163,11 @@ class SpeechBrainVAD:
         except Exception as e:
             raise RuntimeError(f"Failed to get frame probabilities: {e}")
     
+    def process_file(self, audio_file: str) -> np.ndarray:
+        """Return frame-level speech probabilities for run_baseline.py compatibility."""
+        probs, _ = self.get_frame_probs(audio_file)
+        return probs
+    
     def get_segments(
         self,
         audio_file: str,

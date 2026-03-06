@@ -44,7 +44,7 @@ python scripts/run_baseline.py \
 ```
 
 ### 2. SpeechBrain CRDNN VAD (Reference Baseline)
-Pretrained CRDNN model trained on LibriParty (F1=0.95 on test set).
+Pretrained CRDNN model trained on LibriParty (F1=0.9477 on test set).
 ```bash
 pip install speechbrain
 python scripts/run_baseline.py \
