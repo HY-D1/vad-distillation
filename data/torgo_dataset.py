@@ -70,6 +70,11 @@ def load_mel_spectrogram(
         # Load audio
         y, orig_sr = librosa.load(str(audio_path), sr=sr, mono=True)
         
+        # Pad short audio to avoid n_fft > signal_length warning
+        # This ensures librosa can compute valid spectrograms for very short segments
+        if len(y) < n_fft:
+            y = np.pad(y, (0, n_fft - len(y)), mode='constant')
+        
         # Compute mel spectrogram
         mel_spec = librosa.feature.melspectrogram(
             y=y,

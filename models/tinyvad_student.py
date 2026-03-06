@@ -247,9 +247,14 @@ class TinyVAD(nn.Module):
         if f_max is None:
             f_max = self.sample_rate / 2
         
+        # Pad short audio to avoid n_fft > signal_length warning
+        audio = audio.astype(np.float32)
+        if len(audio) < n_fft:
+            audio = np.pad(audio, (0, n_fft - len(audio)), mode='constant')
+        
         # Compute mel spectrogram
         mel_spec = librosa.feature.melspectrogram(
-            y=audio.astype(np.float32),
+            y=audio,
             sr=self.sample_rate,
             n_fft=n_fft,
             hop_length=self.hop_length,
