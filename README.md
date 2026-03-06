@@ -30,6 +30,48 @@ python scripts/build_torgo_manifest.py \
 python train_loso.py --config configs/pilot.yaml --fold F01
 ```
 
+## Baselines
+
+We compare our TinyVAD student against three baselines:
+
+### 1. Energy-based VAD (Course Requirement)
+Simple energy thresholding with hysteresis and smoothing.
+```bash
+python scripts/run_baseline.py \
+  --method energy \
+  --manifest manifests/torgo_pilot.csv \
+  --output-dir outputs/baselines/energy/
+```
+
+### 2. SpeechBrain CRDNN VAD (Reference Baseline)
+Pretrained CRDNN model trained on LibriParty (F1=0.95 on test set).
+```bash
+pip install speechbrain
+python scripts/run_baseline.py \
+  --method speechbrain \
+  --manifest manifests/torgo_pilot.csv \
+  --output-dir outputs/baselines/speechbrain/
+```
+
+### 3. Silero VAD (Teacher / Additional Reference)
+Our distillation teacher.
+```bash
+python scripts/run_baseline.py \
+  --method silero \
+  --manifest manifests/torgo_pilot.csv \
+  --output-dir outputs/baselines/silero/
+```
+
+### Compare All Methods
+```bash
+python scripts/compare_methods.py \
+  --manifest manifests/torgo_pilot.csv \
+  --methods outputs/baselines/energy/,outputs/baselines/speechbrain/,outputs/pilot/ \
+  --method-names "Energy,SpeechBrain,Our Model" \
+  --output-dir analysis/comparison \
+  --proxy-labels teacher
+```
+
 ## Hyperparameter Sweep
 
 Run the full 36-experiment sweep (3 α × 4 T × 3 folds):

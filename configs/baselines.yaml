@@ -1,0 +1,38 @@
+# Baseline configurations for VAD comparison
+
+baselines:
+  enabled: [energy, speechbrain, silero]
+  
+  energy:
+    frame_hop_ms: 10
+    frame_length_ms: 25
+    threshold: 0.5
+    hysteresis_high: 0.6
+    hysteresis_low: 0.4
+    min_speech_dur: 0.25
+    min_silence_dur: 0.25
+    smoothing_window: 3
+    
+  speechbrain:
+    source: "speechbrain/vad-crdnn-libriparty"
+    savedir: "pretrained_models/vad-crdnn-libriparty"
+    device: null  # auto-detect
+    apply_energy_vad: false
+    merge_close_th: 0.250
+    remove_short_th: 0.250
+    
+  silero:
+    model: "silero-vad"
+    device: null  # auto-detect
+    threshold: 0.5
+
+eval:
+  frame_hop_ms: 10
+  proxy_labels: "teacher"  # Options: teacher, all_speech, none
+  threshold: 0.5
+  metrics: [auc, f1, accuracy, precision, recall, miss_rate, far]
+  
+comparison:
+  methods: []  # List of method output directories
+  method_names: []  # Display names for methods
+  output_dir: "outputs/comparison"

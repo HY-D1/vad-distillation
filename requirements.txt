@@ -28,3 +28,4 @@ ipython>=8.0.0
 
 # Optional: TensorBoard
 # tensorboard>=2.13.0
+speechbrain
