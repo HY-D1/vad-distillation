@@ -13,6 +13,26 @@ import numpy as np
 # Handle import error gracefully
 try:
     import torch
+    import torchaudio
+    # Monkey patch for torchaudio 2.10+ compatibility with SpeechBrain
+    # list_audio_backends and info were removed in torchaudio 2.10
+    if not hasattr(torchaudio, 'list_audio_backends'):
+        torchaudio.list_audio_backends = lambda: ['soundfile']
+    if not hasattr(torchaudio, 'info'):
+        # Use soundfile as fallback for torchaudio.info
+        import soundfile as sf
+        def _torchaudio_info(filepath):
+            info = sf.info(str(filepath))
+            # Return a simple namespace-like object matching torchaudio.info interface
+            class _AudioMeta:
+                pass
+            meta = _AudioMeta()
+            meta.sample_rate = info.samplerate
+            meta.num_frames = info.frames
+            meta.num_channels = info.channels
+            meta.duration = info.duration
+            return meta
+        torchaudio.info = _torchaudio_info
     from speechbrain.inference.VAD import VAD
     SPEECHBRAIN_AVAILABLE = True
 except ImportError as e:

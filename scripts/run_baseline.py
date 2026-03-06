@@ -28,6 +28,10 @@ import csv
 import json
 import logging
 import sys
+from pathlib import Path
+
+# Add parent directory to path for baselines import
+sys.path.insert(0, str(Path(__file__).parent.parent))
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -273,7 +277,7 @@ class EnergyVADRunner:
         if self.EnergyVAD is not None:
             # Use imported EnergyVAD if available
             vad = self.EnergyVAD(frame_hop_ms=int(self.frame_hop_ms))
-            audio = waveform.numpy()
+            audio = waveform.numpy().squeeze()
             probs, _ = vad.get_frame_probs(audio, sr=self.sample_rate)
             return probs
         else:
