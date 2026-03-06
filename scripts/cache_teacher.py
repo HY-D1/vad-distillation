@@ -23,6 +23,7 @@ Note: This script uses DASHES for argument names (e.g., --output-dir, NOT --outp
 
 import argparse
 import csv
+import os
 import json
 import signal
 import sys
@@ -224,7 +225,7 @@ def process_single_file(
     # Handle relative paths - manifest paths already include 'data/' prefix
     if not audio_path.is_absolute():
         # Check if path already starts with 'data/'
-        if str(audio_path).startswith('data/'):
+        if str(audio_path).startswith(f'data{os.sep}'):
             audio_path = audio_path  # Already correct
         else:
             audio_path = Path('data') / audio_path
@@ -288,7 +289,7 @@ def process_batch(
         # Handle relative paths - manifest paths already include 'data/' prefix
         if not audio_path.is_absolute():
             # Check if path already starts with 'data/'
-            if str(audio_path).startswith('data/'):
+            if str(audio_path).startswith(f'data{os.sep}'):
                 audio_path = audio_path  # Already correct
             else:
                 audio_path = Path('data') / audio_path
@@ -342,7 +343,7 @@ def group_by_length(
         audio_path = Path(row['path'])
         if not audio_path.is_absolute():
             # Check if path already starts with 'data/'
-            if not str(audio_path).startswith('data/'):
+            if not str(audio_path).startswith(f'data{os.sep}'):
                 audio_path = Path('data') / audio_path
         duration = get_audio_duration(str(audio_path))
         durations.append((duration, row))
@@ -550,7 +551,12 @@ IMPORTANT:
     
     # Auto-detect device if not specified
     if args.device is None:
-        args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        if torch.cuda.is_available():
+            args.device = 'cuda'
+        elif torch.backends.mps.is_available():
+            args.device = 'mps'
+        else:
+            args.device = 'cpu'
     elif args.device == 'cuda' and not torch.cuda.is_available():
         print("Warning: CUDA not available, falling back to CPU")
         args.device = 'cpu'

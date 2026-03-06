@@ -330,7 +330,7 @@ def process_single_file(
     # Otherwise, prepend 'data/' for backward compatibility
     if not audio_path.is_absolute():
         path_str = str(audio_path)
-        if not path_str.startswith('data/'):
+        if not path_str.startswith(f'data{os.sep}'):
             audio_path = Path('data') / audio_path
     
     cache_filename = get_cache_filename(row)

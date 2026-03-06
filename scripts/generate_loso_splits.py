@@ -32,8 +32,10 @@ Usage:
 
 import argparse
 import csv
+import os
 import json
 import sys
+import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -267,7 +269,7 @@ def create_speaker_list_manifest(speakers: list[str], output_path: str):
                 'speaker_id': speaker,
                 'session': f'Session{(i // 100) + 1}',
                 'utt_id': f'{i+1:03d}',
-                'path': f'data/{speaker}/Session{(i // 100) + 1}/{i+1:03d}.wav',
+                'path': os.path.join('data', speaker, f'Session{(i // 100) + 1}', f'{i+1:03d}.wav'),
                 'duration': None,
                 'text': None,
             })
@@ -370,7 +372,8 @@ Examples:
     if args.speakers:
         # Create temporary manifest from speaker list
         print(f"Using speaker list: {args.speakers}")
-        manifest_path = "/tmp/temp_manifest.csv"
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+            manifest_path = f.name
         create_speaker_list_manifest(args.speakers, manifest_path)
     else:
         manifest_path = args.manifest

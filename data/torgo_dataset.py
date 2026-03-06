@@ -10,6 +10,8 @@ Enhanced with comprehensive caching support.
 """
 
 import logging
+import os
+import tempfile
 import warnings
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
@@ -605,7 +607,7 @@ class TORGODataset(Dataset):
         # If path is relative and doesn't start with 'data/', prepend it
         if not audio_path.is_absolute():
             path_str = str(audio_path)
-            if not path_str.startswith('data/'):
+            if not path_str.startswith(f'data{os.sep}'):
                 # Try relative to manifest directory
                 audio_path = self.manifest_path.parent / audio_path
         
@@ -933,8 +935,7 @@ if __name__ == '__main__':
     print("\n5. Testing error handling...")
     try:
         # Test missing teacher probs
-        temp_dir = Path("/tmp/empty_teacher_probs")
-        temp_dir.mkdir(exist_ok=True)
+        temp_dir = Path(tempfile.mkdtemp(prefix="empty_teacher_probs_"))
         
         test_dataset = TORGODataset(
             manifest_path=manifest_path,

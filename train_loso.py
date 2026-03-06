@@ -536,12 +536,12 @@ class CSVLogger:
         
         # Write header if file doesn't exist
         if not os.path.exists(log_path):
-            with open(log_path, 'w') as f:
+            with open(log_path, 'w', newline='') as f:
                 f.write(','.join(fieldnames) + '\n')
     
     def log(self, metrics: Dict[str, float]):
         """Log metrics to CSV."""
-        with open(self.log_path, 'a') as f:
+        with open(self.log_path, 'a', newline='') as f:
             values = [str(metrics.get(k, '')) for k in self.fieldnames]
             f.write(','.join(values) + '\n')
 
@@ -747,12 +747,17 @@ def main():
     if args.device:
         device = torch.device(args.device)
     else:
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        elif torch.backends.mps.is_available():
+            device = torch.device('mps')
+        else:
+            device = torch.device('cpu')
     print(f"Using device: {device}")
     
     # Load fold configuration
     fold_id = args.fold
-    fold_path = f"splits/fold_{fold_id}.json"
+    fold_path = os.path.join("splits", f"fold_{fold_id}.json")
     print(f"Loading fold configuration from {fold_path}")
     
     if not os.path.exists(fold_path):
