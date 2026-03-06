@@ -46,7 +46,7 @@ lr_scheduler:
   min_lr: 0.0001
 
 # Data paths
-manifest: manifests/torgo_all.csv
+manifest: manifests/torgo_sentences.csv
 teacher_probs_dir: teacher_probs/
 
 # Output
