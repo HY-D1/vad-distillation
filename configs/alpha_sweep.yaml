@@ -9,7 +9,7 @@
 # Note: The --alpha flag overrides the config value
 
 # Random seed
-seed: 42
+seed: 6140
 
 # Device
 device: cpu  # Use cpu for sweep experiments

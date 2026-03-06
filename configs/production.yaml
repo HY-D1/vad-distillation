@@ -1,4 +1,4 @@
-seed: 42
+seed: 6140
 device: mps
 model:
   n_mels: 40

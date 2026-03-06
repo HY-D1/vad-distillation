@@ -2,7 +2,7 @@
 # Week 1: Basic functionality test on small subset
 
 # Random seed
-seed: 42
+seed: 6140
 
 # Device
 device: cpu  # Use cpu for smoke test

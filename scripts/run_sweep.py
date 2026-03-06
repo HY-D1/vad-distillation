@@ -157,7 +157,7 @@ Examples:
     parser.add_argument(
         '--seed', 
         type=int, 
-        default=42,
+        default=6140,
         help='Random seed for reproducibility'
     )
     parser.add_argument(
@@ -259,7 +259,7 @@ def generate_random_search(
     n_samples: int,
     folds: List[str],
     fixed_params: Dict[str, float],
-    seed: int = 42
+    seed: int = 6140
 ) -> List[Dict[str, Any]]:
     """
     Generate random samples for random search.
