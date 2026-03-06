@@ -62,3 +62,7 @@ analysis/comparison/
 outputs/baselines/
 outputs/pilot/frame_probs/
 teacher_probs_fixed/
+analysis/comparison/
+outputs/baselines/
+outputs/pilot/frame_probs/
+teacher_probs_fixed/
