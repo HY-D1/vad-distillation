@@ -58,18 +58,30 @@ class DistillationLoss(nn.Module):
         if tensor.shape[1] == target_len:
             return tensor
         
+        # Check if we're on MPS and need to fall back to CPU
+        # MPS doesn't support non-divisible input sizes for adaptive_avg_pool1d
+        device = tensor.device
+        if device.type == 'mps' and (tensor.shape[1] % target_len != 0):
+            tensor = tensor.cpu()
+        
         # Use adaptive average pooling to downsample
         # For 2D tensor [batch, seq_len], treat as [batch, 1, seq_len]
         # For 3D tensor [batch, seq_len, features], treat as [batch, features, seq_len]
         if tensor.dim() == 2:
             # [batch, seq_len] -> [batch, 1, seq_len] -> [batch, 1, target_len] -> [batch, target_len]
             tensor_pooled = F.adaptive_avg_pool1d(tensor.unsqueeze(1), target_len)
-            return tensor_pooled.squeeze(1)
+            result = tensor_pooled.squeeze(1)
         else:
             # [batch, seq_len, features] -> [batch, features, seq_len] -> [batch, features, target_len] -> [batch, target_len, features]
             tensor_transposed = tensor.transpose(1, 2)  # [batch, features, seq_len]
             tensor_pooled = F.adaptive_avg_pool1d(tensor_transposed, target_len)
-            return tensor_pooled.transpose(1, 2)  # [batch, target_len, features]
+            result = tensor_pooled.transpose(1, 2)  # [batch, target_len, features]
+        
+        # Move back to original device if needed
+        if result.device != device:
+            result = result.to(device)
+        
+        return result
     
     def forward(
         self,

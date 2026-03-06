@@ -457,7 +457,7 @@ class TORGODataset(Dataset):
                         np.linspace(0, len(teacher_probs) - 1, expected_frames),
                         np.arange(len(teacher_probs)),
                         teacher_probs
-                    )
+                    ).astype(np.float32)
                 else:
                     # Truncate
                     teacher_probs = teacher_probs[:expected_frames]

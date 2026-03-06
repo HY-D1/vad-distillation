@@ -952,28 +952,33 @@ def main():
         mels = batch['mels'].to(device)
         hard_labels = batch['hard_labels']
         utt_ids = batch['utt_ids']
+        lengths = batch['lengths']  # Actual lengths before padding
         
         with torch.no_grad():
             probs = model(mels)  # TinyVAD outputs probabilities directly
             predictions = (probs > 0.5).long()
         
-        # Handle sequence dimension
-        if predictions.dim() == 2:
-            predictions = predictions.cpu().numpy().flatten()
-            labels_np = hard_labels.cpu().numpy().flatten()
-            probs_np = probs.cpu().numpy().flatten()
-        else:
-            predictions = predictions.cpu().numpy()
-            labels_np = hard_labels.cpu().numpy()
-            probs_np = probs.cpu().numpy()
-        
-        all_predictions.extend(predictions)
-        all_labels.extend(labels_np)
-        all_probs.extend(probs_np)
-        # Repeat utt_ids for each frame in sequence
-        for i, utt_id in enumerate(utt_ids):
-            seq_len = mels.shape[1] if predictions.ndim == 1 else 1
-            all_utt_ids.extend([utt_id] * seq_len)
+        # Handle sequence dimension - process per utterance to handle variable lengths
+        # and CNN downsampling (output frames != input frames)
+        batch_size = predictions.shape[0]
+        for i in range(batch_size):
+            # Get actual output length for this utterance
+            output_len = predictions.shape[1]  # Time dimension
+            input_len = lengths[i].item()
+            
+            # Handle CNN downsampling: model output may be shorter than input labels
+            # Use the minimum to avoid index errors
+            effective_len = min(output_len, input_len)
+            
+            # Extract this utterance's data (handle padding by using effective_len)
+            pred_i = predictions[i, :effective_len].cpu().numpy()
+            label_i = hard_labels[i, :effective_len].cpu().numpy()
+            prob_i = probs[i, :effective_len].cpu().numpy()
+            
+            all_predictions.extend(pred_i)
+            all_labels.extend(label_i)
+            all_probs.extend(prob_i)
+            all_utt_ids.extend([utt_ids[i]] * effective_len)
     
     # Save predictions to file
     predictions_path = os.path.join(log_dir, f"fold_{fold_id}_predictions.npz")
