@@ -778,8 +778,9 @@ def main():
         checkpoint_dir = config['output'].get('checkpoint_dir', 'outputs/checkpoints/')
         log_dir = config['output'].get('log_dir', 'outputs/logs/')
     else:
-        checkpoint_dir = config.get('output_dir', 'outputs/') + 'checkpoints/'
-        log_dir = config.get('output_dir', 'outputs/') + 'logs/'
+        output_dir = config.get('output_dir', 'outputs/')
+        checkpoint_dir = os.path.join(output_dir, 'checkpoints')
+        log_dir = os.path.join(output_dir, 'logs')
     os.makedirs(checkpoint_dir, exist_ok=True)
     os.makedirs(log_dir, exist_ok=True)
     

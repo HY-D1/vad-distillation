@@ -299,7 +299,8 @@ def experiment_to_dirname(exp: Dict[str, Any]) -> str:
     """Convert experiment config to directory name."""
     parts = []
     for key in sorted(exp.keys()):
-        if key != 'fold':
+        # Skip fold and internal keys (starting with _)
+        if key != 'fold' and not key.startswith('_'):
             value = exp[key]
             # Format: param_value
             if isinstance(value, float):
@@ -377,7 +378,15 @@ def run_single_experiment(
     
     # Create experiment config
     exp_config = create_experiment_config(base_config, exp_params, sweep_epochs, sweep_patience)
-    exp_config['output_dir'] = exp_output_dir
+    
+    # Set output_dir - use nested 'output' key if base_config has it, otherwise flat
+    if 'output' in base_config:
+        if 'output' not in exp_config:
+            exp_config['output'] = {}
+        exp_config['output']['checkpoint_dir'] = os.path.join(exp_output_dir, 'checkpoints/')
+        exp_config['output']['log_dir'] = os.path.join(exp_output_dir, 'logs/')
+    else:
+        exp_config['output_dir'] = exp_output_dir
     
     # Save experiment config
     exp_config_path = os.path.join(exp_output_dir, 'config.yaml')
