@@ -189,7 +189,8 @@ def generate_report(
 """
     
     for speaker, metrics in speaker_metrics.items():
-        speaker_type = "Dysarthric" if speaker in ["F01", "M01"] else "Control"
+        speaker_upper = speaker.upper()
+        speaker_type = "Dysarthric" if speaker_upper in ["F01", "M01"] else "Control"
         report += f"- {speaker} ({speaker_type}): {metrics['utterance_count']} utterances"
         if metrics['missing_count'] > 0:
             report += f" ({metrics['missing_count']} missing)"
@@ -229,7 +230,8 @@ def generate_report(
 """
     
     for speaker, metrics in speaker_metrics.items():
-        speaker_type = "Dysarthric" if speaker in ["F01", "M01"] else "Control"
+        speaker_upper = speaker.upper()
+        speaker_type = "Dysarthric" if speaker_upper in ["F01", "M01"] else "Control"
         
         if metrics['utterance_count'] == 0:
             report += f"| {speaker} | {speaker_type} | 0 | - | - | - | - | - | - |\n"

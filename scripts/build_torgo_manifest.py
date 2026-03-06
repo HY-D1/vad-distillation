@@ -162,7 +162,7 @@ def find_audio_files(data_dir: str, compute_durations: bool = True,
         if not speaker_dir.is_dir():
             continue
             
-        speaker_id = speaker_dir.name
+        speaker_id = speaker_dir.name.upper()  # Normalize to uppercase
         
         # Walk through sessions
         for session_dir in sorted(speaker_dir.iterdir()):
@@ -177,7 +177,7 @@ def find_audio_files(data_dir: str, compute_durations: bool = True,
                 continue
             
             # Find all .wav files
-            for wav_file in sorted(wav_dir.glob("*.wav")):
+            for wav_file in sorted([f for f in wav_dir.iterdir() if f.suffix.lower() == '.wav']):
                 wav_files_to_process.append({
                     'speaker_id': speaker_id,
                     'session': session,

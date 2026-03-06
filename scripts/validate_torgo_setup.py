@@ -85,7 +85,7 @@ def check_directory_structure(data_dir: Path) -> dict:
             wav_dir = session_dir / "wav_headMic"
             if wav_dir.exists():
                 results['audio_dirs'].append(str(wav_dir.relative_to(data_dir)))
-                wav_files = list(wav_dir.glob("*.wav"))
+                wav_files = [f for f in wav_dir.iterdir() if f.suffix.lower() == '.wav']
                 results['wav_files'].extend([
                     str(f.relative_to(data_dir)) for f in wav_files
                 ])

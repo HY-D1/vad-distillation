@@ -20,6 +20,7 @@ Frame Alignment Note:
     - Adjust teacher/target labels to match student frame rate
 """
 
+import tempfile
 import warnings
 from pathlib import Path
 from typing import Optional, Tuple, Union
@@ -646,8 +647,7 @@ def run_comprehensive_tests():
     print("=" * 70)
     
     # Create temporary directory for exports
-    output_dir = Path('/tmp/tinyvad_test')
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = Path(tempfile.mkdtemp(prefix="tinyvad_test_"))
     
     # Define model variants
     variants = [
