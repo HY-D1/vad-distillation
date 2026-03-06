@@ -448,7 +448,12 @@ Examples:
     # Auto-detect device if not specified
     import torch
     if args.device is None:
-        args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        if torch.cuda.is_available():
+            args.device = 'cuda'
+        elif torch.backends.mps.is_available():
+            args.device = 'mps'
+        else:
+            args.device = 'cpu'
     elif args.device == 'cuda' and not torch.cuda.is_available():
         print("Warning: CUDA not available, falling back to CPU")
         args.device = 'cpu'
