@@ -415,9 +415,20 @@ def validate(model: nn.Module,
             import torch.nn.functional as F
             target_len = output.shape[1]
             # Pool labels: [batch, seq_len] -> [batch, target_len]
+            
+            # MPS workaround: adaptive_avg_pool1d requires input size divisible by output size
+            labels_for_pooling = labels.unsqueeze(1).float()
+            if device.type == 'mps' and (labels_for_pooling.shape[-1] % target_len != 0):
+                labels_for_pooling = labels_for_pooling.cpu()
+            
             labels_pooled = F.adaptive_avg_pool1d(
-                labels.unsqueeze(1).float(), target_len
+                labels_for_pooling, target_len
             ).squeeze(1)
+            
+            # Move back to original device if needed
+            if labels_pooled.device != device:
+                labels_pooled = labels_pooled.to(device)
+            
             labels = (labels_pooled > 0.5).long()  # Convert back to binary
         
         # Determine output type: TinyVAD outputs single probabilities (sigmoid)
