@@ -24,7 +24,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import yaml
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau, StepLR
 from torch.utils.data import DataLoader
 
 # Add project root to path for imports (works both from project root and scripts/)
@@ -804,7 +804,7 @@ def main():
     
     # Setup checkpoint paths
     checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_latest.pt")
-    best_checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_best.pt")
+    best_checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_latest_best.pt")
     
     # Training state
     start_epoch = 0
