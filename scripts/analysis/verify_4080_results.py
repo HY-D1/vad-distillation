@@ -137,32 +137,32 @@ Examples:
     parser.add_argument(
         '--min-auc',
         type=float,
-        default=0.50,
-        help='Minimum acceptable AUC (default: 0.50)'
+        default=0.85,
+        help='Minimum acceptable AUC (default: 0.85)'
     )
     parser.add_argument(
         '--min-f1',
         type=float,
-        default=0.50,
-        help='Minimum acceptable F1 score (default: 0.50)'
+        default=0.45,
+        help='Minimum acceptable F1 score for atypical speech (default: 0.45)'
     )
     parser.add_argument(
         '--max-miss-rate',
         type=float,
-        default=0.50,
-        help='Maximum acceptable miss rate (default: 0.50)'
+        default=0.65,
+        help='Maximum acceptable miss rate for atypical speech (default: 0.65)'
     )
     parser.add_argument(
         '--max-far',
         type=float,
-        default=0.50,
-        help='Maximum acceptable false alarm rate (default: 0.50)'
+        default=0.05,
+        help='Maximum acceptable false alarm rate (default: 0.05)'
     )
     parser.add_argument(
         '--min-best-auc',
         type=float,
-        default=0.50,
-        help='Minimum reasonable best_auc value (default: 0.50)'
+        default=0.85,
+        help='Minimum reasonable best_auc value (default: 0.85)'
     )
     parser.add_argument(
         '--output',
@@ -209,28 +209,36 @@ def load_summary(logs_dir: Path, fold_id: str) -> Optional[Dict]:
         return None
 
 
-def verify_checkpoint_loadable(checkpoint_path: Path) -> Tuple[bool, Optional[int], Optional[float]]:
+def verify_checkpoint_loadable(checkpoint_path: Path, expected_best_auc: Optional[float] = None) -> Tuple[bool, Optional[int], Optional[str]]:
     """Verify that a checkpoint can be loaded with torch.
     
+    Args:
+        checkpoint_path: Path to the checkpoint file
+        expected_best_auc: Optional best_auc value from summary for cross-checking
+    
     Returns:
-        Tuple of (loadable, epoch, best_auc)
+        Tuple of (loadable, epoch, error_message)
     """
     if not TORCH_AVAILABLE:
-        return False, None, None
+        return False, None, "PyTorch not available"
     
     try:
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
         # Check required keys exist
         required_keys = ['model_state_dict', 'epoch']
         if not all(key in checkpoint for key in required_keys):
-            return False, None, None
+            missing = [k for k in required_keys if k not in checkpoint]
+            return False, None, f"Missing required keys: {missing}"
         
         epoch = checkpoint.get('epoch')
-        best_auc = checkpoint.get('best_auc')
         
-        return True, epoch, best_auc
-    except Exception:
-        return False, None, None
+        # Note: best_auc is stored in summary.json, not in checkpoint
+        # The checkpoint contains metrics for the specific epoch it was saved
+        
+        return True, epoch, None
+    except Exception as e:
+        error_msg = f"{type(e).__name__}: {str(e)}"
+        return False, None, error_msg
 
 
 def verify_fold(
@@ -256,11 +264,10 @@ def verify_fold(
     
     # Try to load checkpoint if requested
     checkpoint_loadable = False
-    checkpoint_best_auc = None
     if args.verify_checkpoint_loadable and checkpoint_exists:
-        checkpoint_loadable, epoch, checkpoint_best_auc = verify_checkpoint_loadable(checkpoint_path)
+        checkpoint_loadable, epoch, error_msg = verify_checkpoint_loadable(checkpoint_path)
         if not checkpoint_loadable:
-            issues.append("Checkpoint not loadable")
+            issues.append(f"Checkpoint not loadable: {error_msg}")
     
     # Extract metrics from summary
     best_auc = None
