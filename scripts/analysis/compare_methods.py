@@ -410,8 +410,16 @@ def evaluate_method(
     }
 
 
-def format_size(size_kb: float) -> str:
-    """Format size in KB to human-readable string."""
+def format_size(size_kb) -> str:
+    """Format size in KB to human-readable string.
+    
+    Handles special string values like "N/A" or "~1400".
+    """
+    # Handle string values (N/A, ~1400, etc.)
+    if isinstance(size_kb, str):
+        return size_kb
+    
+    # Handle numeric values
     if size_kb < 1024:
         return f"{size_kb:.1f} KB"
     elif size_kb < 1024 * 1024:
@@ -420,32 +428,66 @@ def format_size(size_kb: float) -> str:
         return f"{size_kb / (1024 * 1024):.2f} GB"
 
 
-def format_latency(ms_per_frame: float) -> str:
-    """Format latency in ms/frame to human-readable string."""
-    if ms_per_frame < 1:
-        return f"{ms_per_frame * 1000:.2f} μs"
-    elif ms_per_frame < 1000:
-        return f"{ms_per_frame:.2f} ms"
-    else:
-        return f"{ms_per_frame / 1000:.2f} s"
+def format_latency(ms_per_frame) -> str:
+    """Format latency in ms/frame to human-readable string.
+    
+    Always shows in ms for consistency in comparison tables.
+    Handles special string values like "N/A".
+    """
+    # Handle string values (N/A, etc.)
+    if isinstance(ms_per_frame, str):
+        return ms_per_frame
+    
+    # Always show in ms for consistency
+    return f"{ms_per_frame:.3f} ms"
 
 
 def load_timing_data(timing_file: Optional[str]) -> Dict[str, float]:
-    """Load timing data from JSON file."""
+    """Load timing data from JSON file.
+    
+    Supports both flat format: {"Method": 0.5}
+    And nested format: {"Method": {"latency_ms": 0.5, ...}}
+    """
     if timing_file is None or not Path(timing_file).exists():
         return {}
     
     with open(timing_file, 'r') as f:
-        return json.load(f)
+        data = json.load(f)
+    
+    # Convert nested format to flat format
+    result = {}
+    for method, value in data.items():
+        if isinstance(value, dict) and 'latency_ms' in value:
+            result[method] = value['latency_ms']
+        elif isinstance(value, (int, float)):
+            result[method] = value
+    return result
 
 
-def load_model_sizes(size_file: Optional[str]) -> Dict[str, float]:
-    """Load model size data from JSON file."""
+def load_model_sizes(size_file: Optional[str]) -> Dict[str, Any]:
+    """Load model size data from JSON file.
+    
+    Supports both flat format: {"Method": 473}
+    And nested format: {"Method": {"size_kb": 473, ...}}
+    Returns dict with method -> size_kb (or special string like "N/A")
+    """
     if size_file is None or not Path(size_file).exists():
         return {}
     
     with open(size_file, 'r') as f:
-        return json.load(f)
+        data = json.load(f)
+    
+    # Convert nested format to flat format, handling special values
+    result = {}
+    for method, value in data.items():
+        if isinstance(value, dict) and 'size_kb' in value:
+            # Keep the value as-is (could be number, string like "N/A", "~1400")
+            result[method] = value['size_kb']
+        elif isinstance(value, (int, float)):
+            result[method] = value
+        elif isinstance(value, str):
+            result[method] = value
+    return result
 
 
 def save_comparison_csv(
@@ -487,8 +529,8 @@ def save_comparison_csv(
 def generate_markdown_table(results: List[Dict]) -> str:
     """Generate markdown comparison table."""
     lines = []
-    lines.append("| Method | Size | Latency | AUC | F1 | Miss Rate | FAR |")
-    lines.append("|--------|------|---------|-----|-----|-----------|-----|")
+    lines.append("| Method | Size (KB) | Latency (ms/frame) | AUC | F1 | Miss Rate | FAR |")
+    lines.append("|--------|-----------|--------------------|-----|-----|-----------|-----|")
     
     for result in results:
         name = result['name']
@@ -546,7 +588,7 @@ def save_comparison_markdown(
         if result.get('model_size_kb'):
             lines.append(f"- **Model Size:** {format_size(result['model_size_kb'])}")
         if result.get('latency_ms'):
-            lines.append(f"- **Latency:** {format_latency(result['latency_ms'])}")
+            lines.append(f"- **Latency:** {result['latency_ms']:.3f} ms/frame")
         
         metrics = result['metrics']
         if metrics:

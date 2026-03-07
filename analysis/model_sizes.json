@@ -1,0 +1,14 @@
+{
+  "Energy": {
+    "size_kb": "N/A",
+    "type": "signal processing"
+  },
+  "Silero": {
+    "size_kb": "~1400",
+    "type": "PyTorch model"
+  },
+  "Our Model": {
+    "size_kb": 473,
+    "type": "distilled student"
+  }
+}
