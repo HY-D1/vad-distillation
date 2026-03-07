@@ -48,7 +48,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from data import TORGODataset, collate_fn
-from utils import load_config, ensure_dir, format_duration
+from utils import load_config, ensure_dir, format_duration, get_device, compute_metrics
 
 
 def parse_args() -> argparse.Namespace:
@@ -126,20 +126,6 @@ Examples:
     )
 
     return parser.parse_args()
-
-
-def get_device(device_arg: Optional[str] = None) -> torch.device:
-    """Get the appropriate device for Mac verification."""
-    if device_arg:
-        return torch.device(device_arg)
-
-    # Auto-detect: prefer MPS on Mac, fall back to CPU
-    if torch.backends.mps.is_available():
-        print("Using MPS (Apple Silicon)")
-        return torch.device('mps')
-    else:
-        print("Using CPU")
-        return torch.device('cpu')
 
 
 def load_fold_config(fold_id: str) -> Dict:
@@ -220,69 +206,6 @@ def create_test_dataloader(config: Dict, fold_config: Dict, batch_size: int) -> 
     )
 
     return test_loader
-
-
-def compute_metrics(predictions: np.ndarray,
-                    labels: np.ndarray,
-                    probs: np.ndarray,
-                    threshold: float = 0.5) -> Dict[str, float]:
-    """Compute classification metrics."""
-    from sklearn.metrics import roc_auc_score, f1_score, confusion_matrix
-
-    # Flatten arrays
-    predictions = predictions.flatten()
-    labels = labels.flatten()
-    probs = probs.flatten()
-
-    # Mask out invalid labels (-1)
-    valid_mask = labels >= 0
-    predictions = predictions[valid_mask]
-    labels = labels[valid_mask]
-    probs = probs[valid_mask]
-
-    if len(labels) == 0:
-        return {
-            'auc': 0.0,
-            'f1': 0.0,
-            'miss_rate': 0.0,
-            'false_alarm_rate': 0.0,
-            'accuracy': 0.0,
-            'precision': 0.0,
-            'recall': 0.0
-        }
-
-    # AUC
-    try:
-        auc = roc_auc_score(labels, probs)
-    except ValueError:
-        auc = 0.0
-
-    # F1 Score
-    f1 = f1_score(labels, predictions, zero_division=0)
-
-    # Confusion matrix
-    tn, fp, fn, tp = confusion_matrix(labels, predictions, labels=[0, 1]).ravel()
-
-    # Metrics
-    miss_rate = fn / (fn + tp) if (fn + tp) > 0 else 0.0
-    false_alarm_rate = fp / (fp + tn) if (fp + tn) > 0 else 0.0
-    accuracy = (tp + tn) / (tp + tn + fp + fn) if (tp + tn + fp + fn) > 0 else 0.0
-    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
-    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-
-    return {
-        'auc': auc,
-        'f1': f1,
-        'miss_rate': miss_rate,
-        'false_alarm_rate': false_alarm_rate,
-        'accuracy': accuracy,
-        'precision': precision,
-        'recall': recall,
-        'tp': int(tp),
-        'tn': int(tn),
-        'fp': int(fp),
-        'fn': int(fn)
-    }
 
 
 @torch.no_grad()

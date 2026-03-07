@@ -440,7 +440,7 @@ def test_speechbrain_vad():
     try:
         os.remove(test_file)
         print(f"   Removed: {test_file}")
-    except:
+    except Exception:
         pass
     
     print("\n" + "=" * 60)

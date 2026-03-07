@@ -23,6 +23,8 @@ from utils.common import (
     count_parameters,
     get_model_size_mb,
     format_model_size,
+    get_device,
+    compute_metrics,
 )
 
 __all__ = [
@@ -42,4 +44,6 @@ __all__ = [
     "count_parameters",
     "get_model_size_mb",
     "format_model_size",
+    "get_device",
+    "compute_metrics",
 ]

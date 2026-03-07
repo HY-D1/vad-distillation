@@ -41,6 +41,7 @@ import torchaudio
 
 # Import shared audio utilities
 from utils.audio import load_audio
+from utils.common import get_device
 import yaml
 from tqdm import tqdm
 
@@ -50,26 +51,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-
-def get_device(device: Optional[str] = None) -> torch.device:
-    """
-    Get torch device, auto-detecting if not specified.
-    
-    Args:
-        device: Device string ('cpu', 'cuda', or None for auto)
-        
-    Returns:
-        torch.device object
-    """
-    if device is None:
-        if torch.cuda.is_available():
-            device = 'cuda'
-        elif torch.backends.mps.is_available():
-            device = 'mps'
-        else:
-            device = 'cpu'
-    return torch.device(device)
 
 
 def load_manifest(manifest_path: str) -> List[Dict[str, Any]]:

@@ -76,7 +76,7 @@ def print_header(text: str):
 
 def print_fold_status(fold: str, status: str, message: str = ""):
     """Print fold status with color coding."""
-    GREEN, RED, YELLOW, _, CYAN, RESET, BOLD = get_colored_output()
+    GREEN, RED, YELLOW, BLUE, CYAN, RESET, BOLD = get_colored_output()
     
     status_colors = {
         "PENDING": YELLOW,

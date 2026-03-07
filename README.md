@@ -320,7 +320,7 @@ python scripts/analysis/analyze_week2.py \
 | `train_loso.py` | Main training script with LOSO support |
 | `scripts/core/run_sweep.py` | Hyperparameter sweep runner |
 | `scripts/analysis/analyze_week2.py` | Results analysis and visualization |
-| `scripts/data/cache_manager.py` | Cache status, verify, clean |
+| `scripts/deprecated/cache_manager.py` | Cache status, verify, clean |
 | `scripts/data/build_torgo_manifest.py` | Generate dataset manifest |
 | `scripts/data/validate_torgo_setup.py` | Validate TORGO installation |
 

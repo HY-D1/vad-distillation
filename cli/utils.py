@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 from typing import Callable, Optional
 
+from utils.common import format_duration
+
 
 def ensure_project_root() -> Path:
     """
@@ -71,28 +73,6 @@ def confirm_action(message: str, default: bool = False) -> bool:
     if not response:
         return default
     return response in ('y', 'yes')
-
-
-def format_duration(seconds: float) -> str:
-    """
-    Format duration in seconds to human-readable string.
-    
-    Args:
-        seconds: Duration in seconds
-        
-    Returns:
-        Formatted string (e.g., "1h 30m 45s")
-    """
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    secs = int(seconds % 60)
-    
-    if hours > 0:
-        return f"{hours}h {minutes}m {secs}s"
-    elif minutes > 0:
-        return f"{minutes}m {secs}s"
-    else:
-        return f"{secs}s"
 
 
 def format_size(size_bytes: float) -> str:

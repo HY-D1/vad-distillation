@@ -54,7 +54,7 @@ Essential scripts for training, validation, and running experiments.
 
 - **verify_checkpoint.py** - Verify trained checkpoint integrity and metrics.
   ```bash
-  python scripts/core/verify_checkpoint.py --checkpoint outputs/checkpoints/fold_F01_latest_best.pt --fold F01
+  python scripts/core/verify_checkpoint.py --checkpoint outputs/production_cuda/checkpoints/fold_F01_latest_best.pt --fold F01
   ```
 
 ### Testing Scripts
@@ -227,7 +227,7 @@ Deprecated or one-off scripts kept for reference.
    python scripts/analysis/compare_methods.py --manifest manifests/torgo_pilot.csv --methods outputs/exp1/frame_probs --method-names "Our Model"
    
    # Verify checkpoint
-   python scripts/core/verify_checkpoint.py --checkpoint outputs/checkpoints/fold_F01_latest_best.pt --fold F01
+   python scripts/core/verify_checkpoint.py --checkpoint outputs/production_cuda/checkpoints/fold_F01_latest_best.pt --fold F01
    ```
 
 ---

@@ -34,7 +34,10 @@ import traceback
 import warnings
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from cli.utils import ProgressTracker
 
 import numpy as np
 import torch
@@ -347,7 +350,7 @@ def process_single_file(
                     # Invalid cache, delete and recompute
                     try:
                         cache_path.unlink()
-                    except:
+                    except Exception:
                         pass
             else:
                 return 'skipped', None

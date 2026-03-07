@@ -9,7 +9,7 @@ for configuration loading, path handling, and common operations.
 import json
 import sys
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Tuple, Union
 
 import yaml
 
@@ -178,7 +178,10 @@ def format_size(size_bytes: float) -> str:
     return f"{size_bytes:.2f} PB"
 
 
-# Import torch for model utility functions (with fallback if not available)
+# =============================================================================
+# PyTorch-dependent utilities (with fallback if torch not available)
+# =============================================================================
+
 try:
     import torch
     import torch.nn as nn
@@ -210,9 +213,30 @@ try:
         """
         size_mb = get_model_size_mb(model)
         return format_size(size_mb * 1024 * 1024)
+    
+    def get_device(device: Optional[Union[str, torch.device]] = None) -> torch.device:
+        """
+        Get torch device, auto-detecting if not specified.
         
+        Args:
+            device: Device string ('cpu', 'cuda', 'mps') or torch.device, 
+                    or None for auto-detection
+        
+        Returns:
+            torch.device object
+        """
+        if device is None:
+            if torch.cuda.is_available():
+                device = 'cuda'
+            elif torch.backends.mps.is_available():
+                device = 'mps'
+            else:
+                device = 'cpu'
+        return torch.device(device)
+
 except ImportError:
     torch = None
+    nn = None
     
     def count_parameters(model) -> int:
         """Count trainable parameters (torch not available)."""
@@ -225,6 +249,100 @@ except ImportError:
     def format_model_size(model) -> str:
         """Format model size (torch not available)."""
         raise ImportError("torch is required for format_model_size")
+    
+    def get_device(device: Optional[Any] = None):
+        """Get device (torch not available)."""
+        raise ImportError("torch is required for get_device")
+
+
+# =============================================================================
+# Metrics computation (with fallback if sklearn not available)
+# =============================================================================
+
+try:
+    import numpy as np
+    from sklearn.metrics import roc_auc_score, f1_score, confusion_matrix
+    
+    def compute_metrics(
+        predictions: np.ndarray,
+        labels: np.ndarray,
+        probs: np.ndarray,
+        threshold: float = 0.5
+    ) -> Dict[str, float]:
+        """
+        Compute classification metrics for VAD evaluation.
+        
+        Args:
+            predictions: Binary predictions [N]
+            labels: Ground truth labels [N]
+            probs: Probability of positive class [N]
+            threshold: Threshold for binary classification
+        
+        Returns:
+            Dictionary of metrics (auc, f1, miss_rate, false_alarm_rate, 
+            accuracy, precision, recall)
+        """
+        # Flatten arrays
+        predictions = predictions.flatten()
+        labels = labels.flatten()
+        probs = probs.flatten()
+    
+        # Mask out invalid labels (-1)
+        valid_mask = labels >= 0
+        predictions = predictions[valid_mask]
+        labels = labels[valid_mask]
+        probs = probs[valid_mask]
+    
+        if len(labels) == 0:
+            return {
+                'auc': 0.0,
+                'f1': 0.0,
+                'miss_rate': 0.0,
+                'false_alarm_rate': 0.0,
+                'accuracy': 0.0,
+                'precision': 0.0,
+                'recall': 0.0
+            }
+    
+        # AUC
+        try:
+            auc = roc_auc_score(labels, probs)
+        except ValueError:
+            auc = 0.0
+    
+        # F1 Score
+        f1 = f1_score(labels, predictions, zero_division=0)
+    
+        # Confusion matrix
+        tn, fp, fn, tp = confusion_matrix(labels, predictions, labels=[0, 1]).ravel()
+    
+        # Metrics
+        miss_rate = fn / (fn + tp) if (fn + tp) > 0 else 0.0
+        false_alarm_rate = fp / (fp + tn) if (fp + tn) > 0 else 0.0
+        accuracy = (tp + tn) / (tp + tn + fp + fn) if (tp + tn + fp + fn) > 0 else 0.0
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    
+        return {
+            'auc': auc,
+            'f1': f1,
+            'miss_rate': miss_rate,
+            'false_alarm_rate': false_alarm_rate,
+            'accuracy': accuracy,
+            'precision': precision,
+            'recall': recall,
+            'tp': int(tp),
+            'tn': int(tn),
+            'fp': int(fp),
+            'fn': int(fn)
+        }
+
+except ImportError:
+    np = None
+    
+    def compute_metrics(predictions, labels, probs, threshold: float = 0.5) -> Dict[str, float]:
+        """Compute metrics (numpy/sklearn not available)."""
+        raise ImportError("numpy and sklearn are required for compute_metrics")
 
 
 __all__ = [
@@ -240,4 +358,6 @@ __all__ = [
     'count_parameters',
     'get_model_size_mb',
     'format_model_size',
+    'get_device',
+    'compute_metrics',
 ]

@@ -33,7 +33,10 @@ import warnings
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from cli.utils import ProgressTracker
 
 import numpy as np
 import torch

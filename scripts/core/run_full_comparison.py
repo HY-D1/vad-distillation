@@ -39,6 +39,8 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import yaml
 
+from utils.common import get_device
+
 # Setup logging
 logging.basicConfig(
     level=logging.INFO,
@@ -67,16 +69,6 @@ AVAILABLE_METHODS = ['energy', 'silero', 'speechbrain', 'our_model']
 # =============================================================================
 # Utility Functions
 # =============================================================================
-
-def get_device() -> str:
-    """Get the best available device."""
-    import torch
-    if torch.cuda.is_available():
-        return 'cuda'
-    elif torch.backends.mps.is_available():
-        return 'mps'
-    return 'cpu'
-
 
 def check_baseline_exists(baseline_dir: Path, method: str) -> bool:
     """Check if a baseline has already been run."""

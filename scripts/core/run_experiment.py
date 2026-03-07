@@ -46,23 +46,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
+from utils.common import load_config, save_config
+
 
 # =============================================================================
 # Configuration Loading and Manipulation
 # =============================================================================
-
-def load_config(config_path: str) -> Dict[str, Any]:
-    """Load YAML configuration file."""
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
-
-
-def save_config(config: Dict[str, Any], output_path: str):
-    """Save configuration to YAML file."""
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, 'w') as f:
-        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
-
 
 def override_config(config: Dict[str, Any], overrides: Dict[str, Any]) -> Dict[str, Any]:
     """
