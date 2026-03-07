@@ -197,6 +197,19 @@ try:
             buffer_size += buffer.nelement() * buffer.element_size()
         size_mb = (param_size + buffer_size) / 1024**2
         return size_mb
+    
+    def format_model_size(model: nn.Module) -> str:
+        """
+        Format model size as a human-readable string.
+        
+        Args:
+            model: PyTorch model
+            
+        Returns:
+            Formatted string (e.g., "473.25 KB")
+        """
+        size_mb = get_model_size_mb(model)
+        return format_size(size_mb * 1024 * 1024)
         
 except ImportError:
     torch = None
@@ -208,6 +221,10 @@ except ImportError:
     def get_model_size_mb(model) -> float:
         """Get model size in MB (torch not available)."""
         raise ImportError("torch is required for get_model_size_mb")
+    
+    def format_model_size(model) -> str:
+        """Format model size (torch not available)."""
+        raise ImportError("torch is required for format_model_size")
 
 
 __all__ = [
@@ -222,4 +239,5 @@ __all__ = [
     'format_size',
     'count_parameters',
     'get_model_size_mb',
+    'format_model_size',
 ]

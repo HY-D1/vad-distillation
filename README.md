@@ -981,6 +981,50 @@ python inspect_model.py outputs/pilot/checkpoints/fold_F01_latest_best.pt
 
 ---
 
+## Model Variants
+
+The TinyVAD architecture supports multiple size variants to trade off between model capacity and deployment constraints. All variants maintain the ≤ 500 KB target size.
+
+| Variant | CNN Channels | GRU Hidden | GRU Layers | Approx. Size | Use Case | Default Config |
+|---------|-------------|------------|------------|--------------|----------|----------------|
+| **Default** | [14, 28] | 32 | 2 | ~473 KB | Production training, best accuracy | `production_cuda.yaml` |
+| **Small** | [12, 24] | 20 | 2 | ~300-400 KB | Balanced accuracy/size for edge devices | *Custom* |
+| **Tiny** | [16] | 16 | 2 | ~100-200 KB | Ultra-compact, mobile/embedded | *Custom* |
+| **Micro** | [8] | 8 | 2 | ~50-100 KB | Minimal footprint, feasibility testing | *Custom* |
+| **Pilot** | [8, 16] | 24 | 2 | ~200-300 KB | Fast smoke testing, CPU-friendly | `pilot.yaml` |
+
+### Selecting a Variant
+
+**For production use**: Use the **Default** variant (`cnn_channels: [14, 28]`, `gru_hidden: 32`) which provides the best accuracy while meeting the ≤ 500 KB constraint. This is used in:
+- `configs/production_cuda.yaml` (RTX 4080)
+- `configs/production.yaml` (MPS/macOS)
+
+**For quick testing**: Use the **Pilot** variant which trains faster on CPU:
+```bash
+python train_loso.py --config configs/pilot.yaml --fold F01 --test
+```
+
+**For custom deployments**: Create your own config by adjusting the `model` section:
+```yaml
+model:
+  n_mels: 40
+  cnn_channels: [12, 24]  # Try [16] for Tiny, [8] for Micro
+  gru_hidden: 20          # Try 16 for Tiny, 8 for Micro
+  gru_layers: 2
+  dropout: 0.1
+```
+
+### Size vs. Accuracy Trade-offs
+
+| Variant | Expected AUC | Latency (CPU) | Best For |
+|---------|-------------|---------------|----------|
+| Default | > 0.90 | ~8-10 ms/frame | Production, accuracy-critical |
+| Small | > 0.85 | ~6-8 ms/frame | Edge devices, balanced |
+| Tiny | > 0.80 | ~4-6 ms/frame | Mobile apps, real-time |
+| Micro | > 0.75 | ~2-4 ms/frame | Feasibility, ultra-low latency |
+
+---
+
 ## License
 
 MIT License - See [LICENSE](LICENSE)
