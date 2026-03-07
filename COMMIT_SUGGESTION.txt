@@ -196,10 +196,11 @@ git log -1 --stat
 # 2. Optional: Push to remote (if configured)
 # git push origin main
 
-# 3. Resume training on incomplete folds
-python train_loso.py --config configs/production_cuda.yaml --fold F04
-python train_loso.py --config configs/production_cuda.yaml --fold FC01
-python train_loso.py --config configs/production_cuda.yaml --fold M01
+# 3. Resume training on incomplete folds (PowerShell)
+$folds = @('F04','FC01','M01')
+foreach ($fold in $folds) {
+    python train_loso.py --config configs/production_cuda.yaml --fold $fold
+}
 
 --------------------------------------------------------------------------------
 

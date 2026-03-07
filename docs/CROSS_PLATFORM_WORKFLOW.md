@@ -247,28 +247,33 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 .\scripts\train_all_folds.ps1
 ```
 
-**Option B: Individual Commands**
+**Option B: PowerShell Loop (All Folds)**
 
 ```powershell
-# Train each fold individually (allows selective retraining)
-python train_loso.py --config configs/production_cuda.yaml --fold F01
-python train_loso.py --config configs/production_cuda.yaml --fold F03
-python train_loso.py --config configs/production_cuda.yaml --fold F04
-python train_loso.py --config configs/production_cuda.yaml --fold M01
-python train_loso.py --config configs/production_cuda.yaml --fold M02
-python train_loso.py --config configs/production_cuda.yaml --fold M03
-python train_loso.py --config configs/production_cuda.yaml --fold M04
-python train_loso.py --config configs/production_cuda.yaml --fold M05
-python train_loso.py --config configs/production_cuda.yaml --fold FC01
-python train_loso.py --config configs/production_cuda.yaml --fold FC02
-python train_loso.py --config configs/production_cuda.yaml --fold FC03
-python train_loso.py --config configs/production_cuda.yaml --fold MC01
-python train_loso.py --config configs/production_cuda.yaml --fold MC02
-python train_loso.py --config configs/production_cuda.yaml --fold MC03
-python train_loso.py --config configs/production_cuda.yaml --fold MC04
+# Train all remaining folds automatically
+$folds = @('F04','FC01','FC02','FC03','M01','M02','M03','M04','M05','MC01','MC02','MC03','MC04')
+foreach ($fold in $folds) {
+    Write-Host "Training fold: $fold" -ForegroundColor Green
+    python train_loso.py --config configs/production_cuda.yaml --fold $fold
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Training failed for fold: $fold" -ForegroundColor Red
+        break
+    }
+}
 ```
 
-**Option C: Parallel Training (Advanced)**
+**Option C: Train Specific Folds**
+
+```powershell
+# Train only specific folds (modify the array as needed)
+$folds = @('F04','M01','M02')
+foreach ($fold in $folds) {
+    Write-Host "Training fold: $fold" -ForegroundColor Green
+    python train_loso.py --config configs/production_cuda.yaml --fold $fold
+}
+```
+
+**Option D: Parallel Training (Advanced)**
 
 ```powershell
 # Train multiple folds in parallel (if VRAM allows)
@@ -296,7 +301,7 @@ Get-Content outputs/production_cuda/logs/fold_F01.csv -Wait
 ```
 outputs/production_cuda/
 ├── checkpoints/
-│   ├── fold_F01_best.pt
+│   ├── fold_F01_latest_best.pt
 │   ├── fold_F01_latest.pt
 │   ├── fold_F03_best.pt
 │   ├── fold_F03_latest.pt
@@ -538,8 +543,10 @@ python train_loso.py --config configs/quick_test.yaml --fold F01
 python train_loso.py --config configs/pilot_cuda.yaml --fold F01 --epochs 5
 
 # Full training (all folds)
-foreach ($f in "F01","F03","F04","M01","M02","M03","M04","M05","FC01","FC02","FC03","MC01","MC02","MC03","MC04") {
-    python train_loso.py --config configs/production_cuda.yaml --fold $f
+$folds = @('F01','F03','F04','M01','M02','M03','M04','M05','FC01','FC02','FC03','MC01','MC02','MC03','MC04')
+foreach ($fold in $folds) {
+    Write-Host "Training fold: $fold" -ForegroundColor Green
+    python train_loso.py --config configs/production_cuda.yaml --fold $fold
 }
 ```
 
