@@ -10,7 +10,7 @@ param(
     [string]$Mode,
     
     # Common options
-    [switch]$Verbose,
+    [switch]$ShowVerbose,
     [switch]$NoColor,
     
     # Setup options
@@ -25,6 +25,7 @@ param(
     [string]$Device,
     
     # Train options
+    [Alias("all-folds")]
     [switch]$AllFolds,
     [string]$Resume,
     [int]$Epochs,
