@@ -30,8 +30,8 @@ import logging
 import sys
 from pathlib import Path
 
-# Add parent directory to path for baselines import
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # Project root
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -461,8 +461,8 @@ Examples:
         '--device',
         type=str,
         default=None,
-        choices=['cpu', 'cuda'],
-        help='Device to use (cpu/cuda, auto-detect if not given)'
+        choices=['cpu', 'cuda', 'mps'],
+        help='Device to use (cpu/cuda/mps, auto-detect if not given)'
     )
     parser.add_argument(
         '--test',

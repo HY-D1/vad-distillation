@@ -203,7 +203,8 @@ def extract_student_predictions(
                 # For now, save the entire fold's predictions as a single file
                 # The comparison script can load and process these
                 output_file = frame_probs_dir / f"{fold_name}.npz"
-                np.savez(output_file, probs=probs, **{k: data[k] for k in data.keys()})
+                # Don't duplicate 'probs' key - it might already be in data
+                np.savez(output_file, **{k: data[k] for k in data.keys()})
                 extracted_count += 1
                 
                 logger.info(f"  Saved predictions to {output_file}")
