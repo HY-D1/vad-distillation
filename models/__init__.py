@@ -8,8 +8,6 @@ for knowledge distillation from a teacher VAD model.
 
 from .losses import (
     DistillationLoss,
-    BCEDistillationLoss,
-    HardLabelLoss,
     create_loss_function,
 )
 from .tinyvad_student import (
@@ -29,7 +27,5 @@ __all__ = [
     'create_student_micro',
     # Losses
     'DistillationLoss',
-    'BCEDistillationLoss',
-    'HardLabelLoss',
     'create_loss_function',
 ]
