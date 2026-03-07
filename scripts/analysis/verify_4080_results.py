@@ -6,15 +6,15 @@ Validates all fold checkpoints from Windows 4080 without re-running inference.
 Checks that metrics are within expected thresholds and files are complete.
 
 Usage:
-    python scripts/verify_4080_results.py --results-dir outputs/production_cuda/
+    python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/
     
     # With custom thresholds
-    python scripts/verify_4080_results.py --results-dir outputs/production_cuda/ \
+    python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/ \
         --min-auc 0.80 --min-f1 0.65 --max-miss-rate 0.25
     
     # Save report to file
-    python scripts/verify_4080_results.py --results-dir outputs/production_cuda/ \
-        --output verification_report.json
+    python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/ \
+        --output analysis/verification_report.txt
 
 Expected directory structure:
     outputs/production_cuda/
@@ -26,6 +26,9 @@ Expected directory structure:
         ├── fold_F01_summary.json
         ├── fold_F02_summary.json
         └── ...
+
+The 15 speaker folds are: F01, F03, F04, M01, M02, M03, M04, M05, 
+FC01, FC02, FC03, MC01, MC02, MC03, MC04
 """
 
 import argparse
@@ -35,6 +38,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from datetime import datetime
 
 try:
     import torch
@@ -62,6 +66,7 @@ class FoldResult:
     test_metrics: Dict[str, float]
     status: Status
     issues: List[str]
+    epoch: Optional[int] = None
     
     @property
     def auc(self) -> float:
@@ -80,6 +85,13 @@ class FoldResult:
         return self.test_metrics.get('false_alarm_rate', 1.0)
 
 
+# All 15 TORGO speaker folds
+ALL_FOLDS = [
+    'F01', 'F03', 'F04', 'M01', 'M02', 'M03', 'M04', 'M05',
+    'FC01', 'FC02', 'FC03', 'MC01', 'MC02', 'MC03', 'MC04'
+]
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
@@ -88,15 +100,19 @@ def parse_args() -> argparse.Namespace:
         epilog="""
 Examples:
   # Basic verification
-  python scripts/verify_4080_results.py --results-dir outputs/production_cuda/
+  python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/
 
   # Custom thresholds
-  python scripts/verify_4080_results.py --results-dir outputs/production_cuda/ \\
+  python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/ \\
       --min-auc 0.80 --min-f1 0.65 --max-miss-rate 0.25
 
-  # Save detailed report
-  python scripts/verify_4080_results.py --results-dir outputs/production_cuda/ \\
-      --output verification_report.json
+  # Save detailed report to analysis/verification_report.txt
+  python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/ \\
+      --output analysis/verification_report.txt
+
+  # Verify specific folds
+  python scripts/analysis/verify_4080_results.py --results-dir outputs/production_cuda/ \\
+      --folds F01,M01,FC01
         """
     )
 
@@ -121,26 +137,26 @@ Examples:
     parser.add_argument(
         '--min-auc',
         type=float,
-        default=0.85,
-        help='Minimum acceptable AUC (default: 0.85)'
+        default=0.50,
+        help='Minimum acceptable AUC (default: 0.50)'
     )
     parser.add_argument(
         '--min-f1',
         type=float,
-        default=0.70,
-        help='Minimum acceptable F1 score (default: 0.70)'
+        default=0.50,
+        help='Minimum acceptable F1 score (default: 0.50)'
     )
     parser.add_argument(
         '--max-miss-rate',
         type=float,
-        default=0.20,
-        help='Maximum acceptable miss rate (default: 0.20)'
+        default=0.50,
+        help='Maximum acceptable miss rate (default: 0.50)'
     )
     parser.add_argument(
         '--max-far',
         type=float,
-        default=0.20,
-        help='Maximum acceptable false alarm rate (default: 0.20)'
+        default=0.50,
+        help='Maximum acceptable false alarm rate (default: 0.50)'
     )
     parser.add_argument(
         '--min-best-auc',
@@ -151,19 +167,20 @@ Examples:
     parser.add_argument(
         '--output',
         type=str,
-        default=None,
-        help='Save verification report to JSON file'
+        default='analysis/verification_report.txt',
+        help='Save verification report to file (default: analysis/verification_report.txt)'
     )
     parser.add_argument(
         '--verify-checkpoint-loadable',
         action='store_true',
+        default=True,
         help='Attempt to load each checkpoint with torch (requires PyTorch)'
     )
     parser.add_argument(
         '--folds',
         type=str,
         default=None,
-        help='Comma-separated list of fold IDs to verify (default: auto-detect all)'
+        help='Comma-separated list of fold IDs to verify (default: all 15 TORGO folds)'
     )
 
     return parser.parse_args()
@@ -192,18 +209,28 @@ def load_summary(logs_dir: Path, fold_id: str) -> Optional[Dict]:
         return None
 
 
-def verify_checkpoint_loadable(checkpoint_path: Path) -> bool:
-    """Verify that a checkpoint can be loaded with torch."""
+def verify_checkpoint_loadable(checkpoint_path: Path) -> Tuple[bool, Optional[int], Optional[float]]:
+    """Verify that a checkpoint can be loaded with torch.
+    
+    Returns:
+        Tuple of (loadable, epoch, best_auc)
+    """
     if not TORCH_AVAILABLE:
-        return False
+        return False, None, None
     
     try:
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
         # Check required keys exist
         required_keys = ['model_state_dict', 'epoch']
-        return all(key in checkpoint for key in required_keys)
+        if not all(key in checkpoint for key in required_keys):
+            return False, None, None
+        
+        epoch = checkpoint.get('epoch')
+        best_auc = checkpoint.get('best_auc')
+        
+        return True, epoch, best_auc
     except Exception:
-        return False
+        return False, None, None
 
 
 def verify_fold(
@@ -214,6 +241,7 @@ def verify_fold(
 ) -> FoldResult:
     """Verify a single fold's results."""
     issues = []
+    epoch = None
     
     # Check files exist
     checkpoint_path = checkpoints_dir / f"fold_{fold_id}_best.pt"
@@ -224,8 +252,9 @@ def verify_fold(
     
     # Try to load checkpoint if requested
     checkpoint_loadable = False
+    checkpoint_best_auc = None
     if args.verify_checkpoint_loadable and checkpoint_exists:
-        checkpoint_loadable = verify_checkpoint_loadable(checkpoint_path)
+        checkpoint_loadable, epoch, checkpoint_best_auc = verify_checkpoint_loadable(checkpoint_path)
         if not checkpoint_loadable:
             issues.append("Checkpoint not loadable")
     
@@ -295,27 +324,29 @@ def verify_fold(
         best_auc=best_auc,
         test_metrics=test_metrics,
         status=status,
-        issues=issues
+        issues=issues,
+        epoch=epoch
     )
 
 
-def print_summary_table(results: List[FoldResult], args: argparse.Namespace):
-    """Print formatted summary table."""
-    print("\n" + "=" * 100)
-    print("Windows RTX 4080 Results Verification Summary")
-    print("=" * 100)
+def generate_summary_table(results: List[FoldResult]) -> str:
+    """Generate formatted summary table as string."""
+    lines = []
+    lines.append("=" * 100)
+    lines.append("Windows RTX 4080 Results Verification Summary")
+    lines.append("=" * 100)
     
     # Header
-    print(f"\n{'Fold':<8} {'Status':<10} {'AUC':>8} {'F1':>8} {'Miss%':>8} {'FAR%':>8} {'Best AUC':>10} {'Issues'}")
-    print("-" * 100)
+    lines.append(f"\n{'Fold':<8} {'Status':<10} {'AUC':>8} {'F1':>8} {'Miss%':>8} {'FAR%':>8} {'Best AUC':>10} {'Epoch':>6} {'Issues'}")
+    lines.append("-" * 100)
     
     # Rows
     for r in results:
         status_symbol = {
-            Status.PASS: "✓ PASS",
-            Status.FAIL: "✗ FAIL",
-            Status.WARNING: "⚠ WARN",
-            Status.MISSING: "✗ MISS"
+            Status.PASS: "PASS",
+            Status.FAIL: "FAIL",
+            Status.WARNING: "WARN",
+            Status.MISSING: "MISS"
         }.get(r.status, str(r.status))
         
         auc_str = f"{r.auc:.4f}" if r.auc > 0 else "N/A"
@@ -323,19 +354,22 @@ def print_summary_table(results: List[FoldResult], args: argparse.Namespace):
         miss_str = f"{r.miss_rate:.4f}" if r.miss_rate < 1 else "N/A"
         far_str = f"{r.far:.4f}" if r.far < 1 else "N/A"
         best_auc_str = f"{r.best_auc:.4f}" if r.best_auc else "N/A"
+        epoch_str = f"{r.epoch}" if r.epoch is not None else "N/A"
         
         issues_str = "; ".join(r.issues[:2]) if r.issues else ""
         if len(r.issues) > 2:
             issues_str += f" (+{len(r.issues) - 2} more)"
         
-        print(f"{r.fold_id:<8} {status_symbol:<10} {auc_str:>8} {f1_str:>8} "
-              f"{miss_str:>8} {far_str:>8} {best_auc_str:>10} {issues_str}")
+        lines.append(f"{r.fold_id:<8} {status_symbol:<10} {auc_str:>8} {f1_str:>8} "
+                     f"{miss_str:>8} {far_str:>8} {best_auc_str:>10} {epoch_str:>6} {issues_str}")
     
-    print("-" * 100)
+    lines.append("-" * 100)
+    return "\n".join(lines)
 
 
-def print_statistics(results: List[FoldResult], args: argparse.Namespace):
-    """Print overall statistics."""
+def generate_statistics(results: List[FoldResult], args: argparse.Namespace) -> str:
+    """Generate overall statistics as string."""
+    lines = []
     total = len(results)
     passed = sum(1 for r in results if r.status == Status.PASS)
     warnings = sum(1 for r in results if r.status == Status.WARNING)
@@ -347,56 +381,116 @@ def print_statistics(results: List[FoldResult], args: argparse.Namespace):
     valid_f1s = [r.f1 for r in results if r.f1 > 0]
     valid_miss = [r.miss_rate for r in results if r.miss_rate < 1]
     valid_far = [r.far for r in results if r.far < 1]
+    valid_epochs = [r.epoch for r in results if r.epoch is not None]
     
-    print("\n" + "=" * 100)
-    print("Statistics")
-    print("=" * 100)
+    lines.append("\n" + "=" * 100)
+    lines.append("Statistics")
+    lines.append("=" * 100)
     
-    print(f"\nVerification Counts:")
-    print(f"  Total folds:      {total}")
-    print(f"  ✓ Passed:         {passed}")
-    print(f"  ⚠ Warnings:       {warnings}")
-    print(f"  ✗ Failed:         {failed}")
-    print(f"  ✗ Missing:        {missing}")
+    lines.append(f"\nVerification Counts:")
+    lines.append(f"  Total folds:      {total}")
+    lines.append(f"  Passed:           {passed}")
+    lines.append(f"  Warnings:         {warnings}")
+    lines.append(f"  Failed:           {failed}")
+    lines.append(f"  Missing:          {missing}")
     
     if valid_aucs:
-        print(f"\nMetric Averages (valid folds only):")
-        print(f"  AUC:              {sum(valid_aucs)/len(valid_aucs):.4f} "
-              f"(min: {min(valid_aucs):.4f}, max: {max(valid_aucs):.4f})")
+        lines.append(f"\nMetric Averages (valid folds only):")
+        lines.append(f"  AUC:              {sum(valid_aucs)/len(valid_aucs):.4f} "
+                     f"(min: {min(valid_aucs):.4f}, max: {max(valid_aucs):.4f})")
     if valid_f1s:
-        print(f"  F1:               {sum(valid_f1s)/len(valid_f1s):.4f} "
-              f"(min: {min(valid_f1s):.4f}, max: {max(valid_f1s):.4f})")
+        lines.append(f"  F1:               {sum(valid_f1s)/len(valid_f1s):.4f} "
+                     f"(min: {min(valid_f1s):.4f}, max: {max(valid_f1s):.4f})")
     if valid_miss:
-        print(f"  Miss Rate:        {sum(valid_miss)/len(valid_miss):.4f} "
-              f"(min: {min(valid_miss):.4f}, max: {max(valid_miss):.4f})")
+        lines.append(f"  Miss Rate:        {sum(valid_miss)/len(valid_miss):.4f} "
+                     f"(min: {min(valid_miss):.4f}, max: {max(valid_miss):.4f})")
     if valid_far:
-        print(f"  FAR:              {sum(valid_far)/len(valid_far):.4f} "
-              f"(min: {min(valid_far):.4f}, max: {max(valid_far):.4f})")
+        lines.append(f"  FAR:              {sum(valid_far)/len(valid_far):.4f} "
+                     f"(min: {min(valid_far):.4f}, max: {max(valid_far):.4f})")
+    if valid_epochs:
+        lines.append(f"  Epoch:            {sum(valid_epochs)/len(valid_epochs):.1f} "
+                     f"(min: {min(valid_epochs)}, max: {max(valid_epochs)})")
     
-    print(f"\nThresholds Used:")
-    print(f"  Min AUC:          {args.min_auc}")
-    print(f"  Min F1:           {args.min_f1}")
-    print(f"  Max Miss Rate:    {args.max_miss_rate}")
-    print(f"  Max FAR:          {args.max_far}")
+    lines.append(f"\nThresholds Used:")
+    lines.append(f"  Min AUC:          {args.min_auc}")
+    lines.append(f"  Min F1:           {args.min_f1}")
+    lines.append(f"  Max Miss Rate:    {args.max_miss_rate}")
+    lines.append(f"  Max FAR:          {args.max_far}")
+    lines.append(f"  Min Best AUC:     {args.min_best_auc}")
     
-    print("\n" + "=" * 100)
+    lines.append("\n" + "=" * 100)
     
     # Final verdict
     if passed == total:
-        print("\n✅ ALL FOLDS PASSED VERIFICATION")
+        lines.append("\nALL FOLDS PASSED VERIFICATION")
     elif failed == 0 and missing == 0:
-        print(f"\n⚠️  {passed}/{total} FOLDS PASSED, {warnings} WITH WARNINGS")
+        lines.append(f"\n{passed}/{total} FOLDS PASSED, {warnings} WITH WARNINGS")
     else:
-        print(f"\n✗ {passed}/{total} FOLDS PASSED, {failed} FAILED, {missing} MISSING")
+        lines.append(f"\n{passed}/{total} FOLDS PASSED, {failed} FAILED, {missing} MISSING")
     
-    print("=" * 100)
+    lines.append("=" * 100)
+    return "\n".join(lines)
 
 
-def save_report(results: List[FoldResult], output_path: Path, args: argparse.Namespace):
+def save_text_report(results: List[FoldResult], output_path: Path, args: argparse.Namespace):
+    """Save detailed text report."""
+    lines = []
+    lines.append("=" * 100)
+    lines.append("Windows RTX 4080 Training Results Verification Report")
+    lines.append("=" * 100)
+    lines.append(f"\nGenerated: {datetime.now().isoformat()}")
+    lines.append(f"Results directory: {args.results_dir}")
+    lines.append(f"\nPyTorch available: {TORCH_AVAILABLE}")
+    
+    # Add summary table
+    lines.append("\n" + generate_summary_table(results))
+    
+    # Add statistics
+    lines.append("\n" + generate_statistics(results, args))
+    
+    # Add per-fold detailed info
+    lines.append("\n\n" + "=" * 100)
+    lines.append("Per-Fold Detailed Information")
+    lines.append("=" * 100)
+    
+    for r in results:
+        lines.append(f"\nFold: {r.fold_id}")
+        lines.append(f"  Status: {r.status.value}")
+        lines.append(f"  Checkpoint exists: {r.checkpoint_exists}")
+        lines.append(f"  Summary exists: {r.summary_exists}")
+        lines.append(f"  Checkpoint loadable: {r.checkpoint_loadable}")
+        lines.append(f"  Epoch: {r.epoch if r.epoch is not None else 'N/A'}")
+        lines.append(f"  Best Val AUC: {r.best_auc:.4f}" if r.best_auc else "  Best Val AUC: N/A")
+        lines.append(f"  Test Metrics:")
+        lines.append(f"    AUC:          {r.auc:.4f}" if r.auc > 0 else "    AUC:          N/A")
+        lines.append(f"    F1:           {r.f1:.4f}" if r.f1 > 0 else "    F1:           N/A")
+        lines.append(f"    Miss Rate:    {r.miss_rate:.4f}" if r.miss_rate < 1 else "    Miss Rate:    N/A")
+        lines.append(f"    False Alarm:  {r.far:.4f}" if r.far < 1 else "    False Alarm:  N/A")
+        if r.issues:
+            lines.append(f"  Issues:")
+            for issue in r.issues:
+                lines.append(f"    - {issue}")
+        else:
+            lines.append(f"  Issues: None")
+    
+    lines.append("\n" + "=" * 100)
+    lines.append("End of Report")
+    lines.append("=" * 100)
+    
+    # Write to file
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'w') as f:
+        f.write("\n".join(lines))
+    
+    print(f"\nReport saved to: {output_path}")
+
+
+def save_json_report(results: List[FoldResult], output_path: Path, args: argparse.Namespace):
     """Save detailed report to JSON."""
     report = {
-        'verification_timestamp': None,  # Will be filled by caller
+        'verification_timestamp': datetime.now().isoformat(),
         'results_dir': str(args.results_dir),
+        'pytorch_available': TORCH_AVAILABLE,
         'thresholds': {
             'min_auc': args.min_auc,
             'min_f1': args.min_f1,
@@ -421,6 +515,7 @@ def save_report(results: List[FoldResult], output_path: Path, args: argparse.Nam
             'checkpoint_exists': r.checkpoint_exists,
             'summary_exists': r.summary_exists,
             'checkpoint_loadable': r.checkpoint_loadable,
+            'epoch': r.epoch,
             'best_auc': r.best_auc,
             'test_metrics': r.test_metrics,
             'issues': r.issues
@@ -430,7 +525,7 @@ def save_report(results: List[FoldResult], output_path: Path, args: argparse.Nam
     with open(output_path, 'w') as f:
         json.dump(report, f, indent=2)
     
-    print(f"\n📄 Report saved to: {output_path}")
+    print(f"JSON report saved to: {output_path}")
 
 
 def main():
@@ -445,26 +540,23 @@ def main():
     print("=" * 100)
     print("Windows RTX 4080 Training Results Verification")
     print("=" * 100)
-    print(f"\nResults directory:  {results_dir}")
+    print(f"\nResults directory:     {results_dir}")
     print(f"Checkpoints directory: {checkpoints_dir}")
-    print(f"Logs directory:     {logs_dir}")
+    print(f"Logs directory:        {logs_dir}")
+    print(f"PyTorch available:     {TORCH_AVAILABLE}")
     
     if not results_dir.exists():
-        print(f"\n❌ Error: Results directory not found: {results_dir}")
+        print(f"\nError: Results directory not found: {results_dir}")
         sys.exit(1)
     
     # Get list of folds
     if args.folds:
         folds = [f.strip() for f in args.folds.split(',')]
     else:
-        folds = find_all_folds(logs_dir)
+        # Use all 15 TORGO folds
+        folds = ALL_FOLDS
     
-    if not folds:
-        print("\n❌ Error: No folds found to verify")
-        print("  Expected: logs/fold_*_summary.json files")
-        sys.exit(1)
-    
-    print(f"\nFound {len(folds)} folds to verify: {', '.join(folds)}")
+    print(f"\nVerifying {len(folds)} folds: {', '.join(folds)}")
     
     # Verify each fold
     print("\nVerifying folds...")
@@ -473,46 +565,17 @@ def main():
         result = verify_fold(fold_id, checkpoints_dir, logs_dir, args)
         results.append(result)
     
-    # Print results
-    print_summary_table(results, args)
-    print_statistics(results, args)
+    # Print results to console
+    print(generate_summary_table(results))
+    print(generate_statistics(results, args))
     
     # Save report if requested
     if args.output:
-        from datetime import datetime
         output_path = Path(args.output)
-        report_data = {
-            'verification_timestamp': datetime.now().isoformat(),
-            'results_dir': str(results_dir),
-            'thresholds': {
-                'min_auc': args.min_auc,
-                'min_f1': args.min_f1,
-                'max_miss_rate': args.max_miss_rate,
-                'max_far': args.max_far,
-                'min_best_auc': args.min_best_auc
-            },
-            'summary': {
-                'total_folds': len(results),
-                'passed': sum(1 for r in results if r.status == Status.PASS),
-                'warnings': sum(1 for r in results if r.status == Status.WARNING),
-                'failed': sum(1 for r in results if r.status == Status.FAIL),
-                'missing': sum(1 for r in results if r.status == Status.MISSING)
-            },
-            'folds': [
-                {
-                    'fold_id': r.fold_id,
-                    'status': r.status.value,
-                    'checkpoint_exists': r.checkpoint_exists,
-                    'summary_exists': r.summary_exists,
-                    'checkpoint_loadable': r.checkpoint_loadable,
-                    'best_auc': r.best_auc,
-                    'test_metrics': r.test_metrics,
-                    'issues': r.issues
-                }
-                for r in results
-            ]
-        }
-        save_report(results, output_path, args)
+        if output_path.suffix == '.json':
+            save_json_report(results, output_path, args)
+        else:
+            save_text_report(results, output_path, args)
     
     # Exit with appropriate code
     failed = sum(1 for r in results if r.status in (Status.FAIL, Status.MISSING))

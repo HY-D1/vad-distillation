@@ -1,40 +1,41 @@
-# Quick test configuration for RTX 4080 verification
-# For rapid testing and debugging - completes in minutes
+# Quick test configuration for RTX 4080 (CUDA)
+# Very quick verification config (< 5 minutes)
 
-# Random seed
 seed: 6140
-
-# Device
 device: cuda
-num_workers: 2
+num_workers: 4
 
-# Model architecture (smaller for quick test)
 model:
   n_mels: 40
-  cnn_channels: [8, 16]
-  gru_hidden: 24
+  cnn_channels:
+  - 14
+  - 28
+  gru_hidden: 32
   gru_layers: 2
-  dropout: 0.0
+  dropout: 0.1
 
-# Distillation hyperparameters
-alpha: 0.5
+alpha: 0.6
 temperature: 3.0
 
-# Training (minimal settings for quick verification)
 dataset: torgo_pilot
-num_samples: 50     # Very small for quick test
-seq_len: 50         # Shorter sequences
-batch_size: 16
+num_samples: 50
+seq_len: 150
+batch_size: 64
 learning_rate: 0.001
-num_epochs: 2       # Just 2 epochs
+num_epochs: 2
 
-# Data paths
+lr_scheduler:
+  type: ReduceLROnPlateau
+  factor: 0.5
+  patience: 2
+  min_lr: 0.0001
+
 manifest: manifests/torgo_sentences.csv
 teacher_probs_dir: teacher_probs/
-
-# Output
 output_dir: outputs/quick_test/
 
-# Logging
 log_interval: 5
 save_interval: 1
+
+early_stopping:
+  enabled: false
