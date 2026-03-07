@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Utility functions for VAD distillation project.
+Common utility functions for VAD distillation project.
 
 This module contains shared utility functions used across the project
 for configuration loading, path handling, and common operations.
@@ -26,7 +26,7 @@ def setup_project_paths() -> Path:
     """
     # Get the project root (parent of the current script's directory)
     current_file = Path(__file__).resolve()
-    project_root = current_file.parent
+    project_root = current_file.parent.parent
     
     # Add to sys.path if not already there
     if str(project_root) not in sys.path:
@@ -42,7 +42,7 @@ def get_project_root() -> Path:
     Returns:
         Path to project root
     """
-    return Path(__file__).parent.resolve()
+    return Path(__file__).parent.parent.resolve()
 
 
 def load_config(config_path: Union[str, Path]) -> Dict[str, Any]:
