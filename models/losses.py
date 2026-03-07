@@ -195,105 +195,6 @@ class DistillationLoss(nn.Module):
         return total_loss, loss_dict
 
 
-class BCEDistillationLoss(nn.Module):
-    """
-    Alternative distillation loss using BCE instead of KL divergence.
-    
-    This version uses binary cross-entropy and is suitable when the
-    student outputs probabilities directly (not logits).
-    
-    Loss = (1 - alpha) * BCE(student, hard_labels) + 
-           alpha * BCE(student_soft, teacher_soft)
-    
-    where teacher_soft is softened with temperature T.
-    """
-    
-    def __init__(self, alpha: float = 0.5, temperature: float = 3.0):
-        """
-        Initialize the BCE distillation loss.
-        
-        Args:
-            alpha: Weight for soft loss (0 = hard only, 1 = soft only)
-            temperature: Temperature for softening teacher probabilities
-        """
-        super().__init__()
-        self.alpha = alpha
-        self.temperature = temperature
-        self.bce = nn.BCELoss()
-    
-    def forward(
-        self,
-        student_probs: torch.Tensor,
-        hard_labels: torch.Tensor,
-        teacher_probs: torch.Tensor
-    ) -> torch.Tensor:
-        """
-        Compute combined distillation loss.
-        
-        Args:
-            student_probs: Student predictions (batch, time) in [0, 1]
-            hard_labels: Ground truth labels (batch, time) in {0, 1}
-            teacher_probs: Teacher predictions (batch, time) in [0, 1]
-        
-        Returns:
-            loss: Scalar loss tensor
-        """
-        # Hard loss: standard BCE with ground truth
-        hard_loss = self.bce(student_probs, hard_labels)
-        
-        # Soft loss: BCE with softened teacher probabilities
-        # Convert to logits
-        teacher_logits = torch.logit(teacher_probs.clamp(1e-7, 1 - 1e-7))
-        student_logits = torch.logit(student_probs.clamp(1e-7, 1 - 1e-7))
-        
-        # Apply temperature
-        teacher_soft = torch.sigmoid(teacher_logits / self.temperature)
-        student_soft = torch.sigmoid(student_logits / self.temperature)
-        
-        soft_loss = self.bce(student_soft, teacher_soft)
-        
-        # Combined loss
-        loss = (1 - self.alpha) * hard_loss + self.alpha * soft_loss
-        
-        return loss
-
-
-class HardLabelLoss(nn.Module):
-    """
-    Simple hard label loss for baseline training.
-    
-    This is just a wrapper around CrossEntropyLoss for convenience.
-    """
-    
-    def __init__(self):
-        """Initialize the hard label loss."""
-        super().__init__()
-        self.ce = nn.CrossEntropyLoss()
-    
-    def forward(
-        self,
-        logits: torch.Tensor,
-        labels: torch.Tensor
-    ) -> torch.Tensor:
-        """
-        Compute cross-entropy loss.
-        
-        Args:
-            logits: Model predictions [batch, seq_len, num_classes] or [batch, num_classes]
-            labels: Ground truth labels [batch, seq_len] or [batch]
-        
-        Returns:
-            loss: Scalar loss tensor
-        """
-        if logits.dim() == 3:
-            # Flatten sequence dimension
-            batch_size, seq_len, num_classes = logits.shape
-            logits = logits.reshape(-1, num_classes)
-            labels = labels.reshape(-1)
-        
-        return self.ce(logits, labels)
-
-
 def create_loss_function(
     loss_type: str = 'distillation',
     alpha: float = 0.5,
@@ -303,7 +204,7 @@ def create_loss_function(
     Factory function to create loss functions.
     
     Args:
-        loss_type: Type of loss ('distillation', 'bce_distillation', 'hard')
+        loss_type: Type of loss ('distillation')
         alpha: Weight for distillation loss
         temperature: Temperature for softening
     
@@ -315,17 +216,11 @@ def create_loss_function(
     """
     if loss_type == 'distillation':
         return DistillationLoss(alpha=alpha, temperature=temperature)
-    elif loss_type == 'bce_distillation':
-        return BCEDistillationLoss(alpha=alpha, temperature=temperature)
-    elif loss_type == 'hard':
-        return HardLabelLoss()
     else:
         raise ValueError(f"Unknown loss type: {loss_type}")
 
 
 __all__ = [
     'DistillationLoss',
-    'BCEDistillationLoss',
-    'HardLabelLoss',
     'create_loss_function',
 ]

@@ -7,7 +7,7 @@ to verify results are consistent.
 
 Usage:
     python scripts/verify_checkpoint.py \
-        --checkpoint outputs/production_4080/checkpoints/fold_F01_best.pt \
+        --checkpoint outputs/production_4080/checkpoints/fold_F01_latest_best.pt \
         --config configs/production.yaml \
         --fold F01 \
         --output-dir outputs/production_4080/verification/
@@ -60,7 +60,7 @@ def parse_args() -> argparse.Namespace:
 Examples:
   # Basic usage
   python scripts/verify_checkpoint.py \\
-      --checkpoint outputs/production_4080/checkpoints/fold_F01_best.pt \\
+      --checkpoint outputs/production_4080/checkpoints/fold_F01_latest_best.pt \\
       --config configs/production.yaml \\
       --fold F01 \\
       --output-dir outputs/production_4080/verification/

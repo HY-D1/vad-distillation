@@ -740,6 +740,17 @@ Alternative: Interpolate student output to match teacher frame rate.
     return all(r['passed'] for r in results)
 
 
+# =============================================================================
+# DEVELOPMENT TESTING ENTRY POINT
+# =============================================================================
+# This __main__ block is intended for development and manual testing only.
+# It runs comprehensive tests on all model variants (Default, Small, Tiny, Micro).
+# For automated testing, use proper test files in a tests/ directory.
+#
+# Usage:
+#     python models/tinyvad_student.py
+# =============================================================================
+
 if __name__ == "__main__":
     success = run_comprehensive_tests()
     exit(0 if success else 1)

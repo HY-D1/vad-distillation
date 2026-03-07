@@ -113,36 +113,26 @@ class SpeechBrainVAD:
         """
         Load audio file and return audio data with sample rate.
         
+        This method now uses the shared load_audio utility from utils.audio
+        for consistency across the project.
+        
         Args:
             audio_file: Path to audio file
             
         Returns:
             Tuple of (audio_data, sample_rate)
         """
-        # Use torchaudio for loading (SpeechBrain's dependency)
-        try:
-            import torchaudio
-        except ImportError:
-            raise ImportError(
-                "torchaudio is required for audio loading. "
-                "Install with: pip install torchaudio"
-            )
+        # Import shared audio utility
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from utils.audio import load_audio
         
-        audio, sr = torchaudio.load(audio_file)
+        result = load_audio(audio_file, target_sr=self.sample_rate, return_tensor=False)
+        if result is None:
+            raise RuntimeError(f"Failed to load audio file: {audio_file}")
         
-        # Convert to mono if stereo
-        if audio.shape[0] > 1:
-            audio = torch.mean(audio, dim=0, keepdim=True)
-        
-        # Resample if needed
-        if sr != self.sample_rate:
-            resampler = torchaudio.transforms.Resample(
-                orig_freq=sr,
-                new_freq=self.sample_rate
-            )
-            audio = resampler(audio)
-        
-        return audio.squeeze().numpy(), self.sample_rate
+        return result
     
     def get_frame_probs(self, audio_file: str) -> Tuple[np.ndarray, np.ndarray]:
         """

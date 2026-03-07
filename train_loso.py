@@ -23,9 +23,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import yaml
 from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau, StepLR
 from torch.utils.data import DataLoader
-import yaml
 
 # Add project root to path for imports (works both from project root and scripts/)
 project_root = Path(__file__).parent.resolve()
@@ -35,6 +35,7 @@ if str(project_root) not in sys.path:
 try:
     from data import TORGODataset, collate_fn
     from models.losses import DistillationLoss
+    from utils import count_parameters, get_model_size_mb
 except ImportError as e:
     print(f"Error importing modules: {e}")
     print("Make sure you're running from the project root or have proper PYTHONPATH set.")
@@ -115,23 +116,6 @@ def compute_metrics(predictions: np.ndarray,
         'fp': int(fp),
         'fn': int(fn)
     }
-
-
-def count_parameters(model: nn.Module) -> int:
-    """Count trainable parameters in a model."""
-    return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
-
-def get_model_size_mb(model: nn.Module) -> float:
-    """Get model size in megabytes."""
-    param_size = 0
-    for param in model.parameters():
-        param_size += param.nelement() * param.element_size()
-    buffer_size = 0
-    for buffer in model.buffers():
-        buffer_size += buffer.nelement() * buffer.element_size()
-    size_mb = (param_size + buffer_size) / 1024**2
-    return size_mb
 
 
 # =============================================================================
@@ -284,33 +268,6 @@ def create_model(config: Dict) -> nn.Module:
         model = create_student_model(model_params)
     
     return model
-
-
-class SimpleVADModel(nn.Module):
-    """Simple LSTM-based VAD model as fallback."""
-    
-    def __init__(self, input_dim: int = 40, hidden_dim: int = 128, 
-                 num_layers: int = 2, dropout: float = 0.3):
-        super().__init__()
-        self.lstm = nn.LSTM(
-            input_dim, hidden_dim, num_layers,
-            batch_first=True, dropout=dropout if num_layers > 1 else 0,
-            bidirectional=True
-        )
-        self.fc = nn.Linear(hidden_dim * 2, 2)  # 2 classes: speech, non-speech
-        self.dropout = nn.Dropout(dropout)
-    
-    def forward(self, x):
-        """
-        Args:
-            x: Input features [batch, seq_len, input_dim]
-        Returns:
-            logits: [batch, seq_len, 2]
-        """
-        lstm_out, _ = self.lstm(x)
-        lstm_out = self.dropout(lstm_out)
-        logits = self.fc(lstm_out)
-        return logits
 
 
 # =============================================================================
@@ -750,11 +707,6 @@ def main():
         print(f"Overriding early_stopping_patience to {args.patience}")
     
     # Set device
-    print(f"Loading configuration from {args.config}")
-    with open(args.config, 'r') as f:
-        config = yaml.safe_load(f)
-    
-    # Set device
     if args.device:
         device = torch.device(args.device)
     else:
@@ -852,7 +804,7 @@ def main():
     
     # Setup checkpoint paths
     checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_latest.pt")
-    best_checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_best.pt")
+    best_checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_latest_best.pt")
     
     # Training state
     start_epoch = 0

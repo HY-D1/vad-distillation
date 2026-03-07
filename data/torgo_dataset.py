@@ -19,7 +19,6 @@ from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 import torch
-import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
 try:
@@ -763,13 +762,17 @@ def create_dataloader(
     )
 
 
+# =============================================================================
+# DEVELOPMENT TESTING ENTRY POINT
+# =============================================================================
+# This __main__ block is intended for development and manual testing only.
+# For automated testing, use proper test files in a tests/ directory.
+#
+# Usage:
+#     python data/torgo_dataset.py
+# =============================================================================
+
 if __name__ == '__main__':
-    """
-    Test script for TORGODataset.
-    
-    Usage:
-        python data/torgo_dataset.py
-    """
     import json
     
     # Setup logging

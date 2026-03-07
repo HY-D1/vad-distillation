@@ -19,8 +19,8 @@ For full LOSO training:
     python train_loso.py --config configs/pilot.yaml --fold F01
     
 For hyperparameter sweeps:
-    python scripts/run_sweep.py --help
-    python scripts/run_experiment.py --help
+    python scripts/core/run_sweep.py --help
+    python scripts/core/run_experiment.py --help
 """
 
 import argparse
