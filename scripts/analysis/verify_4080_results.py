@@ -19,8 +19,8 @@ Usage:
 Expected directory structure:
     outputs/production_cuda/
     ├── checkpoints/
-    │   ├── fold_F01_latest_best.pt
-    │   ├── fold_F02_best.pt
+    │   ├── fold_F01_latest_best.pt      # Best checkpoint
+    │   ├── fold_F01_latest.pt           # Latest checkpoint
     │   └── ...
     └── logs/
         ├── fold_F01_summary.json
@@ -244,7 +244,11 @@ def verify_fold(
     epoch = None
     
     # Check files exist
-    checkpoint_path = checkpoints_dir / f"fold_{fold_id}_best.pt"
+    # Try both naming patterns: fold_F01_latest_best.pt (new) and fold_F01_best.pt (old)
+    checkpoint_path = checkpoints_dir / f"fold_{fold_id}_latest_best.pt"
+    if not checkpoint_path.exists():
+        # Fallback to old naming pattern
+        checkpoint_path = checkpoints_dir / f"fold_{fold_id}_best.pt"
     checkpoint_exists = checkpoint_path.exists()
     
     summary = load_summary(logs_dir, fold_id)

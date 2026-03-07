@@ -1,2 +1,0 @@
-Method,Model_Size_KB,Latency_ms_per_frame,AUC,F1,Accuracy,Miss_Rate,FAR,Precision,Recall,Utterances,Frames
-Our Model,,,0.5326,0.3740,0.5112,0.7171,0.2453,0.5515,0.2829,28,3521
