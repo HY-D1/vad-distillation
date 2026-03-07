@@ -6,6 +6,50 @@ This guide covers the complete data transfer and workflow for training VAD model
 
 ---
 
+## Tracking Training Outputs with Git LFS
+
+### Overview
+Training outputs (checkpoints, logs) are now tracked in the repository using Git LFS, enabling seamless cross-device workflows.
+
+### What's Tracked
+- **Model checkpoints** (*.pt) - ~1.4 MB each, stored in LFS
+- **Training logs** (*.csv) - Small text files
+- **Summary metrics** (*.json) - Small text files
+- **Predictions** (*.npz) - Large binary, stored in LFS
+
+### Setup (One-time)
+```bash
+# Install Git LFS
+git lfs install
+
+# Pull LFS files
+git lfs pull
+```
+
+### Workflow: Windows → macOS
+```bash
+# On Windows (after training)
+git add outputs/production_cuda/
+git commit -m "Add training results for folds F01, F03, ..."
+git push
+
+# On macOS
+git pull
+git lfs pull
+# Now all checkpoints and logs are available locally
+```
+
+### Storage Quota
+- GitHub LFS free tier: 1 GB storage, 1 GB bandwidth/month
+- Current project size: ~45 MB (checkpoints) + ~140 MB (predictions)
+- Well within free tier limits
+
+### Selective Tracking
+Only `outputs/production_cuda/` is tracked.
+Baseline outputs and archives remain gitignored (can be regenerated).
+
+---
+
 ## Prerequisites
 
 ### Environment Setup
@@ -343,7 +387,20 @@ outputs/production_cuda/
 
 ### Transfer Commands
 
-#### rsync: Windows → Mac
+#### Option A: Git LFS (Recommended)
+
+```bash
+# On Windows - add outputs to git tracking
+git add outputs/production_cuda/
+git commit -m "Add training results for all 15 folds"
+git push
+
+# On Mac - pull the updates
+git pull
+git lfs pull
+```
+
+#### Option B: rsync: Windows → Mac
 
 ```powershell
 # On Windows (using WSL or Git Bash)
@@ -361,7 +418,7 @@ rsync -avz --progress \
     outputs/production_cuda/
 ```
 
-#### Robocopy + External Drive
+#### Option C: Robocopy + External Drive
 
 ```powershell
 # On Windows - copy to external drive
@@ -373,7 +430,7 @@ copy outputs\production_cuda\config.yaml E:\vad-results\
 cp -r /Volumes/ExternalDrive/vad-results/* outputs/production_cuda/
 ```
 
-#### Compress and Transfer
+#### Option D: Compress and Transfer
 
 ```powershell
 # On Windows - create archive
@@ -553,7 +610,10 @@ foreach ($fold in $folds) {
 ### After Training (Windows → Mac)
 
 ```bash
-# Mac side (pull from Windows)
+# Option A: Git LFS (recommended)
+git pull && git lfs pull
+
+# Option B: rsync
 rsync -avz user@windows:vad-distillation/outputs/production_cuda/ outputs/production_cuda/
 ```
 
@@ -576,6 +636,15 @@ python scripts/analysis/verify_4080_results.py --results-dir outputs/production_
 | Permission denied | Check SSH key authentication |
 | Partial transfer | Use `rsync --partial` for resume capability |
 | Slow transfer | Use compression `-z` flag with rsync |
+
+### Git LFS Issues
+
+| Issue | Solution |
+|-------|----------|
+| LFS files not downloaded | Run `git lfs pull` after `git pull` |
+| LFS quota exceeded | Check quota with `git lfs quota` |
+| LFS not installed | Run `git lfs install` first |
+| Large files not tracked | Check `.gitattributes` for proper patterns |
 
 ### Training Issues
 
@@ -633,5 +702,5 @@ du -sh outputs/production_cuda/logs/         # ~8 MB
 
 ---
 
-*Last updated: 2026-03-06*
+*Last updated: 2026-03-07*
 *Target Model Size: 473 KB | Random Seed: 6140 | Total Folds: 15*
