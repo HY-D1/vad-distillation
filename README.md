@@ -121,6 +121,12 @@ python train_loso.py --config configs/pilot_cuda.yaml --fold F01 --epochs 10
 
 # Full production training on CUDA
 python train_loso.py --config configs/production_cuda.yaml --fold F01
+
+# Train all folds (PowerShell)
+$folds = @('F01','F03','F04','M01','M02','M03','M04','M05','FC01','FC02','FC03','MC01','MC02','MC03','MC04')
+foreach ($fold in $folds) {
+    python train_loso.py --config configs/production_cuda.yaml --fold $fold
+}
 ```
 
 ### Running Baselines
@@ -322,7 +328,7 @@ python scripts/analysis/analyze_week2.py \
 
 1. **Dataset**: TORGO sentences (continuous speech) as primary dataset
 2. **Evaluation**: Speaker-independent via Leave-One-Speaker-Out (LOSO) with 15 folds
-3. **Distillation**: Soft labels with temperature T, loss = (1-α)×BCE(hard) + α×BCE(soft)
+3. **Distillation**: Soft labels with temperature T, loss = α×BCE(hard) + (1-α)×BCE(soft)
 4. **Architecture**: CNN + GRU style student (TinyVAD-inspired), ~473KB
 5. **Seed**: 6140 (for reproducibility)
 
@@ -337,7 +343,7 @@ Training outputs are organized under the `output_dir` specified in your config:
 ```
 outputs/pilot/                    outputs/production_cuda/
 ├── checkpoints/                  ├── checkpoints/
-│   ├── fold_F01_best.pt          │   ├── fold_F01_best.pt
+│   ├── fold_F01_latest_best.pt          │   ├── fold_F01_latest_best.pt
 │   ├── fold_F01_latest.pt        │   ├── fold_F01_latest.pt
 │   └── fold_F01_epoch_10.pt      │   └── ...
 ├── logs/                         ├── logs/
@@ -421,11 +427,11 @@ print(f"Test AUC: {compute_auc(data['labels'], data['probs']):.4f}")
 
 ```bash
 # File size on disk
-ls -lh outputs/pilot/checkpoints/fold_F01_best.pt
+ls -lh outputs/pilot/checkpoints/fold_F01_latest_best.pt
 
 # Or in Python
 import torch
-checkpoint = torch.load('outputs/pilot/checkpoints/fold_F01_best.pt')
+checkpoint = torch.load('outputs/pilot/checkpoints/fold_F01_latest_best.pt', weights_only=True)
 print(f"Parameters: {checkpoint['num_parameters']:,}")
 print(f"Size: {checkpoint['model_size_mb']:.2f} MB")
 ```
@@ -519,7 +525,7 @@ import torch
 model = create_student_model()
 
 # Load trained weights
-checkpoint_path = 'outputs/pilot/checkpoints/fold_F01_best.pt'
+checkpoint_path = 'outputs/pilot/checkpoints/fold_F01_latest_best.pt'
 checkpoint = torch.load(checkpoint_path, map_location='cpu')
 model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -758,7 +764,7 @@ import os
 import time
 
 formats = {
-    'PyTorch (checkpoint)': 'outputs/pilot/checkpoints/fold_F01_best.pt',
+    'PyTorch (checkpoint)': 'outputs/pilot/checkpoints/fold_F01_latest_best.pt',
     'TorchScript': 'deploy/tinyvad_model.pt',
     'ONNX': 'deploy/tinyvad_model.onnx',
 }
@@ -970,7 +976,7 @@ if __name__ == "__main__":
 python inspect_model.py
 
 # Inspect trained checkpoint
-python inspect_model.py outputs/pilot/checkpoints/fold_F01_best.pt
+python inspect_model.py outputs/pilot/checkpoints/fold_F01_latest_best.pt
 ```
 
 ---

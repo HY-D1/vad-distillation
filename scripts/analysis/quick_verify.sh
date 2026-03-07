@@ -18,7 +18,7 @@
 # Expected directory structure:
 #     outputs/production_cuda/
 #     ├── checkpoints/
-#     │   ├── fold_F01_best.pt
+#     │   ├── fold_F01_latest_best.pt
 #     │   ├── fold_F02_best.pt
 #     │   └── ...
 #     └── logs/

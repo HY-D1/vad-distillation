@@ -72,7 +72,7 @@ def main(args: argparse.Namespace) -> int:
     if not args.checkpoint and not args.config:
         print_error(
             "Must specify either --checkpoint or --config",
-            "Example: vad.py export --checkpoint outputs/checkpoints/fold_F01_best.pt --format onnx"
+            "Example: vad.py export --checkpoint outputs/checkpoints/fold_F01_latest_best.pt --format onnx"
         )
         return 2
     
