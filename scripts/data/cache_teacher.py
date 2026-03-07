@@ -40,6 +40,10 @@ import torch
 import torchaudio
 from tqdm import tqdm
 
+# Add project root to path for utils import
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from utils.audio import load_audio
+
 
 # Cache version for metadata
 CACHE_VERSION = "1.0.0"
@@ -62,35 +66,6 @@ def load_silero_vad():
         trust_repo=True,
     )
     return model, utils
-
-
-def load_audio(audio_path: str, target_sr: int = 16000) -> torch.Tensor:
-    """
-    Load audio file for Silero VAD.
-    
-    NOTE: This is a standalone copy in cache_teacher.py. A similar but
-    incompatible function exists in run_baseline.py that returns a tuple
-    of (waveform, sample_rate). Kept separate due to different return types.
-    
-    Args:
-        audio_path: Path to audio file
-        target_sr: Target sample rate
-    
-    Returns:
-        waveform: Audio tensor (samples,)
-    """
-    waveform, orig_sr = torchaudio.load(audio_path)
-    
-    # Convert to mono if stereo
-    if waveform.shape[0] > 1:
-        waveform = torch.mean(waveform, dim=0, keepdim=True)
-    
-    # Resample if needed
-    if orig_sr != target_sr:
-        resampler = torchaudio.transforms.Resample(orig_sr, target_sr)
-        waveform = resampler(waveform)
-    
-    return waveform.squeeze(0)
 
 
 def get_audio_duration(audio_path: str) -> float:
@@ -243,7 +218,7 @@ def process_single_file(
     
     try:
         # Load audio
-        audio = load_audio(str(audio_path), SILERO_SR)
+        audio, _ = load_audio(str(audio_path), target_sr=SILERO_SR, return_tensor=True)
         
         # Get speech probabilities
         probs = get_speech_probs(model, utils, audio, SILERO_SR)
@@ -308,7 +283,7 @@ def process_batch(
         
         try:
             # Load audio
-            audio = load_audio(str(audio_path), SILERO_SR)
+            audio, _ = load_audio(str(audio_path), target_sr=SILERO_SR, return_tensor=True)
             
             # Get speech probabilities
             with torch.no_grad():

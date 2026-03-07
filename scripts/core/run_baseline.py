@@ -33,12 +33,14 @@ from pathlib import Path
 # Add parent directory to path for baselines import
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from datetime import datetime
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
 import torchaudio
+
+# Import shared audio utilities
+from utils.audio import load_audio
 import yaml
 from tqdm import tqdm
 
@@ -90,36 +92,6 @@ def load_manifest(manifest_path: str) -> List[Dict[str, Any]]:
     
     logger.info(f"Loaded {len(rows)} utterances from {manifest_path}")
     return rows
-
-
-def load_audio(audio_path: str, target_sr: int = 16000) -> Tuple[torch.Tensor, int]:
-    """
-    Load audio file and resample if necessary.
-    
-    NOTE: This is a standalone copy in run_baseline.py. A similar but
-    incompatible function exists in cache_teacher.py that returns only the
-    waveform tensor (not a tuple). Kept separate due to different return types.
-    
-    Args:
-        audio_path: Path to audio file
-        target_sr: Target sample rate
-        
-    Returns:
-        Tuple of (waveform tensor, sample rate)
-    """
-    waveform, sr = torchaudio.load(audio_path)
-    
-    # Convert to mono if stereo
-    if waveform.shape[0] > 1:
-        waveform = torch.mean(waveform, dim=0, keepdim=True)
-    
-    # Resample if necessary
-    if sr != target_sr:
-        resampler = torchaudio.transforms.Resample(sr, target_sr)
-        waveform = resampler(waveform)
-        sr = target_sr
-    
-    return waveform.squeeze(0), sr
 
 
 def probs_to_segments(
@@ -220,7 +192,7 @@ class SileroVADRunner:
             raise RuntimeError("Model not loaded. Call load() first.")
         
         # Load audio
-        waveform, sr = load_audio(audio_path, target_sr=16000)
+        waveform, sr = load_audio(audio_path, target_sr=16000, return_tensor=True)
         
         # Silero processes audio in 512-sample chunks for 16kHz (32ms frames)
         chunk_size = 512
@@ -276,7 +248,7 @@ class EnergyVADRunner:
         Returns:
             Array of frame probabilities (normalized energy)
         """
-        waveform, sr = load_audio(audio_path, target_sr=self.sample_rate)
+        waveform, sr = load_audio(audio_path, target_sr=self.sample_rate, return_tensor=True)
         
         if self.EnergyVAD is not None:
             # Use imported EnergyVAD if available
