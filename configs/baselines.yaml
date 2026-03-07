@@ -1,5 +1,7 @@
 # Baseline configurations for VAD comparison
 
+seed: 6140
+
 baselines:
   enabled: [energy, speechbrain, silero]
   
