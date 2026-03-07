@@ -58,10 +58,17 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
-analysis/comparison/
-outputs/baselines/
-outputs/pilot/frame_probs/
-teacher_probs_fixed/
+
+# Archives (large data files)
+*.zip
+
+# Platform-specific scripts (Windows)
+scripts/*.ps1
+scripts/*.bat
+scripts/platform/windows/*.ps1
+scripts/platform/windows/*.bat
+
+# Duplicate/old analysis directories
 analysis/comparison/
 outputs/baselines/
 outputs/pilot/frame_probs/

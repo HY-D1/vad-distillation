@@ -750,11 +750,6 @@ def main():
         print(f"Overriding early_stopping_patience to {args.patience}")
     
     # Set device
-    print(f"Loading configuration from {args.config}")
-    with open(args.config, 'r') as f:
-        config = yaml.safe_load(f)
-    
-    # Set device
     if args.device:
         device = torch.device(args.device)
     else:

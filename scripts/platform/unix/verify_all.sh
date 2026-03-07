@@ -119,7 +119,7 @@ for fold in $FOLDS; do
     echo "Checkpoint: $CHECKPOINT"
 
     # Run verification
-    if python scripts/verify_checkpoint.py \
+    if python scripts/core/verify_checkpoint.py \
         --checkpoint "$CHECKPOINT" \
         --config "$CONFIG" \
         --fold "$fold" \
@@ -143,7 +143,7 @@ echo "======================================================================"
 echo "Generating Comparison Report"
 echo "======================================================================"
 
-python scripts/compare_verification.py \
+python scripts/analysis/compare_verification.py \
     --windows-dir "$SOURCE_DIR/logs/" \
     --mac-dir "$VERIFICATION_DIR/" \
     --output "$REPORT_PATH"

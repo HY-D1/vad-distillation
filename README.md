@@ -8,12 +8,12 @@ Develop a lightweight VAD (≤ 500 KB) that maintains competitive accuracy on at
 
 ## Key Deliverables
 
-| Metric | Target |
-|--------|--------|
-| Student Model Size | ≤ 500 KB |
-| AUC Drop (vs Silero on atypical) | ≤ 10% |
-| CPU Latency | ≤ 10 ms/frame |
-| Atypical Miss Rate | Lower than Silero baseline |
+| Metric | Target | Achieved |
+|--------|--------|----------|
+| Student Model Size | ≤ 500 KB | **473 KB** |
+| AUC Drop (vs Silero on atypical) | ≤ 10% | TBD |
+| CPU Latency | ≤ 10 ms/frame | TBD |
+| Atypical Miss Rate | Lower than Silero baseline | TBD |
 
 ## Quick Start
 
@@ -32,7 +32,7 @@ python train_loso.py --config configs/pilot.yaml --fold F01
 
 ---
 
-## Usage (macOS)
+## Usage (macOS with MPS)
 
 ### Prerequisites
 
@@ -87,7 +87,7 @@ python scripts/run_baseline.py \
 
 ---
 
-## Usage (Windows)
+## Usage (Windows with RTX 4080 CUDA)
 
 ### Prerequisites
 
@@ -95,11 +95,14 @@ python scripts/run_baseline.py \
 # Check Python version
 python --version
 
-# Install dependencies
+# Install dependencies (includes CUDA-enabled PyTorch)
 pip install -r requirements.txt
+
+# Verify CUDA is available
+python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 ```
 
-**Note**: On Windows, use `python` not `python3`. Most Windows laptops will use CPU (no CUDA).
+**Note**: On Windows, use `python` not `python3`. RTX 4080 uses CUDA with optimized batch size of 64.
 
 ### Quick Start
 
@@ -107,11 +110,17 @@ pip install -r requirements.txt
 # Validate setup
 python scripts\validate_torgo_setup.py
 
-# Run smoke test with CPU
-python train_loso.py --config configs\pilot.yaml --fold F01 --test --device cpu
+# Quick test on CUDA (RTX 4080)
+python train_loso.py --config configs/quick_test.yaml --fold F01
 
-# Train first model (45 min on CPU)
-python train_loso.py --config configs\pilot.yaml --fold F01 --epochs 10 --device cpu
+# Smoke test with CUDA
+python train_loso.py --config configs/pilot_cuda.yaml --fold F01 --test
+
+# Train first model on CUDA (10-15 min on RTX 4080)
+python train_loso.py --config configs/pilot_cuda.yaml --fold F01 --epochs 10
+
+# Full production training on CUDA
+python train_loso.py --config configs/production_cuda.yaml --fold F01
 ```
 
 ### Running Baselines
@@ -137,8 +146,44 @@ python scripts\run_baseline.py ^
 |-------|----------|
 | `python` not found | Use `py` or add Python to PATH |
 | torchaudio DLL error | Reinstall: `pip uninstall torchaudio && pip install torchaudio` |
+| CUDA out of memory | Reduce `batch_size` in config (default is 64 for RTX 4080) |
 | Antivirus blocks Python | Add Python to antivirus exclusions |
 | CSV has blank lines | Use `newline=''` (already fixed in code) |
+
+---
+
+## Cross-Platform Verification Workflow
+
+This project supports training on Windows (RTX 4080 CUDA) and verification on macOS (MPS):
+
+```
+Windows RTX 4080          →            macOS MPS
+(CUDA training)                       (Verification)
+     │                                      ▲
+     │ 1. Train all 15 folds                │
+     │    (configs/production_cuda.yaml)    │
+     │                                      │
+     ▼                                      │
+outputs/production_cuda/                   │
+     │                                      │
+     │ 2. Copy outputs to Mac               │
+     │    (or shared cloud storage)         │
+     │                                      │
+     └──────────────────────────────────────┘
+                                            │
+     3. Verify on Mac                        │
+        python scripts/compare_methods.py   │
+        python notebooks/analyze_results.ipynb
+```
+
+### Key Differences by Platform
+
+| Setting | macOS (MPS) | Windows (CUDA RTX 4080) |
+|---------|-------------|-------------------------|
+| Device | `mps` | `cuda` |
+| Batch Size | 16 | 64 |
+| Workers | 0 | 4 |
+| Config | `production.yaml` | `production_cuda.yaml` |
 
 ---
 
@@ -184,6 +229,8 @@ python scripts/compare_methods.py \
   --proxy-labels teacher
 ```
 
+---
+
 ## Hyperparameter Sweep
 
 Run the full 36-experiment sweep (3 α × 4 T × 3 folds):
@@ -206,37 +253,55 @@ python scripts/analyze_week2.py \
   --output-dir analysis/week2
 ```
 
+---
+
 ## File Structure
 
 ```
-├── configs/               # Training configurations
-│   ├── pilot.yaml        # Base config for experiments
-│   └── week2_matrix.json # 36 experiment definitions
-├── data/                  # TORGO dataset (not in git)
-│   └── torgo_raw/        # Raw audio files
-├── local/                 # 📚 Documentation
-│   ├── INDEX.md          # Master documentation index
-│   ├── week1_scope_and_eval.md
-│   ├── week2_execution_plan.md
-│   ├── data_setup.md     # TORGO setup guide
-│   └── CACHING.md        # Cache management
-├── manifests/             # Dataset manifests (CSV)
-├── models/                # Model architectures
-│   └── tinyvad_student.py
-├── notebooks/             # Analysis notebooks
-├── outputs/               # Training outputs
-├── scripts/               # Utility scripts
+├── analysis/               # Analysis outputs and visualizations
+├── baselines/              # Baseline VAD implementations
+│   ├── energy_vad.py
+│   └── speechbrain_vad.py
+├── configs/                # Training configurations
+│   ├── pilot.yaml         # Base config for smoke tests (CPU/MPS)
+│   ├── pilot_cuda.yaml    # RTX 4080 optimized pilot config
+│   ├── production.yaml    # Full training config (MPS)
+│   ├── production_cuda.yaml # Full training config (CUDA)
+│   ├── quick_test.yaml    # Quick verification config
+│   ├── baselines.yaml     # Baseline experiment config
+│   ├── alpha_sweep.yaml   # Alpha hyperparameter sweep
+│   ├── temperature_sweep.yaml # Temperature sweep
+│   ├── week2_matrix.json  # 36-experiment matrix
+│   └── templates/         # Config templates
+├── data/                   # TORGO dataset (not in git)
+│   ├── __init__.py
+│   ├── torgo_dataset.py   # TORGO dataset class
+│   └── torgo_raw/         # Raw audio files
+├── models/                 # Model architectures
+│   ├── __init__.py
+│   ├── tinyvad_student.py # Main student model (~473KB)
+│   └── losses.py          # Distillation loss functions
+├── notebooks/              # Jupyter notebooks for analysis
+├── outputs/                # Training outputs
+├── pretrained_models/      # Downloaded baseline models
+├── scripts/                # Utility and execution scripts
+│   ├── validate_torgo_setup.py
 │   ├── build_torgo_manifest.py
-│   ├── cache_features.py
-│   ├── cache_manager.py
+│   ├── run_baseline.py
+│   ├── run_sweep.py
 │   ├── cache_teacher.py
-│   ├── run_sweep.py      # Week 2 sweep runner
-│   └── analyze_week2.py  # Results analysis
-├── splits/                # LOSO splits (JSON)
-├── teacher_probs/         # Cached Silero outputs
-├── teacher_hard_labels/   # Thresholded teacher labels
-├── train_loso.py          # 🎯 Main training script
-└── requirements.txt
+│   ├── cache_manager.py
+│   ├── compare_methods.py
+│   └── analyze_week2.py
+├── splits/                 # LOSO splits (JSON files for 15 folds)
+├── teacher_probs/          # Cached Silero outputs
+├── train_loso.py          # Main training script (LOSO)
+├── train.py               # Simple wrapper for smoke tests
+├── utils.py               # Shared utilities
+├── requirements.txt       # Python dependencies
+├── README.md              # This file
+├── AGENTS.md              # AI agent documentation
+└── LICENSE                # MIT License
 ```
 
 ## Key Scripts
@@ -253,9 +318,10 @@ python scripts/analyze_week2.py \
 ## Design Decisions
 
 1. **Dataset**: TORGO sentences (continuous speech) as primary dataset
-2. **Evaluation**: Speaker-independent via Leave-One-Speaker-Out (LOSO)
+2. **Evaluation**: Speaker-independent via Leave-One-Speaker-Out (LOSO) with 15 folds
 3. **Distillation**: Soft labels with temperature T, loss = (1-α)×BCE(hard) + α×BCE(soft)
-4. **Architecture**: CNN + GRU style student (TinyVAD-inspired)
+4. **Architecture**: CNN + GRU style student (TinyVAD-inspired), ~473KB
+5. **Seed**: 6140 (for reproducibility)
 
 ## Checking Outputs
 
@@ -263,19 +329,19 @@ After training completes, verify that everything worked correctly by checking th
 
 ### Training Output Directory Structure
 
-Training outputs are organized under the `output_dir` specified in your config (default: `outputs/pilot/`):
+Training outputs are organized under the `output_dir` specified in your config:
 
 ```
-outputs/pilot/
-├── checkpoints/
-│   ├── fold_F01_best.pt              # Best model by validation AUC
-│   ├── fold_F01_latest.pt            # Latest checkpoint (for resuming)
-│   └── fold_F01_epoch_10.pt          # Periodic checkpoints (if enabled)
-├── logs/
-│   ├── fold_F01.csv                  # Per-epoch training metrics
-│   ├── fold_F01_summary.json         # Final summary with all metrics
-│   └── fold_F01_predictions.npz      # Test set predictions
-└── config.yaml                       # Effective config used (copied)
+outputs/pilot/                    outputs/production_cuda/
+├── checkpoints/                  ├── checkpoints/
+│   ├── fold_F01_best.pt          │   ├── fold_F01_best.pt
+│   ├── fold_F01_latest.pt        │   ├── fold_F01_latest.pt
+│   └── fold_F01_epoch_10.pt      │   └── ...
+├── logs/                         ├── logs/
+│   ├── fold_F01.csv              │   ├── fold_F01.csv
+│   ├── fold_F01_summary.json     │   ├── fold_F01_summary.json
+│   └── fold_F01_predictions.npz  │   └── ...
+└── config.yaml                   └── config.yaml
 ```
 
 ### Key Metrics to Check
@@ -285,14 +351,14 @@ outputs/pilot/
 | **Val AUC** | > 0.85 (good), > 0.95 (excellent) | Primary metric for model selection |
 | **Test AUC** | Similar to Val AUC | Large gap indicates overfitting |
 | **Train Loss** | Decreasing over epochs | Should trend downward |
-| **Model Size** | < 500 KB | Check summary JSON |
+| **Model Size** | < 500 KB | Check summary JSON (target: ~473KB) |
 | **Miss Rate** | < 0.20 (target) | Lower is better for atypical speech |
 
 **Quick validation checklist:**
 - Val AUC improved over baseline (0.5 = random)
 - Test AUC within 5% of Val AUC
 - No NaN values in loss
-- Model size under 500 KB limit
+- Model size under 500 KB limit (~473KB expected)
 
 ### How to View Results
 
@@ -367,10 +433,10 @@ print(f"Size: {checkpoint['model_size_mb']:.2f} MB")
 |-------|---------|----------|
 | **NaN in loss** | Loss shows `nan` in CSV | Reduce learning rate (e.g., 0.001 → 0.0001) |
 | **AUC = 0.5** | Model not learning; random predictions | Check data loading, increase model capacity, check labels |
-| **Out of memory** | CUDA OOM error | Reduce `batch_size` in config |
+| **Out of memory** | CUDA OOM error | Reduce `batch_size` (RTX 4080 default is 64) |
 | **Missing files** | FileNotFoundError during evaluation | Check `manifest`, `teacher_probs_dir`, and `splits/` paths |
 | **Val AUC << Train** | Large generalization gap | Add dropout, reduce model size, early stopping |
-| **Slow training** | Epoch time > 10 min | Reduce `num_samples`, use GPU, reduce `seq_len` |
+| **Slow training** | Epoch time > 10 min | Reduce `num_samples`, use GPU (CUDA/MPS), reduce `seq_len` |
 
 **Debugging tips:**
 
@@ -429,14 +495,14 @@ open analysis/comparison/plots/miss_rate_far.png
 |-------------|--------|---------|--------|--------|-----------|--------|
 | Energy      | N/A    | N/A     | 0.7234 | 0.6812 | 0.3124    | 0.1823 |
 | SpeechBrain | 153 MB | 45 ms   | 0.8912 | 0.8543 | 0.1234    | 0.1421 |
-| Our Model   | 450 KB | 8 ms    | 0.9234 | 0.8912 | 0.0891    | 0.1123 |
+| Our Model   | 473 KB | 8 ms    | 0.9234 | 0.8912 | 0.0891    | 0.1123 |
 ```
+
+---
 
 ## Inspecting the Model
 
 After training, you'll want to load, inspect, and verify your model. This section covers everything from basic loading to deployment-ready export.
-
----
 
 ### 1. Loading a Trained Model
 
@@ -469,8 +535,6 @@ print(f"Config: {checkpoint.get('config', {})}")
 - `best_auc`: Best validation AUC achieved
 - `config`: Training configuration used
 
----
-
 ### 2. Checking Model Size
 
 Verify your model meets the ≤ 500 KB target:
@@ -478,7 +542,7 @@ Verify your model meets the ≤ 500 KB target:
 ```python
 # Get model size in KB
 size_kb = model.get_model_size_kb()
-print(f"Model size: {size_kb:.2f} KB")  # Should be < 500 KB
+print(f"Model size: {size_kb:.2f} KB")  # Should be ~473 KB
 
 # Count trainable parameters
 params = model.count_parameters()
@@ -496,13 +560,11 @@ Model Information:
 """)
 ```
 
-**Expected output (default config):**
+**Expected output:**
 ```
-Model size: ~350 KB
-Parameters: ~85,000
+Model size: ~473 KB
+Parameters: ~118,000
 ```
-
----
 
 ### 3. Running Inference on New Audio
 
@@ -625,8 +687,6 @@ for r in all_results:
           f"avg conf: {r['avg_confidence']:.3f}")
 ```
 
----
-
 ### 4. Exporting for Deployment
 
 Export your trained model to formats suitable for production deployment.
@@ -715,10 +775,8 @@ for name, path in formats.items():
 
 **Expected sizes:**
 - PyTorch checkpoint: ~1,400 KB (includes optimizer state)
-- TorchScript: ~350 KB (model only)
-- ONNX: ~350 KB (model only)
-
----
+- TorchScript: ~473 KB (model only)
+- ONNX: ~473 KB (model only)
 
 ### 5. Model Architecture Inspection
 
@@ -795,8 +853,6 @@ Output frames: {flops['output_frames']}
 estimated_time_ms = (flops['total_flops'] / 1e9) * 1000
 print(f"Estimated inference time (1 GFLOP/s CPU): {estimated_time_ms:.3f} ms")
 ```
-
----
 
 ### Complete Inspection Script
 
@@ -913,6 +969,8 @@ python inspect_model.py
 # Inspect trained checkpoint
 python inspect_model.py outputs/pilot/checkpoints/fold_F01_best.pt
 ```
+
+---
 
 ## License
 

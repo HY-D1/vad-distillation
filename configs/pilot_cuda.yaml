@@ -1,0 +1,40 @@
+# Pilot configuration for smoke testing (RTX 4080 optimized)
+# Week 1: Basic functionality test on small subset
+
+# Random seed
+seed: 6140
+
+# Device
+device: cuda
+num_workers: 2
+
+# Model architecture
+model:
+  n_mels: 40
+  cnn_channels: [8, 16]    # Reduced for ≤500KB target (was [16, 32])
+  gru_hidden: 24           # Reduced for ≤500KB target (was 32)
+  gru_layers: 2
+  dropout: 0.0
+
+# Distillation hyperparameters
+alpha: 0.5          # Weight for soft loss (0.5 = balanced)
+temperature: 3.0    # Temperature for softening teacher outputs
+
+# Training
+dataset: torgo_pilot
+num_samples: 100    # Small for smoke test
+seq_len: 100        # ~3.2 seconds @ 32ms frames
+batch_size: 32
+learning_rate: 0.001
+num_epochs: 1       # Just 1 epoch for smoke test
+
+# Data paths
+manifest: manifests/torgo_sentences.csv
+teacher_probs_dir: teacher_probs/
+
+# Output
+output_dir: outputs/pilot_cuda/
+
+# Logging
+log_interval: 10
+save_interval: 1
