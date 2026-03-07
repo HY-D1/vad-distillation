@@ -18,7 +18,7 @@ mkdir -p "$OUTPUT_BASE/speechbrain/frame_probs"
 # 1. Energy Baseline
 echo ""
 echo "1. Running Energy baseline..."
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
     --method energy \
     --manifest "$MANIFEST" \
     --output-dir "$OUTPUT_BASE/energy/"
@@ -26,7 +26,7 @@ python scripts/run_baseline.py \
 # 2. Silero Baseline (teacher)
 echo ""
 echo "2. Running Silero baseline..."
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
     --method silero \
     --manifest "$MANIFEST" \
     --output-dir "$OUTPUT_BASE/silero/"
@@ -35,7 +35,7 @@ python scripts/run_baseline.py \
 echo ""
 echo "3. Running SpeechBrain baseline..."
 if python -c "import speechbrain" 2>/dev/null; then
-    python scripts/run_baseline.py \
+    python scripts/core/run_baseline.py \
         --method speechbrain \
         --manifest "$MANIFEST" \
         --output-dir "$OUTPUT_BASE/speechbrain/"

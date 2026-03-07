@@ -743,7 +743,129 @@ PowerShell equivalent of start.sh for Windows users.
 - **Scripts**: All scripts in `scripts/` have `--help` for usage
 - **Notebooks**: EDA and analysis in `notebooks/`
 
+## Phase 1 Final Project Workflow (Demo Video 1)
+
+### Prerequisites
+- All 15 LOSO folds trained and checkpoints in `outputs/production_cuda/checkpoints/`
+- Training logs in `outputs/production_cuda/logs/`
+
+### Step 1: Verify Training Results
+```bash
+# Verify all 15 folds completed successfully
+python scripts/analysis/verify_4080_results.py \
+    --results-dir outputs/production_cuda \
+    --max-miss-rate 0.75 --min-f1 0.4
+```
+
+### Step 2: Extract Frame Predictions
+```bash
+# Extract all fold predictions to frame_probs format for comparison
+python scripts/core/extract_all_predictions.py \
+    --results-dir outputs/production_cuda \
+    --output-dir outputs/our_model
+```
+
+This creates:
+```
+outputs/our_model/
+├── extraction_summary.json
+├── fold_F01/frame_probs/*.npy
+├── fold_F03/frame_probs/*.npy
+└── ... (all 15 folds)
+```
+
+### Step 3: Run Baselines (if not already done)
+```bash
+# Energy baseline
+python scripts/core/run_baseline.py \
+    --method energy \
+    --manifest manifests/torgo_sentences.csv \
+    --output-dir outputs/baselines/energy/
+
+# Silero baseline (teacher)
+python scripts/core/run_baseline.py \
+    --method silero \
+    --manifest manifests/torgo_sentences.csv \
+    --output-dir outputs/baselines/silero/
+
+# SpeechBrain baseline (optional)
+python scripts/core/run_baseline.py \
+    --method speechbrain \
+    --manifest manifests/torgo_sentences.csv \
+    --output-dir outputs/baselines/speechbrain/
+```
+
+### Step 4: Run Full Comparison Pipeline
+```bash
+# Run complete comparison (auto-detects existing baselines)
+python scripts/core/run_full_comparison.py
+
+# Or with specific options
+python scripts/core/run_full_comparison.py \
+    --skip-baselines \
+    --methods energy,silero,our_model
+```
+
+Generates:
+- `analysis/comparison/comparison_table.csv`
+- `analysis/comparison/comparison_table.md`
+- `analysis/comparison/plots/*.png`
+
+### Step 5: Run Latency Benchmark
+```bash
+# Benchmark student model latency
+python scripts/analysis/benchmark_latency.py \
+    --compare-baselines
+```
+
+Generates:
+- `analysis/benchmark_results.json`
+- `analysis/benchmark_report.md`
+- `analysis/latency_comparison.png`
+
+### Alternative: One-Command Full Pipeline
+```bash
+# Run everything (extract, baselines, compare, benchmark)
+python scripts/core/run_full_comparison.py && \
+python scripts/analysis/benchmark_latency.py --compare-baselines
+```
+
+## New Scripts Reference
+
+| Script | Purpose | Location |
+|--------|---------|----------|
+| `run_all_folds.py` | Train all 15 LOSO folds | `scripts/core/` |
+| `extract_all_predictions.py` | Extract frame_probs from predictions.npz | `scripts/core/` |
+| `run_full_comparison.py` | Master comparison pipeline | `scripts/core/` |
+| `benchmark_latency.py` | Latency + engineering targets | `scripts/analysis/` |
+| `extract_predictions.py` | Per-fold prediction extraction | `scripts/analysis/` |
+| `run_baseline.py` (wrapper) | Backward compatibility wrapper | `scripts/` |
+| `compare_methods.py` (wrapper) | Backward compatibility wrapper | `scripts/` |
+| `run_all_folds.bat` | Windows batch for training | `scripts/platform/windows/` |
+
+## Training on Windows RTX 4080
+
+### Option 1: Individual Folds
+```bash
+python train_loso.py --config configs/production_cuda.yaml --fold F01
+```
+
+### Option 2: All Folds (Sequential)
+```bash
+python scripts/core/run_all_folds.py --config configs/production_cuda.yaml
+```
+
+### Option 3: All Folds (Parallel - 2 at a time)
+```bash
+python scripts/core/run_all_folds.py --config configs/production_cuda.yaml --parallel 2
+```
+
+### Option 4: Resume Interrupted Training
+```bash
+python scripts/core/run_all_folds.py --config configs/production_cuda.yaml --resume
+```
+
 ---
 
 *Last updated: 2026-03-07*
-*Seed: 6140 | Model Size Target: ≤ 500 KB | Folds: 15*
+*Seed: 6140 | Model Size Target: ≤ 500 KB | Folds: 15* | *Phase 1: Complete*
