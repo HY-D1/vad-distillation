@@ -68,6 +68,10 @@ def load_audio(audio_path: str, target_sr: int = 16000) -> torch.Tensor:
     """
     Load audio file for Silero VAD.
     
+    NOTE: This is a standalone copy in cache_teacher.py. A similar but
+    incompatible function exists in run_baseline.py that returns a tuple
+    of (waveform, sample_rate). Kept separate due to different return types.
+    
     Args:
         audio_path: Path to audio file
         target_sr: Target sample rate
@@ -94,7 +98,7 @@ def get_audio_duration(audio_path: str) -> float:
     try:
         info = torchaudio.info(audio_path)
         return info.num_frames / info.sample_rate
-    except:
+    except (RuntimeError, IOError):
         return 0.0
 
 

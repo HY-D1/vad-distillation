@@ -583,7 +583,7 @@ def generate_report(output_dir: str) -> str:
                 config = load_config(config_file)
                 alpha = config.get('alpha')
                 temperature = config.get('temperature')
-            except:
+            except Exception:
                 pass
         
         row = {
