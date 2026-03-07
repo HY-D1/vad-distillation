@@ -34,6 +34,7 @@ cached_features/
 *.md
 !README.md
 !CROSS_PLATFORM_WORKFLOW.md
+AGENTS.md
 local/
 logs/
 wandb/
@@ -101,6 +102,7 @@ outputs/**/tmp/
 outputs/**/temp/
 outputs/**/cache/
 outputs/**/__pycache__/
+outputs/TRAINING_STATUS.md
 
 # Baseline outputs (can be regenerated)
 outputs/baselines/*

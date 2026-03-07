@@ -108,7 +108,7 @@ python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
 
 ```cmd
 # Validate setup
-python scripts\validate_torgo_setup.py
+python scripts/data/validate_torgo_setup.py
 
 # Quick test on CUDA (RTX 4080)
 python train_loso.py --config configs/quick_test.yaml --fold F01
@@ -133,17 +133,17 @@ foreach ($fold in $folds) {
 
 ```cmd
 # Energy baseline
-python scripts\run_baseline.py ^
+python scripts/core/run_baseline.py ^
   --method energy ^
-  --manifest manifests\torgo_pilot.csv ^
-  --output-dir outputs\baselines\energy\
+  --manifest manifests/torgo_pilot.csv ^
+  --output-dir outputs/baselines/energy/
 
 # SpeechBrain baseline
 pip install speechbrain
-python scripts\run_baseline.py ^
+python scripts/core/run_baseline.py ^
   --method speechbrain ^
-  --manifest manifests\torgo_pilot.csv ^
-  --output-dir outputs\baselines\speechbrain\
+  --manifest manifests/torgo_pilot.csv ^
+  --output-dir outputs/baselines/speechbrain/
 ```
 
 ### Troubleshooting Windows
