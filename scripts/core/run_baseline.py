@@ -96,6 +96,10 @@ def load_audio(audio_path: str, target_sr: int = 16000) -> Tuple[torch.Tensor, i
     """
     Load audio file and resample if necessary.
     
+    NOTE: This is a standalone copy in run_baseline.py. A similar but
+    incompatible function exists in cache_teacher.py that returns only the
+    waveform tensor (not a tuple). Kept separate due to different return types.
+    
     Args:
         audio_path: Path to audio file
         target_sr: Target sample rate
