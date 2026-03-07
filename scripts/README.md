@@ -57,11 +57,6 @@ Essential scripts for training, validation, and running experiments.
   python scripts/core/verify_checkpoint.py --checkpoint outputs/checkpoints/fold_F01_best.pt --fold F01
   ```
 
-- **precompute_all.py** - One script to cache all features and teacher outputs.
-  ```bash
-  python scripts/core/precompute_all.py --manifest manifests/torgo_sentences.csv --features mel mfcc --teacher --parallel 4
-  ```
-
 ### Testing Scripts
 
 - **run_tests.py** - Run project tests.
@@ -85,8 +80,6 @@ Scripts for data preparation, caching, and management.
   python scripts/data/cache_features.py --manifest manifests/torgo_sentences.csv --features mel mfcc --parallel 4
   ```
 
-- **cache_manager.py** - Cache management utilities (list, verify, clean caches).
-
 ### Data Preparation
 
 - **build_torgo_manifest.py** - Build TORGO dataset manifest for sentence-level audio files.
@@ -103,8 +96,6 @@ Scripts for data preparation, caching, and management.
   ```bash
   python scripts/data/validate_torgo_setup.py --data_dir data/torgo_raw
   ```
-
-- **generate_hard_labels.py** - Generate hard labels from soft teacher probabilities.
 
 - **run_silero_teacher.py** - Run Silero VAD as teacher on audio files.
 
@@ -126,8 +117,6 @@ Scripts for analyzing results, comparing methods, and generating reports.
   ```
 
 - **compare_platforms.py** - Compare results between Windows and Mac platforms.
-- **compare_verification.py** - Compare verification results between platforms.
-
 ### Analysis Scripts
 
 - **analyze_week2.py** - Analyze Week 2 hyperparameter sweep results for alpha (α) and temperature (T).
@@ -135,9 +124,6 @@ Scripts for analyzing results, comparing methods, and generating reports.
   python scripts/analysis/analyze_week2.py --results-dir outputs/week2/ --output-dir analysis/week2/
   ```
 
-- **compute_baseline_metrics.py** - Compute metrics for baseline methods.
-- **generate_experiment_matrix.py** - Generate experiment matrix for batch runs.
-- **extract_predictions.py** - Extract and format predictions from model outputs.
 - **verify_4080_results.py** - Verify RTX 4080 training results.
 
 ---
@@ -219,8 +205,11 @@ Deprecated or one-off scripts kept for reference.
 
 2. **Cache Data**
    ```bash
-   # Cache features and teacher outputs
-   python scripts/core/precompute_all.py --manifest manifests/torgo_sentences.csv --features mel --teacher --parallel 4
+   # Cache teacher outputs
+   python scripts/data/cache_teacher.py --manifest manifests/torgo_sentences.csv --device cuda
+   
+   # Cache features
+   python scripts/data/cache_features.py --manifest manifests/torgo_sentences.csv --features mel --parallel 4
    ```
 
 3. **Train Model**

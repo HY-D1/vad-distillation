@@ -30,15 +30,16 @@ teacher_probs/
 teacher_hard_labels/
 cached_features/
 
-# Local-only documentation and planning
+# Allow markdown documentation
 *.md
 !README.md
-docs/
+!CROSS_PLATFORM_WORKFLOW.md
 local/
 logs/
 wandb/
 outputs/
 checkpoints/
+*.bz2
 
 # Jupyter
 .ipynb_checkpoints/

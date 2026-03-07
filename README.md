@@ -19,10 +19,10 @@ Develop a lightweight VAD (≤ 500 KB) that maintains competitive accuracy on at
 
 ```bash
 # 1. Validate TORGO data setup
-python scripts/validate_torgo_setup.py
+python scripts/data/validate_torgo_setup.py
 
 # 2. Build dataset manifest
-python scripts/build_torgo_manifest.py \
+python scripts/data/build_torgo_manifest.py \
     --data_dir data/torgo_raw \
     --output manifests/torgo_sentences.csv
 
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 ```bash
 # Validate setup
-python scripts/validate_torgo_setup.py
+python scripts/data/validate_torgo_setup.py
 
 # Run smoke test (1-2 minutes)
 python train_loso.py --config configs/pilot.yaml --fold F01 --test
@@ -64,14 +64,14 @@ python train_loso.py --config configs/pilot.yaml --fold F01 --epochs 10
 
 ```bash
 # Energy baseline
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
   --method energy \
   --manifest manifests/torgo_pilot.csv \
   --output-dir outputs/baselines/energy/
 
 # SpeechBrain baseline
 pip install speechbrain
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
   --method speechbrain \
   --manifest manifests/torgo_pilot.csv \
   --output-dir outputs/baselines/speechbrain/
@@ -83,7 +83,7 @@ python scripts/run_baseline.py \
 |-------|----------|
 | MPS not available | Falls back to CPU automatically |
 | `ModuleNotFoundError` | Run `pip install -r requirements.txt` |
-| Permission denied | Run `chmod +x scripts/*.py` |
+| Permission denied | Run `chmod +x scripts/**/*.py` |
 
 ---
 
@@ -172,7 +172,7 @@ outputs/production_cuda/                   │
      └──────────────────────────────────────┘
                                             │
      3. Verify on Mac                        │
-        python scripts/compare_methods.py   │
+        python scripts/analysis/compare_methods.py   │
         python notebooks/analyze_results.ipynb
 ```
 
@@ -194,7 +194,7 @@ We compare our TinyVAD student against three baselines:
 ### 1. Energy-based VAD (Course Requirement)
 Simple energy thresholding with hysteresis and smoothing.
 ```bash
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
   --method energy \
   --manifest manifests/torgo_pilot.csv \
   --output-dir outputs/baselines/energy/
@@ -204,7 +204,7 @@ python scripts/run_baseline.py \
 Pretrained CRDNN model trained on LibriParty (F1=0.9477 on test set).
 ```bash
 pip install speechbrain
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
   --method speechbrain \
   --manifest manifests/torgo_pilot.csv \
   --output-dir outputs/baselines/speechbrain/
@@ -213,7 +213,7 @@ python scripts/run_baseline.py \
 ### 3. Silero VAD (Teacher / Additional Reference)
 Our distillation teacher.
 ```bash
-python scripts/run_baseline.py \
+python scripts/core/run_baseline.py \
   --method silero \
   --manifest manifests/torgo_pilot.csv \
   --output-dir outputs/baselines/silero/
@@ -221,7 +221,7 @@ python scripts/run_baseline.py \
 
 ### Compare All Methods
 ```bash
-python scripts/compare_methods.py \
+python scripts/analysis/compare_methods.py \
   --manifest manifests/torgo_pilot.csv \
   --methods outputs/baselines/energy/,outputs/baselines/speechbrain/,outputs/pilot/ \
   --method-names "Energy,SpeechBrain,Our Model" \
@@ -236,7 +236,7 @@ python scripts/compare_methods.py \
 Run the full 36-experiment sweep (3 α × 4 T × 3 folds):
 
 ```bash
-python scripts/run_sweep.py \
+python scripts/core/run_sweep.py \
   --param alpha --values 0.5 0.7 0.9 \
   --param temperature --values 1 2 3 5 \
   --folds F01 M01 FC01 \
@@ -248,7 +248,7 @@ python scripts/run_sweep.py \
 
 Analyze results:
 ```bash
-python scripts/analyze_week2.py \
+python scripts/analysis/analyze_week2.py \
   --results-dir outputs/week2_full \
   --output-dir analysis/week2
 ```
@@ -285,14 +285,17 @@ python scripts/analyze_week2.py \
 ├── outputs/                # Training outputs
 ├── pretrained_models/      # Downloaded baseline models
 ├── scripts/                # Utility and execution scripts
-│   ├── validate_torgo_setup.py
-│   ├── build_torgo_manifest.py
-│   ├── run_baseline.py
-│   ├── run_sweep.py
-│   ├── cache_teacher.py
-│   ├── cache_manager.py
-│   ├── compare_methods.py
-│   └── analyze_week2.py
+│   ├── core/               # Core training and experiment scripts
+│   │   ├── run_baseline.py
+│   │   ├── run_sweep.py
+│   │   └── run_experiment.py
+│   ├── data/               # Data processing scripts
+│   │   ├── validate_torgo_setup.py
+│   │   ├── build_torgo_manifest.py
+│   │   └── cache_teacher.py
+│   └── analysis/           # Analysis and comparison scripts
+│       ├── compare_methods.py
+│       └── analyze_week2.py
 ├── splits/                 # LOSO splits (JSON files for 15 folds)
 ├── teacher_probs/          # Cached Silero outputs
 ├── train_loso.py          # Main training script (LOSO)
@@ -309,11 +312,11 @@ python scripts/analyze_week2.py \
 | Script | Purpose |
 |--------|---------|
 | `train_loso.py` | Main training script with LOSO support |
-| `scripts/run_sweep.py` | Hyperparameter sweep runner |
-| `scripts/analyze_week2.py` | Results analysis and visualization |
-| `scripts/cache_manager.py` | Cache status, verify, clean |
-| `scripts/build_torgo_manifest.py` | Generate dataset manifest |
-| `scripts/validate_torgo_setup.py` | Validate TORGO installation |
+| `scripts/core/run_sweep.py` | Hyperparameter sweep runner |
+| `scripts/analysis/analyze_week2.py` | Results analysis and visualization |
+| `scripts/data/cache_manager.py` | Cache status, verify, clean |
+| `scripts/data/build_torgo_manifest.py` | Generate dataset manifest |
+| `scripts/data/validate_torgo_setup.py` | Validate TORGO installation |
 
 ## Design Decisions
 
@@ -460,7 +463,7 @@ Use the comparison script to evaluate and compare different models or baselines:
 
 ```bash
 # Compare your model against baselines
-python scripts/compare_methods.py \
+python scripts/analysis/compare_methods.py \
   --manifest manifests/torgo_pilot.csv \
   --methods outputs/baselines/energy/,outputs/baselines/speechbrain/,outputs/pilot/ \
   --method-names "Energy,SpeechBrain,Our Model" \
