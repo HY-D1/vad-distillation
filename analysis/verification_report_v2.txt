@@ -1,0 +1,283 @@
+====================================================================================================
+Windows RTX 4080 Training Results Verification Report
+====================================================================================================
+
+Generated: 2026-03-07T09:51:32.578061
+Results directory: outputs/production_cuda
+
+PyTorch available: True
+
+====================================================================================================
+Windows RTX 4080 Results Verification Summary
+====================================================================================================
+
+Fold     Status          AUC       F1    Miss%     FAR%   Best AUC  Epoch Issues
+----------------------------------------------------------------------------------------------------
+F01      PASS         0.9933   0.7254   0.4185   0.0069     0.9999     17 
+F03      PASS         0.9999   0.6289   0.5413   0.0000     0.9995     18 
+F04      PASS         0.9990   0.5365   0.6334   0.0000     0.9996     18 
+M01      PASS         0.9997   0.7090   0.4506   0.0001     0.9995     17 
+M02      PASS         0.9997   0.6647   0.5022   0.0000     1.0000     15 
+M03      PASS         0.9999   0.5882   0.5834   0.0000     0.9999     18 
+M04      PASS         0.9998   0.6535   0.5146   0.0000     0.9994     19 
+M05      PASS         0.9991   0.6644   0.5025   0.0001     0.9987     18 
+FC01     WARN         0.9993   0.4944   0.6715   0.0002     0.9993      3 Miss Rate (0.6715) > threshold (0.65)
+FC02     PASS         0.9990   0.5926   0.5789   0.0000     0.9994     14 
+FC03     PASS         0.9986   0.6495   0.5190   0.0000     0.9997      2 
+MC01     PASS         0.9989   0.5720   0.5990   0.0008     0.9998     17 
+MC02     WARN         0.9998   0.4866   0.6784   0.0000     0.9997     14 Miss Rate (0.6784) > threshold (0.65)
+MC03     PASS         0.9997   0.5691   0.6023   0.0000     0.9984     19 
+MC04     PASS         0.9970   0.6734   0.4921   0.0003     0.9942      6 
+----------------------------------------------------------------------------------------------------
+
+
+====================================================================================================
+Statistics
+====================================================================================================
+
+Verification Counts:
+  Total folds:      15
+  Passed:           13
+  Warnings:         2
+  Failed:           0
+  Missing:          0
+
+Metric Averages (valid folds only):
+  AUC:              0.9988 (min: 0.9933, max: 0.9999)
+  F1:               0.6139 (min: 0.4866, max: 0.7254)
+  Miss Rate:        0.5525 (min: 0.4185, max: 0.6784)
+  FAR:              0.0006 (min: 0.0000, max: 0.0069)
+  Epoch:            14.3 (min: 2, max: 19)
+
+Thresholds Used:
+  Min AUC:          0.85
+  Min F1:           0.45
+  Max Miss Rate:    0.65
+  Max FAR:          0.05
+  Min Best AUC:     0.85
+
+====================================================================================================
+
+13/15 FOLDS PASSED, 2 WITH WARNINGS
+====================================================================================================
+
+
+====================================================================================================
+Per-Fold Detailed Information
+====================================================================================================
+
+Fold: F01
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 17
+  Best Val AUC: 0.9999
+  Test Metrics:
+    AUC:          0.9933
+    F1:           0.7254
+    Miss Rate:    0.4185
+    False Alarm:  0.0069
+  Issues: None
+
+Fold: F03
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 18
+  Best Val AUC: 0.9995
+  Test Metrics:
+    AUC:          0.9999
+    F1:           0.6289
+    Miss Rate:    0.5413
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: F04
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 18
+  Best Val AUC: 0.9996
+  Test Metrics:
+    AUC:          0.9990
+    F1:           0.5365
+    Miss Rate:    0.6334
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: M01
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 17
+  Best Val AUC: 0.9995
+  Test Metrics:
+    AUC:          0.9997
+    F1:           0.7090
+    Miss Rate:    0.4506
+    False Alarm:  0.0001
+  Issues: None
+
+Fold: M02
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 15
+  Best Val AUC: 1.0000
+  Test Metrics:
+    AUC:          0.9997
+    F1:           0.6647
+    Miss Rate:    0.5022
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: M03
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 18
+  Best Val AUC: 0.9999
+  Test Metrics:
+    AUC:          0.9999
+    F1:           0.5882
+    Miss Rate:    0.5834
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: M04
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 19
+  Best Val AUC: 0.9994
+  Test Metrics:
+    AUC:          0.9998
+    F1:           0.6535
+    Miss Rate:    0.5146
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: M05
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 18
+  Best Val AUC: 0.9987
+  Test Metrics:
+    AUC:          0.9991
+    F1:           0.6644
+    Miss Rate:    0.5025
+    False Alarm:  0.0001
+  Issues: None
+
+Fold: FC01
+  Status: WARNING
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 3
+  Best Val AUC: 0.9993
+  Test Metrics:
+    AUC:          0.9993
+    F1:           0.4944
+    Miss Rate:    0.6715
+    False Alarm:  0.0002
+  Issues:
+    - Miss Rate (0.6715) > threshold (0.65)
+
+Fold: FC02
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 14
+  Best Val AUC: 0.9994
+  Test Metrics:
+    AUC:          0.9990
+    F1:           0.5926
+    Miss Rate:    0.5789
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: FC03
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 2
+  Best Val AUC: 0.9997
+  Test Metrics:
+    AUC:          0.9986
+    F1:           0.6495
+    Miss Rate:    0.5190
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: MC01
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 17
+  Best Val AUC: 0.9998
+  Test Metrics:
+    AUC:          0.9989
+    F1:           0.5720
+    Miss Rate:    0.5990
+    False Alarm:  0.0008
+  Issues: None
+
+Fold: MC02
+  Status: WARNING
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 14
+  Best Val AUC: 0.9997
+  Test Metrics:
+    AUC:          0.9998
+    F1:           0.4866
+    Miss Rate:    0.6784
+    False Alarm:  0.0000
+  Issues:
+    - Miss Rate (0.6784) > threshold (0.65)
+
+Fold: MC03
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 19
+  Best Val AUC: 0.9984
+  Test Metrics:
+    AUC:          0.9997
+    F1:           0.5691
+    Miss Rate:    0.6023
+    False Alarm:  0.0000
+  Issues: None
+
+Fold: MC04
+  Status: PASS
+  Checkpoint exists: True
+  Summary exists: True
+  Checkpoint loadable: True
+  Epoch: 6
+  Best Val AUC: 0.9942
+  Test Metrics:
+    AUC:          0.9970
+    F1:           0.6734
+    Miss Rate:    0.4921
+    False Alarm:  0.0003
+  Issues: None
+
+====================================================================================================
+End of Report
+====================================================================================================
