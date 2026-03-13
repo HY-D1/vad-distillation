@@ -1,0 +1,43 @@
+# Production configuration for RTX 4080 (CUDA)
+# Full training config optimized for NVIDIA RTX 4080
+
+seed: 6140
+device: cuda
+num_workers: 4
+
+model:
+  n_mels: 40
+  cnn_channels:
+  - 14
+  - 28
+  gru_hidden: 32
+  gru_layers: 2
+  dropout: 0.1
+
+alpha: 0.6
+temperature: 3.0
+
+dataset: torgo_full
+num_samples: 2000
+seq_len: 150
+batch_size: 64
+learning_rate: 0.001
+num_epochs: 20
+
+lr_scheduler:
+  type: ReduceLROnPlateau
+  factor: 0.5
+  patience: 3
+  min_lr: 0.0001
+
+manifest: manifests/torgo_sentences.csv
+teacher_probs_dir: teacher_probs/
+output_dir: outputs/production_cuda/
+
+log_interval: 50
+save_interval: 5
+
+early_stopping:
+  enabled: true
+  patience: 5
+  metric: val_loss

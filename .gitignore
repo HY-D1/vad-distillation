@@ -30,11 +30,63 @@ teacher_probs/
 teacher_hard_labels/
 cached_features/
 
-# Allow markdown documentation
+# =============================================================================
+# ESSENTIAL FILES ONLY - Submission Ready
+# Keep: README.md, LICENSE, requirements.txt, core code, configs
+# Ignore: All development notes, analysis outputs, helper scripts
+# =============================================================================
+
+# Allow only essential markdown
 *.md
 !README.md
-!CROSS_PLATFORM_WORKFLOW.md
+
+# Agent/AI documentation (internal use only)
 AGENTS.md
+docs/
+
+# Internal documentation and notes (not for submission)
+COMMIT_SUGGESTION.txt
+PROJECT_STATUS.md
+CLEANUP_SUMMARY.md
+DEMO_CHECKLIST.md
+WINDOWS_*.md
+FILE_STRUCTURE_AUDIT*.md
+CLI_DESIGN.md
+
+# Analysis outputs and reports
+analysis/*.json
+analysis/*.txt
+analysis/*.png
+analysis/demo_plots/
+analysis/comparison/
+analysis/benchmark_*.md
+analysis/verification_report*.txt
+
+# Jupyter notebooks (for exploration only)
+notebooks/*.ipynb
+
+# Platform-specific helper scripts
+scripts/**/*.sh
+scripts/platform/
+start.sh
+start.ps1
+start.bat
+
+# Config templates and experiment matrices (not core configs)
+configs/templates/
+configs/week2_matrix.json
+configs/*_sweep.yaml
+
+# Output configs (generated during training)
+outputs/**/config.yaml
+
+# Utility scripts not core to the project
+scripts/utils/
+scripts/archive/
+scripts/deprecated/
+scripts/README.md
+scripts/compare_methods.py  # Legacy wrapper
+
 local/
 logs/
 wandb/
