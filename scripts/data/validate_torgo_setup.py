@@ -17,10 +17,10 @@ from pathlib import Path
 
 
 try:
-    import torchaudio
-    TORCHAUDIO_AVAILABLE = True
+    import soundfile as sf
+    SOUNDFILE_AVAILABLE = True
 except ImportError:
-    TORCHAUDIO_AVAILABLE = False
+    SOUNDFILE_AVAILABLE = False
 
 
 def check_directory_structure(data_dir: Path) -> dict:
@@ -122,8 +122,8 @@ def validate_audio_sample(wav_files: list[str], data_dir: Path,
         'can_load': False
     }
     
-    if not TORCHAUDIO_AVAILABLE:
-        results['error'] = "torchaudio not available, cannot validate audio files"
+    if not SOUNDFILE_AVAILABLE:
+        results['error'] = "soundfile not available, cannot validate audio files"
         return results
     
     if not wav_files:
@@ -142,13 +142,13 @@ def validate_audio_sample(wav_files: list[str], data_dir: Path,
         results['checked'] += 1
         
         try:
-            info = torchaudio.info(str(wav_path))
-            if info.num_frames == 0:
+            info = sf.info(str(wav_path))
+            if info.frames == 0:
                 results['corrupt'].append({
                     'file': wav_file,
                     'error': 'Empty audio file (0 frames)'
                 })
-            elif info.sample_rate == 0:
+            elif info.samplerate == 0:
                 results['corrupt'].append({
                     'file': wav_file,
                     'error': 'Invalid sample rate (0)'

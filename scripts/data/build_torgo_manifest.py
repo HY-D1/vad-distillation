@@ -27,11 +27,11 @@ from pathlib import Path
 
 # Try importing optional dependencies
 try:
-    import torchaudio
-    TORCHAUDIO_AVAILABLE = True
+    import soundfile as sf
+    SOUNDFILE_AVAILABLE = True
 except ImportError:
-    TORCHAUDIO_AVAILABLE = False
-    warnings.warn("torchaudio not available. Duration computation will be skipped.")
+    SOUNDFILE_AVAILABLE = False
+    warnings.warn("soundfile not available. Duration computation will be skipped.")
 
 try:
     from tqdm import tqdm
@@ -75,7 +75,7 @@ def find_transcript(wav_file: Path) -> tuple[str | None, Path | None]:
 
 def compute_duration(wav_file: Path) -> float | None:
     """
-    Compute audio duration in seconds using torchaudio.
+    Compute audio duration in seconds using soundfile.
     
     Args:
         wav_file: Path to the audio file
@@ -83,12 +83,12 @@ def compute_duration(wav_file: Path) -> float | None:
     Returns:
         Duration in seconds, or None if computation fails
     """
-    if not TORCHAUDIO_AVAILABLE:
+    if not SOUNDFILE_AVAILABLE:
         return None
     
     try:
-        info = torchaudio.info(str(wav_file))
-        duration = info.num_frames / info.sample_rate
+        info = sf.info(str(wav_file))
+        duration = info.frames / info.samplerate
         return duration
     except Exception as e:
         return None
@@ -104,15 +104,15 @@ def validate_audio_file(wav_file: Path) -> tuple[bool, str | None]:
     Returns:
         Tuple of (is_valid, error_message)
     """
-    if not TORCHAUDIO_AVAILABLE:
-        # Can't validate without torchaudio, assume valid
+    if not SOUNDFILE_AVAILABLE:
+        # Can't validate without soundfile, assume valid
         return True, None
     
     try:
-        info = torchaudio.info(str(wav_file))
-        if info.num_frames == 0:
+        info = sf.info(str(wav_file))
+        if info.frames == 0:
             return False, "Empty audio file (0 frames)"
-        if info.sample_rate == 0:
+        if info.samplerate == 0:
             return False, "Invalid sample rate (0)"
         return True, None
     except Exception as e:
@@ -195,7 +195,7 @@ def find_audio_files(data_dir: str, compute_durations: bool = True,
         
         # Validate audio file
         is_valid, error_msg = True, None
-        if validate_files and TORCHAUDIO_AVAILABLE:
+        if validate_files and SOUNDFILE_AVAILABLE:
             is_valid, error_msg = validate_audio_file(wav_file)
         
         if not is_valid:
