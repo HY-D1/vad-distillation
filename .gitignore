@@ -163,6 +163,7 @@ outputs/baselines/*
 # Archive/old outputs
 outputs/archive/*
 !outputs/archive/.gitkeep
+demo/
 
 # Ignore large binary checkpoint files (use LFS for these)
 outputs/**/*.pt
