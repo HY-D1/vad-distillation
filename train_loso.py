@@ -36,6 +36,7 @@ try:
     from data import TORGODataset, collate_fn
     from models.losses import DistillationLoss
     from utils import count_parameters, get_model_size_mb
+    from utils.metrics_tracker import MetricsTracker, compute_gradient_norm
 except ImportError as e:
     print(f"Error importing modules: {e}")
     print("Make sure you're running from the project root or have proper PYTHONPATH set.")
@@ -274,63 +275,87 @@ def create_model(config: Dict) -> nn.Module:
 # Training Functions
 # =============================================================================
 
-def train_epoch(model: nn.Module, 
+def train_epoch(model: nn.Module,
                 train_loader: DataLoader,
                 criterion: DistillationLoss,
                 optimizer: optim.Optimizer,
                 device: torch.device,
-                epoch: int) -> Dict[str, float]:
+                epoch: int,
+                metrics_tracker: Optional[MetricsTracker] = None) -> Dict[str, float]:
     """
     Train for one epoch.
-    
+
     Returns:
         Dictionary with average loss values for the epoch.
     """
     model.train()
-    
+
     total_loss = 0.0
     total_hard_loss = 0.0
     total_soft_loss = 0.0
     num_batches = 0
-    
+
     for batch_idx, batch in enumerate(train_loader):
+        batch_start_time = time.time()
+
         # Move to device
         features = batch['mels'].to(device)
         teacher_probs = batch['teacher_probs'].to(device)
         labels = batch['hard_labels'].to(device)
-        
+
         # Forward pass
         optimizer.zero_grad()
         logits = model(features)
-        
+
         # Compute loss
         loss, loss_dict = criterion(logits, teacher_probs, labels)
-        
+
         # Backward pass
         loss.backward()
-        
+
+        # Compute gradient norm before clipping (for monitoring)
+        grad_norm = compute_gradient_norm(model)
+
         # Gradient clipping
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-        
+
         optimizer.step()
-        
+
+        batch_time = time.time() - batch_start_time
+
         # Accumulate losses
         total_loss += loss_dict['total_loss']
         total_hard_loss += loss_dict['hard_loss']
         total_soft_loss += loss_dict['soft_loss']
         num_batches += 1
-        
+
+        # Log batch metrics if tracker is provided
+        if metrics_tracker is not None:
+            metrics_tracker.log_batch(
+                epoch=epoch,
+                batch=batch_idx,
+                losses=loss_dict,
+                learning_rate=optimizer.param_groups[0]['lr'],
+                grad_norm=grad_norm,
+                batch_time=batch_time
+            )
+
         # Print progress every N batches
         if (batch_idx + 1) % 50 == 0:
             print(f"  Batch [{batch_idx+1}/{len(train_loader)}] "
                   f"Loss: {loss_dict['total_loss']:.4f} "
                   f"(Hard: {loss_dict['hard_loss']:.4f}, "
-                  f"Soft: {loss_dict['soft_loss']:.4f})")
-    
+                  f"Soft: {loss_dict['soft_loss']:.4f}), "
+                  f"Grad: {grad_norm:.4f}")
+
+    # Log gradient statistics at end of epoch
+    if metrics_tracker is not None:
+        metrics_tracker.log_gradients(model, epoch)
+
     avg_loss = total_loss / num_batches if num_batches > 0 else 0.0
     avg_hard_loss = total_hard_loss / num_batches if num_batches > 0 else 0.0
     avg_soft_loss = total_soft_loss / num_batches if num_batches > 0 else 0.0
-    
+
     return {
         'train_loss': avg_loss,
         'train_hard_loss': avg_hard_loss,
@@ -685,7 +710,13 @@ def main():
                         help='Number of epochs (overrides config)')
     parser.add_argument('--patience', type=int, default=None,
                         help='Early stopping patience (overrides config)')
-    
+    parser.add_argument('--tensorboard', action='store_true',
+                        help='Enable TensorBoard logging')
+    parser.add_argument('--log-interval', type=int, default=10,
+                        help='Log batch metrics every N batches (default: 10)')
+    parser.add_argument('--no-detailed-logs', action='store_true',
+                        help='Disable detailed batch-level logging')
+
     args = parser.parse_args()
     
     # Load configuration
@@ -801,6 +832,20 @@ def main():
                   'val_accuracy', 'learning_rate', 'time']
     logger = CSVLogger(log_path, fieldnames)
     print(f"Logging to: {log_path}")
+
+    # Setup enhanced metrics tracking
+    if not args.no_detailed_logs:
+        metrics_tracker = MetricsTracker(
+            log_dir=log_dir,
+            fold_id=fold_id,
+            use_tensorboard=args.tensorboard,
+            log_interval=args.log_interval
+        )
+        print(f"Detailed metrics tracking enabled")
+        if args.tensorboard:
+            print(f"  TensorBoard: tensorboard --logdir={log_dir}/tensorboard")
+    else:
+        metrics_tracker = None
     
     # Setup checkpoint paths
     checkpoint_path = os.path.join(checkpoint_dir, f"fold_{fold_id}_latest.pt")
@@ -835,19 +880,19 @@ def main():
         print("-" * 40)
         
         # Train
-        train_metrics = train_epoch(model, train_loader, criterion, optimizer, device, epoch)
+        train_metrics = train_epoch(model, train_loader, criterion, optimizer, device, epoch, metrics_tracker)
         print(f"Train Loss: {train_metrics['train_loss']:.4f} "
               f"(Hard: {train_metrics['train_hard_loss']:.4f}, "
               f"Soft: {train_metrics['train_soft_loss']:.4f})")
-        
+
         # Validate
         val_metrics = validate(model, val_loader, device)
         print_metrics(val_metrics, prefix="Val ")
-        
+
         # Get current learning rate
         current_lr = optimizer.param_groups[0]['lr']
-        
-        # Log metrics
+
+        # Log metrics to CSV
         log_entry = {
             'epoch': epoch + 1,
             'train_loss': train_metrics['train_loss'],
@@ -862,6 +907,16 @@ def main():
             'time': time.time() - epoch_start_time
         }
         logger.log(log_entry)
+
+        # Log to metrics tracker
+        if metrics_tracker is not None:
+            metrics_tracker.log_epoch(
+                epoch=epoch,
+                train_metrics=train_metrics,
+                val_metrics=val_metrics,
+                learning_rate=current_lr,
+                epoch_time=time.time() - epoch_start_time
+            )
         
         # Update scheduler
         if scheduler is not None:
@@ -988,7 +1043,13 @@ def main():
         json.dump(convert_to_native(summary), f, indent=2)
     
     print(f"Summary saved to: {summary_path}")
-    
+
+    # Close metrics tracker
+    if metrics_tracker is not None:
+        metrics_tracker.save()
+        metrics_tracker.close()
+        print(f"Detailed metrics saved to: {log_dir}/fold_{fold_id}_detailed_metrics.json")
+
     print("\n" + "="*60)
     print(f"Fold {fold_id} training completed!")
     print(f"Best Val AUC: {best_val_auc:.4f}")
