@@ -320,7 +320,7 @@ def main():
     parser.add_argument(
         '--baseline-preds',
         type=str,
-        default='outputs/personal/baseline_energy_50/frame_probs',
+        default='outputs/baselines/energy/frame_probs',
         help='Directory with baseline predictions (.npy)'
     )
     parser.add_argument(

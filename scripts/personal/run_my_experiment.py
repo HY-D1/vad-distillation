@@ -303,7 +303,7 @@ def main():
     parser.add_argument(
         '--checkpoint',
         type=str,
-        default='outputs/quick_test/checkpoints/fold_F01_latest_best.pt',
+        default='outputs/production_cuda/checkpoints/fold_F01_latest_best.pt',
         help='Path to model checkpoint'
     )
     parser.add_argument(
@@ -315,7 +315,7 @@ def main():
     parser.add_argument(
         '--baseline-dir',
         type=str,
-        default='outputs/personal/baseline_energy_50/frame_probs',
+        default='outputs/baselines/energy/frame_probs',
         help='Directory with baseline predictions'
     )
     parser.add_argument(

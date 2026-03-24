@@ -285,10 +285,16 @@ def main():
 
     else:
         if available_logs:
+            def format_log_path(x):
+                try:
+                    return str(x.relative_to(project_root))
+                except ValueError:
+                    return str(x.name)
+
             selected_log = st.sidebar.selectbox(
                 "Select Training Log",
                 options=available_logs,
-                format_func=lambda x: str(x.relative_to(project_root))
+                format_func=format_log_path
             )
 
             if selected_log:
