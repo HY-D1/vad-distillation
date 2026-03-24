@@ -1,0 +1,31 @@
+{
+  "examples": [
+    {
+      "utt_id": "F01_Session1_0002",
+      "correlation": 0.24487422876145856,
+      "mse": 0.42129501700401306,
+      "reason": "best_agreement",
+      "description": "Highest correlation with student model"
+    },
+    {
+      "utt_id": "F01_Session1_0005",
+      "correlation": -0.03203857978560571,
+      "mse": 0.26489973068237305,
+      "reason": "worst_agreement",
+      "description": "Lowest correlation (most disagreement)"
+    },
+    {
+      "utt_id": "F01_Session1_0001",
+      "correlation": 0.08146272262280141,
+      "mse": 0.4374110698699951,
+      "reason": "representative",
+      "description": "Median correlation (typical case)"
+    }
+  ],
+  "selection_method": "Based on correlation with student model (Day 5 comparison)",
+  "alignment_method": "Linear interpolation to baseline time grid",
+  "frame_rates": {
+    "student": "~31 fps (CNN downsampling)",
+    "baseline": "~100 fps (10ms hop)"
+  }
+}
