@@ -1,0 +1,30 @@
+{
+  "method": "silero",
+  "timestamp": "2026-03-06T10:11:08.878056",
+  "config": {
+    "method": "silero",
+    "manifest": "manifests/torgo_pilot.csv",
+    "output_dir": "outputs/baselines/silero/",
+    "frame_hop_ms": 10,
+    "device": "mps",
+    "segment_threshold": 0.5,
+    "min_segment_duration_ms": 0.0,
+    "test_mode": false,
+    "total_utterances": 684,
+    "processed_count": 681,
+    "failed_count": 2
+  },
+  "failed_files": [
+    {
+      "utt_id": "F01_Session1_0067",
+      "path": "data/torgo_raw/F01/Session1/wav_headMic/0067.wav",
+      "error": "Failed to create AudioDecoder for data/torgo_raw/F01/Session1/wav_headMic/0067.wav: Could not open input file: data/torgo_raw/F01/Session1/wav_headMic/0067.wav Invalid data found when processing input"
+    },
+    {
+      "utt_id": "F01_Session1_0068",
+      "path": "data/torgo_raw/F01/Session1/wav_headMic/0068.wav",
+      "error": "Failed to create AudioDecoder for data/torgo_raw/F01/Session1/wav_headMic/0068.wav: Could not open input file: data/torgo_raw/F01/Session1/wav_headMic/0068.wav Invalid data found when processing input"
+    }
+  ],
+  "total_failed": 2
+}

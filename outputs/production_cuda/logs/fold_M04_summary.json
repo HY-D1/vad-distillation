@@ -1,0 +1,73 @@
+{
+  "fold_id": "M04",
+  "train_speakers": [
+    "F01",
+    "F03",
+    "F04",
+    "FC01",
+    "FC02",
+    "FC03",
+    "M01",
+    "M02",
+    "M03",
+    "MC01",
+    "MC02",
+    "MC03",
+    "MC04"
+  ],
+  "val_speaker": "M05",
+  "test_speaker": "M04",
+  "num_parameters": 120933,
+  "model_size_mb": 0.4616584777832031,
+  "best_val_auc": 0.9994422020616502,
+  "test_metrics": {
+    "auc": 0.9997894527586799,
+    "f1": 0.6535222838365168,
+    "miss_rate": 0.5146026903342116,
+    "false_alarm_rate": 2.9031789809841776e-05,
+    "accuracy": 0.8668699332807231,
+    "tp": 17501,
+    "tn": 103332,
+    "fp": 3,
+    "fn": 18554
+  },
+  "config": {
+    "seed": 6140,
+    "device": "cuda",
+    "num_workers": 4,
+    "model": {
+      "n_mels": 40,
+      "cnn_channels": [
+        14,
+        28
+      ],
+      "gru_hidden": 32,
+      "gru_layers": 2,
+      "dropout": 0.1
+    },
+    "alpha": 0.6,
+    "temperature": 3.0,
+    "dataset": "torgo_full",
+    "num_samples": 2000,
+    "seq_len": 150,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "num_epochs": 20,
+    "lr_scheduler": {
+      "type": "ReduceLROnPlateau",
+      "factor": 0.5,
+      "patience": 3,
+      "min_lr": 0.0001
+    },
+    "manifest": "manifests/torgo_sentences.csv",
+    "teacher_probs_dir": "teacher_probs/",
+    "output_dir": "outputs/production_cuda/",
+    "log_interval": 50,
+    "save_interval": 5,
+    "early_stopping": {
+      "enabled": true,
+      "patience": 5,
+      "metric": "val_loss"
+    }
+  }
+}

@@ -200,7 +200,7 @@ def test_scripts():
     
     # Test validate_torgo_setup
     try:
-        result = run_script(project_root / "scripts" / "validate_torgo_setup.py")
+        result = run_script(project_root / "scripts" / "data" / "validate_torgo_setup.py")
         if result[0]:
             print(f"  ✓ validate_torgo_setup.py runs")
         else:
@@ -208,27 +208,27 @@ def test_scripts():
     except Exception as e:
         print(f"  ✗ validate_torgo_setup.py failed: {e}")
         all_ok = False
-    
-    # Test cache_manager
+
+    # Test cache_teacher (replaces deprecated cache_manager)
     try:
-        result = run_python_module("scripts.cache_manager")
-        if "Cache Status" in result[1] or "usage:" in result[1]:
-            print(f"  ✓ cache_manager.py runs")
+        result = run_script(project_root / "scripts" / "data" / "cache_teacher.py")
+        if result[0] or "usage:" in result[1] or "arguments" in result[1]:
+            print(f"  ✓ cache_teacher.py runs")
         else:
-            print(f"  ⚠ cache_manager.py runs (unexpected output)")
+            print(f"  ⚠ cache_teacher.py runs (unexpected output)")
     except Exception as e:
-        print(f"  ✗ cache_manager.py failed: {e}")
+        print(f"  ✗ cache_teacher.py failed: {e}")
         all_ok = False
-    
-    # Test generate_experiment_matrix
+
+    # Test cache_features
     try:
-        result = run_script(project_root / "scripts" / "generate_experiment_matrix.py")
-        if "usage:" in result[1]:
-            print(f"  ✓ generate_experiment_matrix.py runs")
+        result = run_script(project_root / "scripts" / "data" / "cache_features.py")
+        if result[0] or "usage:" in result[1] or "arguments" in result[1]:
+            print(f"  ✓ cache_features.py runs")
         else:
-            print(f"  ⚠ generate_experiment_matrix.py runs (unexpected output)")
+            print(f"  ⚠ cache_features.py runs (unexpected output)")
     except Exception as e:
-        print(f"  ✗ generate_experiment_matrix.py failed: {e}")
+        print(f"  ✗ cache_features.py failed: {e}")
         all_ok = False
     
     return all_ok
