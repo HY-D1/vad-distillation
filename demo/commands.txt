@@ -38,7 +38,7 @@ cat scripts/personal/plot_model_vs_energy.py | head -30
 
 cd /Users/harrydai/Desktop/HD/CS\ 6140/project/group/vad-distillation
 
-python scripts/personal/run_my_experiment.py --max-utterances 5
+./.venv/bin/python scripts/personal/run_my_experiment.py --max-utterances 5 --overwrite
 
 # =============================================================================
 # SECTION 4: SHOW OUTPUTS (1:30-2:30)
@@ -48,7 +48,7 @@ python scripts/personal/run_my_experiment.py --max-utterances 5
 cat outputs/personal/comparison/summary.txt
 
 # Show checkpoint metrics
-python -c "
+./.venv/bin/python -c "
 import torch
 ckpt = torch.load('outputs/quick_test/checkpoints/fold_F01_latest_best.pt', map_location='cpu', weights_only=False)
 print(f'Model size: {ckpt[\"model_size_mb\"]:.2f} MB')
@@ -64,7 +64,7 @@ cat outputs/quick_test/logs/fold_F01.csv
 # =============================================================================
 # Show the frame rate difference issue and how it was handled
 
-python -c "
+./.venv/bin/python -c "
 import numpy as np
 student = np.load('outputs/personal/comparison/student_frame_probs/F01_Session1_0001.npy')
 baseline = np.load('outputs/personal/baseline_energy_50/frame_probs/F01_Session1_0001.npy')
@@ -122,7 +122,7 @@ cat outputs/personal/comparison/summary.txt
 ls outputs/personal/comparison/student_frame_probs/
 
 # Show checkpoint info
-python -c "
+./.venv/bin/python -c "
 import torch
 ckpt = torch.load('outputs/quick_test/checkpoints/fold_F01_latest_best.pt', map_location='cpu', weights_only=False)
 print(f'Model size: {ckpt[\"model_size_mb\"]:.2f} MB (target: <0.5 MB)')
@@ -134,7 +134,7 @@ print(f'✓ Within target!' if ckpt['model_size_mb'] < 0.5 else '✗ Over target
 # =============================================================================
 
 # Verify all outputs exist
-python -c "
+./.venv/bin/python -c "
 from pathlib import Path
 paths = [
     'outputs/quick_test/checkpoints/fold_F01_latest_best.pt',
@@ -147,7 +147,7 @@ for p in paths:
 "
 
 # Test that demo command works (5 utterances)
-python scripts/personal/run_my_experiment.py --max-utterances 5
+./.venv/bin/python scripts/personal/run_my_experiment.py --max-utterances 5 --overwrite
 
 # =============================================================================
 # END OF DEMO COMMANDS

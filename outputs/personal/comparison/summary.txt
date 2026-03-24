@@ -5,7 +5,7 @@ PERSONAL VAD MILESTONE: MODEL VS BASELINE COMPARISON
 INFERENCE RESULTS
 ----------------------------------------
 Utterances processed: 0
-Utterances skipped: 5
+Utterances skipped: 1
 Utterances failed: 0
 
 CHECKPOINT METRICS

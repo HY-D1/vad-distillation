@@ -1,0 +1,30 @@
+============================================================
+PERSONAL VAD MILESTONE: MODEL VS BASELINE COMPARISON
+============================================================
+
+INFERENCE RESULTS
+----------------------------------------
+Utterances processed: 0
+Utterances skipped: 0
+Utterances failed: 5
+
+CHECKPOINT METRICS
+----------------------------------------
+epoch: 2
+val_auc: 0.0000
+model_size_mb: 0.4617
+num_parameters: 120933
+
+COMPARISON WITH BASELINE
+----------------------------------------
+Common utterances: 0
+Student only: 0
+Baseline only: 681
+
+
+============================================================
+NOTES
+============================================================
+- No utterances were processed. Check audio file paths.
+- No common utterances found between student and baseline.
+- This is expected if the manifest and baseline outputs don't overlap.

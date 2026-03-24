@@ -36,7 +36,6 @@ from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
-import torchaudio
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.resolve()
@@ -44,6 +43,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 from baselines.energy_vad import EnergyVAD
+from scripts.personal.audio_loader import load_audio_mono
 
 
 def load_manifest(manifest_path: str, max_utterances: int = None) -> List[Dict]:
@@ -140,10 +140,7 @@ def evaluate_setting(
         try:
             # Load audio
             audio_path = utt['path']
-            waveform, sr = torchaudio.load(audio_path)
-            if sr != 16000:
-                waveform = torchaudio.transforms.Resample(sr, 16000)(waveform)
-            audio_np = waveform.squeeze().numpy()
+            audio_np, _ = load_audio_mono(audio_path, target_sr=16000)
             
             # Get energy VAD predictions
             energy_probs, _ = vad.get_frame_probs(audio_np, sr=16000)

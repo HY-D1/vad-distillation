@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-03-24T14:15:36",
+  "inference": {
+    "processed": 0,
+    "skipped": 0,
+    "failed": 5,
+    "predictions": []
+  },
+  "comparison": {
+    "common_utterances": 0,
+    "student_only": 0,
+    "baseline_only": 681,
+    "utterance_comparisons": []
+  },
+  "checkpoint_metrics": {
+    "epoch": 2,
+    "val_auc": 0.0,
+    "model_size_mb": 0.4616584777832031,
+    "num_parameters": 120933
+  },
+  "notes": [
+    "No utterances were processed. Check audio file paths.",
+    "No common utterances found between student and baseline.",
+    "This is expected if the manifest and baseline outputs don't overlap."
+  ]
+}

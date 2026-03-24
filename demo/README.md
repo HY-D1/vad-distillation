@@ -9,11 +9,11 @@ Quick start guide for recording the 5-minute milestone demo video.
 
 ## Main Documentation
 
-See `../docs/day8_demo_workflow.md` for complete video plan with:
-- Timeline (4-6 minutes)
-- Talking points
-- Primary and backup demo paths
-- Recording checklist
+See `task_010_readme.md` for the complete task-based package with:
+- Timeline commands (`task_010_commands.txt`)
+- Talking points (`task_010_script.md`)
+- Pre-record checklist (`task_010_checklist.md`)
+- Rubric map (`task_010_rubric_matrix.md`)
 
 ## Quick Setup
 
@@ -22,7 +22,7 @@ See `../docs/day8_demo_workflow.md` for complete video plan with:
 cd /Users/harrydai/Desktop/HD/CS\ 6140/project/group/vad-distillation
 
 # 2. Verify everything is ready
-python scripts/personal/run_my_experiment.py --max-utterances 5
+./.venv/bin/python scripts/personal/run_my_experiment.py --max-utterances 5 --overwrite
 
 # 3. Check outputs exist
 ls outputs/personal/comparison/summary.txt

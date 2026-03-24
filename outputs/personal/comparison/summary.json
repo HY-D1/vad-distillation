@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-03-23T18:12:45",
+  "timestamp": "2026-03-24T14:14:29",
   "inference": {
     "processed": 0,
-    "skipped": 5,
+    "skipped": 1,
     "failed": 0,
     "predictions": []
   },
@@ -16,7 +16,7 @@
         "num_frames": 319,
         "student_mean_prob": 0.9448859095573425,
         "baseline_mean_prob": 0.37421277165412903,
-        "correlation": 0.10375626877908503,
+        "correlation": 0.10375626877908496,
         "mse": 0.4142778813838959
       },
       {
@@ -24,7 +24,7 @@
         "num_frames": 294,
         "student_mean_prob": 0.7894488573074341,
         "baseline_mean_prob": 0.2948286533355713,
-        "correlation": 0.24649955191026318,
+        "correlation": 0.24649955191026304,
         "mse": 0.38084015250205994
       },
       {
@@ -40,7 +40,7 @@
         "num_frames": 300,
         "student_mean_prob": 0.6307302713394165,
         "baseline_mean_prob": 0.36723488569259644,
-        "correlation": 0.03887869697423301,
+        "correlation": 0.03887869697423302,
         "mse": 0.3637113869190216
       },
       {
@@ -48,7 +48,7 @@
         "num_frames": 240,
         "student_mean_prob": 0.9815735220909119,
         "baseline_mean_prob": 0.5025988221168518,
-        "correlation": -0.032686654502908315,
+        "correlation": -0.03268665450290829,
         "mse": 0.25343260169029236
       },
       {
@@ -56,7 +56,7 @@
         "num_frames": 43,
         "student_mean_prob": 0.413740873336792,
         "baseline_mean_prob": 0.02498370036482811,
-        "correlation": 0.2969383205905398,
+        "correlation": 0.29693832059053993,
         "mse": 0.3161647319793701
       },
       {
@@ -64,7 +64,7 @@
         "num_frames": 71,
         "student_mean_prob": 0.3671891689300537,
         "baseline_mean_prob": 0.01660272851586342,
-        "correlation": 0.19155899611854932,
+        "correlation": 0.1915589961185492,
         "mse": 0.30513253808021545
       },
       {
@@ -72,7 +72,7 @@
         "num_frames": 307,
         "student_mean_prob": 0.5228596925735474,
         "baseline_mean_prob": 0.23510389029979706,
-        "correlation": 0.1635794243426596,
+        "correlation": 0.16357942434265962,
         "mse": 0.32804742455482483
       },
       {
@@ -88,7 +88,7 @@
         "num_frames": 65,
         "student_mean_prob": 0.40149620175361633,
         "baseline_mean_prob": 0.028353586792945862,
-        "correlation": -0.36317040749918905,
+        "correlation": -0.36317040749918916,
         "mse": 0.3321169316768646
       }
     ]

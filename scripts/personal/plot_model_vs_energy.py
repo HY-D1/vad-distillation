@@ -50,16 +50,11 @@ except ImportError:
     MATPLOTLIB_AVAILABLE = False
     print("WARNING: matplotlib not available. Plots will not be generated.")
 
-try:
-    import torchaudio
-    TORCHAUDIO_AVAILABLE = True
-except ImportError:
-    TORCHAUDIO_AVAILABLE = False
-    print("WARNING: torchaudio not available. Waveforms will not be plotted.")
+from scripts.personal.audio_loader import load_audio_mono
 
 
 def load_summary(summary_path: str) -> Dict:
-    """Load summary JSON from Day 5 comparison."""
+    """Load summary JSON from comparison outputs."""
     print(f"Loading summary: {summary_path}")
     with open(summary_path, 'r') as f:
         return json.load(f)
@@ -130,9 +125,6 @@ def load_predictions(utt_id: str, student_dir: Path, baseline_dir: Path) -> Tupl
 
 def load_audio(utt_id: str, manifest_path: str) -> Tuple[np.ndarray, int]:
     """Load audio waveform for an utterance."""
-    if not TORCHAUDIO_AVAILABLE:
-        return None, 16000
-    
     # Find utterance in manifest
     with open(manifest_path, 'r') as f:
         reader = csv.DictReader(f)
@@ -141,10 +133,8 @@ def load_audio(utt_id: str, manifest_path: str) -> Tuple[np.ndarray, int]:
             if check_id == utt_id:
                 audio_path = row['path']
                 try:
-                    waveform, sr = torchaudio.load(audio_path)
-                    if sr != 16000:
-                        waveform = torchaudio.transforms.Resample(sr, 16000)(waveform)
-                    return waveform.squeeze().numpy(), 16000
+                    waveform, sr = load_audio_mono(audio_path, target_sr=16000)
+                    return waveform, sr
                 except Exception as e:
                     print(f"Warning: Could not load audio for {utt_id}: {e}")
                     return None, 16000
@@ -253,7 +243,7 @@ def generate_summary(examples: List[Dict], output_dir: Path):
     
     summary = {
         'examples': examples,
-        'selection_method': 'Based on correlation with student model (Day 5 comparison)',
+        'selection_method': 'Based on correlation with student model (TASK-003 comparison)',
         'alignment_method': 'Linear interpolation to baseline time grid',
         'frame_rates': {
             'student': '~31 fps (CNN downsampling)',
@@ -276,7 +266,7 @@ def generate_summary(examples: List[Dict], output_dir: Path):
         f.write("SELECTION METHOD\n")
         f.write("-" * 70 + "\n")
         f.write("Examples selected based on correlation with student model\n")
-        f.write("from Day 5 comparison results.\n\n")
+        f.write("from TASK-003 comparison results.\n\n")
         
         f.write("ALIGNMENT METHOD\n")
         f.write("-" * 70 + "\n")
@@ -327,7 +317,7 @@ def main():
         '--summary',
         type=str,
         default='outputs/personal/comparison/summary.json',
-        help='Day 5 comparison summary JSON'
+        help='Comparison summary JSON'
     )
     parser.add_argument(
         '--manifest',

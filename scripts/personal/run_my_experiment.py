@@ -27,13 +27,13 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
-import torchaudio
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.resolve()
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+from scripts.personal.audio_loader import load_audio_mono
 from models.tinyvad_student import TinyVAD
 
 
@@ -87,7 +87,8 @@ def run_inference(
     utterances: List[Dict],
     device: torch.device,
     output_dir: Path,
-    baseline_dir: Path
+    baseline_dir: Path,
+    overwrite: bool = False
 ) -> Dict:
     """Run inference on utterances and save predictions."""
     
@@ -122,17 +123,12 @@ def run_inference(
         try:
             # Check if already processed
             output_path = frame_probs_dir / f"{utt_id}.npy"
-            if output_path.exists():
+            if output_path.exists() and not overwrite:
                 results['skipped'] += 1
                 continue
             
-            # Load audio
-            waveform, sr = torchaudio.load(audio_path)
-            if sr != 16000:
-                waveform = torchaudio.transforms.Resample(sr, 16000)(waveform)
-            
-            # Convert to numpy and run prediction
-            audio_np = waveform.squeeze().numpy()
+            # Load audio with soundfile/librosa to avoid torchaudio runtime codec issues.
+            audio_np, _ = load_audio_mono(audio_path, target_sr=16000)
             
             with torch.no_grad():
                 probs = model.predict(audio_np, device=device, return_numpy=True)
@@ -236,8 +232,9 @@ def generate_summary(
         notes.append("No common utterances found between student and baseline.")
         notes.append("This is expected if the manifest and baseline outputs don't overlap.")
     
-    if checkpoint_metrics.get('val_auc', 0) > 0.9:
-        notes.append(f"Student model achieved excellent Val AUC: {checkpoint_metrics['val_auc']:.4f}")
+    val_auc = checkpoint_metrics.get('val_auc')
+    if isinstance(val_auc, (int, float)) and val_auc > 0.9:
+        notes.append(f"Student model achieved excellent Val AUC: {val_auc:.4f}")
     
     summary['notes'] = notes
     
@@ -336,6 +333,11 @@ def main():
         default=None,
         help='Maximum utterances to process (for testing)'
     )
+    parser.add_argument(
+        '--overwrite',
+        action='store_true',
+        help='Recompute predictions even if output files already exist'
+    )
     
     args = parser.parse_args()
     
@@ -363,7 +365,7 @@ def main():
     # Extract metrics from checkpoint
     checkpoint_metrics = {
         'epoch': checkpoint.get('epoch', 0),
-        'val_auc': checkpoint.get('val_auc', 0.0),
+        'val_auc': checkpoint.get('val_auc'),
         'model_size_mb': checkpoint.get('model_size_mb', 0.0),
         'num_parameters': checkpoint.get('num_parameters', 0)
     }
@@ -374,7 +376,7 @@ def main():
     # Run inference
     baseline_dir = Path(args.baseline_dir)
     inference_results = run_inference(
-        model, utterances, device, output_dir, baseline_dir
+        model, utterances, device, output_dir, baseline_dir, overwrite=args.overwrite
     )
     
     # Compare with baseline

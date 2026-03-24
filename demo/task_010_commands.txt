@@ -1,0 +1,65 @@
+# =============================================================================
+# TASK-010: PERSONAL MILESTONE VIDEO COMMANDS (HYBRID, ERROR-FREE)
+# =============================================================================
+
+# TASK-011 (0:00-0:30): Introduction + ownership
+ls -la scripts/personal/
+
+# TASK-012 (0:30-1:00): Show your three personal scripts
+cat scripts/personal/run_my_experiment.py | head -30
+cat scripts/personal/tune_energy_vad.py | head -30
+cat scripts/personal/plot_model_vs_energy.py | head -30
+
+# TASK-013 (1:00-1:35): Live execution attempt (fast)
+cd /Users/harrydai/Desktop/HD/CS\ 6140/project/group/vad-distillation
+./.venv/bin/python scripts/personal/run_my_experiment.py --max-utterances 5 --overwrite --output-dir outputs/personal/comparison_live_ready
+
+# TASK-014 (1:35-2:30): Show textual outputs + model facts
+cat outputs/personal/comparison_live_ready/summary.txt
+./.venv/bin/python -c "
+import torch
+ckpt=torch.load('outputs/production_cuda/checkpoints/fold_F01_latest_best.pt', map_location='cpu', weights_only=False)
+print(f'Model size (MB): {ckpt.get(\"model_size_mb\"):.4f}')
+print(f'Parameters: {ckpt.get(\"num_parameters\"):,}')
+"
+cat outputs/quick_test/logs/fold_F01.csv
+
+# TASK-015 (2:30-3:20): Technical challenge and resolution
+./.venv/bin/python -c "
+import numpy as np
+student=np.load('outputs/personal/comparison_live_ready/student_frame_probs/F01_Session1_0001.npy')
+baseline=np.load('outputs/personal/baseline_energy_50/frame_probs/F01_Session1_0001.npy')
+print(f'Student frames: {len(student)}')
+print(f'Baseline frames: {len(baseline)}')
+print(f'Frame-rate ratio: {len(baseline)/len(student):.1f}x')
+"
+grep -A 12 "def align_predictions" scripts/personal/plot_model_vs_energy.py
+
+# TASK-016 (3:20-4:20): Plot evidence (hybrid part)
+MPLCONFIGDIR=/tmp/mpl ./.venv/bin/python scripts/personal/plot_model_vs_energy.py \
+  --student-preds outputs/personal/comparison_live_ready/student_frame_probs \
+  --baseline-preds outputs/personal/baseline_energy_50/frame_probs \
+  --summary outputs/personal/comparison_live_ready/summary.json \
+  --output-dir outputs/personal/qualitative_plots_live_ready
+ls -lh outputs/personal/qualitative_plots_live_ready/*.png
+cat outputs/personal/qualitative_plots_live_ready/summary.txt
+open outputs/personal/qualitative_plots_live_ready/F01_Session1_0002.png
+
+# TASK-017 (4:20-4:50): Tuning evidence
+./.venv/bin/python scripts/personal/tune_energy_vad.py \
+  --max-utterances 5 \
+  --student-preds outputs/personal/comparison_live_ready/student_frame_probs \
+  --output-dir outputs/personal/energy_tuning_live_ready
+cat outputs/personal/energy_tuning_live_ready/summary.txt
+
+# TASK-018 (4:50-5:00): Closing
+ls -la scripts/personal/
+ls -la outputs/personal/comparison_live_ready
+ls -la outputs/personal/qualitative_plots_live_ready
+
+# =============================================================================
+# BACKUP PATH (if live execution hiccups)
+# =============================================================================
+cat outputs/personal/comparison_live_ready/summary.txt
+ls outputs/personal/comparison_live_ready/student_frame_probs/
+cat outputs/personal/qualitative_plots_live_ready/summary.txt
