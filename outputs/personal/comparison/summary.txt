@@ -4,8 +4,8 @@ PERSONAL VAD MILESTONE: MODEL VS BASELINE COMPARISON
 
 INFERENCE RESULTS
 ----------------------------------------
-Utterances processed: 5
-Utterances skipped: 0
+Utterances processed: 0
+Utterances skipped: 5
 Utterances failed: 0
 
 CHECKPOINT METRICS
@@ -17,48 +17,84 @@ num_parameters: 120933
 
 COMPARISON WITH BASELINE
 ----------------------------------------
-Common utterances: 5
+Common utterances: 20
 Student only: 0
-Baseline only: 676
+Baseline only: 661
 
 SAMPLE COMPARISONS (first 10):
 ----------------------------------------
 
 Utterance: F01_Session1_0001
   Frames: 319
-  Student mean prob: 0.962
+  Student mean prob: 0.945
   Baseline mean prob: 0.374
-  Correlation: 0.081
-  MSE: 0.437411
+  Correlation: 0.104
+  MSE: 0.414278
 
 Utterance: F01_Session1_0002
   Frames: 294
-  Student mean prob: 0.823
+  Student mean prob: 0.789
   Baseline mean prob: 0.295
-  Correlation: 0.245
-  MSE: 0.421295
+  Correlation: 0.246
+  MSE: 0.380840
 
 Utterance: F01_Session1_0003
   Frames: 241
-  Student mean prob: 0.813
+  Student mean prob: 0.800
   Baseline mean prob: 0.295
-  Correlation: 0.147
-  MSE: 0.447258
+  Correlation: 0.102
+  MSE: 0.429254
 
 Utterance: F01_Session1_0004
   Frames: 300
-  Student mean prob: 0.690
+  Student mean prob: 0.631
   Baseline mean prob: 0.367
-  Correlation: 0.063
-  MSE: 0.389413
+  Correlation: 0.039
+  MSE: 0.363711
 
 Utterance: F01_Session1_0005
   Frames: 240
-  Student mean prob: 0.993
+  Student mean prob: 0.982
   Baseline mean prob: 0.503
-  Correlation: -0.032
-  MSE: 0.264900
+  Correlation: -0.033
+  MSE: 0.253433
+
+Utterance: F01_Session1_0006
+  Frames: 43
+  Student mean prob: 0.414
+  Baseline mean prob: 0.025
+  Correlation: 0.297
+  MSE: 0.316165
+
+Utterance: F01_Session1_0007
+  Frames: 71
+  Student mean prob: 0.367
+  Baseline mean prob: 0.017
+  Correlation: 0.192
+  MSE: 0.305133
+
+Utterance: F01_Session1_0008
+  Frames: 307
+  Student mean prob: 0.523
+  Baseline mean prob: 0.235
+  Correlation: 0.164
+  MSE: 0.328047
+
+Utterance: F01_Session1_0009
+  Frames: 39
+  Student mean prob: 0.423
+  Baseline mean prob: 0.106
+  Correlation: -0.422
+  MSE: 0.398497
+
+Utterance: F01_Session1_0010
+  Frames: 65
+  Student mean prob: 0.401
+  Baseline mean prob: 0.028
+  Correlation: -0.363
+  MSE: 0.332117
 
 ============================================================
 NOTES
 ============================================================
+- No utterances were processed. Check audio file paths.

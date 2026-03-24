@@ -1,0 +1,19 @@
+{
+  "method": "energy",
+  "timestamp": "2026-03-15T14:29:04.360840",
+  "config": {
+    "method": "energy",
+    "manifest": "manifests/torgo_pilot.csv",
+    "output_dir": "outputs/personal/baseline_energy",
+    "frame_hop_ms": 10,
+    "device": "mps",
+    "segment_threshold": 0.5,
+    "min_segment_duration_ms": 0.0,
+    "test_mode": true,
+    "total_utterances": 5,
+    "processed_count": 5,
+    "failed_count": 0
+  },
+  "failed_files": [],
+  "total_failed": 0
+}

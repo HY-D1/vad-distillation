@@ -1,91 +1,95 @@
 {
-  "timestamp": "2026-03-23T18:02:46",
+  "timestamp": "2026-03-23T18:12:45",
   "inference": {
-    "processed": 5,
-    "skipped": 0,
+    "processed": 0,
+    "skipped": 5,
     "failed": 0,
-    "predictions": [
-      {
-        "utt_id": "F01_Session1_0001",
-        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0001.wav",
-        "num_frames": 319,
-        "mean_prob": 0.9623862504959106,
-        "max_prob": 0.994827926158905
-      },
-      {
-        "utt_id": "F01_Session1_0002",
-        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0002.wav",
-        "num_frames": 294,
-        "mean_prob": 0.8227527141571045,
-        "max_prob": 0.993757963180542
-      },
-      {
-        "utt_id": "F01_Session1_0003",
-        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0003.wav",
-        "num_frames": 241,
-        "mean_prob": 0.8126471638679504,
-        "max_prob": 0.994861900806427
-      },
-      {
-        "utt_id": "F01_Session1_0004",
-        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0004.wav",
-        "num_frames": 300,
-        "mean_prob": 0.6897639036178589,
-        "max_prob": 0.994662344455719
-      },
-      {
-        "utt_id": "F01_Session1_0005",
-        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0005.wav",
-        "num_frames": 240,
-        "mean_prob": 0.9934565424919128,
-        "max_prob": 0.9946162104606628
-      }
-    ]
+    "predictions": []
   },
   "comparison": {
-    "common_utterances": 5,
+    "common_utterances": 20,
     "student_only": 0,
-    "baseline_only": 676,
+    "baseline_only": 661,
     "utterance_comparisons": [
       {
         "utt_id": "F01_Session1_0001",
         "num_frames": 319,
-        "student_mean_prob": 0.9623862504959106,
+        "student_mean_prob": 0.9448859095573425,
         "baseline_mean_prob": 0.37421277165412903,
-        "correlation": 0.08146272262280141,
-        "mse": 0.4374110698699951
+        "correlation": 0.10375626877908503,
+        "mse": 0.4142778813838959
       },
       {
         "utt_id": "F01_Session1_0002",
         "num_frames": 294,
-        "student_mean_prob": 0.8227527141571045,
+        "student_mean_prob": 0.7894488573074341,
         "baseline_mean_prob": 0.2948286533355713,
-        "correlation": 0.24487422876145856,
-        "mse": 0.42129501700401306
+        "correlation": 0.24649955191026318,
+        "mse": 0.38084015250205994
       },
       {
         "utt_id": "F01_Session1_0003",
         "num_frames": 241,
-        "student_mean_prob": 0.8126471638679504,
+        "student_mean_prob": 0.8003096580505371,
         "baseline_mean_prob": 0.29540112614631653,
-        "correlation": 0.14672136641630795,
-        "mse": 0.4472580850124359
+        "correlation": 0.10199784129937813,
+        "mse": 0.42925384640693665
       },
       {
         "utt_id": "F01_Session1_0004",
         "num_frames": 300,
-        "student_mean_prob": 0.6897639036178589,
+        "student_mean_prob": 0.6307302713394165,
         "baseline_mean_prob": 0.36723488569259644,
-        "correlation": 0.06287217902187502,
-        "mse": 0.38941314816474915
+        "correlation": 0.03887869697423301,
+        "mse": 0.3637113869190216
       },
       {
         "utt_id": "F01_Session1_0005",
         "num_frames": 240,
-        "student_mean_prob": 0.9934565424919128,
+        "student_mean_prob": 0.9815735220909119,
         "baseline_mean_prob": 0.5025988221168518,
-        "correlation": -0.03203857978560571,
-        "mse": 0.26489973068237305
+        "correlation": -0.032686654502908315,
+        "mse": 0.25343260169029236
+      },
+      {
+        "utt_id": "F01_Session1_0006",
+        "num_frames": 43,
+        "student_mean_prob": 0.413740873336792,
+        "baseline_mean_prob": 0.02498370036482811,
+        "correlation": 0.2969383205905398,
+        "mse": 0.3161647319793701
+      },
+      {
+        "utt_id": "F01_Session1_0007",
+        "num_frames": 71,
+        "student_mean_prob": 0.3671891689300537,
+        "baseline_mean_prob": 0.01660272851586342,
+        "correlation": 0.19155899611854932,
+        "mse": 0.30513253808021545
+      },
+      {
+        "utt_id": "F01_Session1_0008",
+        "num_frames": 307,
+        "student_mean_prob": 0.5228596925735474,
+        "baseline_mean_prob": 0.23510389029979706,
+        "correlation": 0.1635794243426596,
+        "mse": 0.32804742455482483
+      },
+      {
+        "utt_id": "F01_Session1_0009",
+        "num_frames": 39,
+        "student_mean_prob": 0.42292702198028564,
+        "baseline_mean_prob": 0.10604950040578842,
+        "correlation": -0.42194878619902787,
+        "mse": 0.3984973132610321
+      },
+      {
+        "utt_id": "F01_Session1_0010",
+        "num_frames": 65,
+        "student_mean_prob": 0.40149620175361633,
+        "baseline_mean_prob": 0.028353586792945862,
+        "correlation": -0.36317040749918905,
+        "mse": 0.3321169316768646
       }
     ]
   },
@@ -95,5 +99,7 @@
     "model_size_mb": 0.4616584777832031,
     "num_parameters": 120933
   },
-  "notes": []
+  "notes": [
+    "No utterances were processed. Check audio file paths."
+  ]
 }
