@@ -37,34 +37,34 @@ def test_script_imports():
     
     # Test validate_torgo_setup
     try:
-        import scripts.validate_torgo_setup as validate
+        import scripts.data.validate_torgo_setup as validate
         print("✓ validate_torgo_setup import")
         results.append(True)
     except Exception as e:
         print(f"✗ validate_torgo_setup import: {e}")
         results.append(False)
-    
-    # Test cache_manager
+
+    # Test cache_teacher (replaces deprecated cache_manager)
     try:
-        import scripts.cache_manager as cache_mgr
-        print("✓ cache_manager import")
+        import scripts.data.cache_teacher as cache_teacher
+        print("✓ cache_teacher import")
         results.append(True)
     except Exception as e:
-        print(f"✗ cache_manager import: {e}")
+        print(f"✗ cache_teacher import: {e}")
         results.append(False)
-    
-    # Test generate_experiment_matrix
+
+    # Test cache_features
     try:
-        import scripts.generate_experiment_matrix as gen_matrix
-        print("✓ generate_experiment_matrix import")
+        import scripts.data.cache_features as cache_features
+        print("✓ cache_features import")
         results.append(True)
     except Exception as e:
-        print(f"✗ generate_experiment_matrix import: {e}")
+        print(f"✗ cache_features import: {e}")
         results.append(False)
-    
-    # Test run_sweep
+
+    # Test run_sweep (moved to core)
     try:
-        import scripts.run_sweep as run_sweep
+        import scripts.core.run_sweep as run_sweep
         print("✓ run_sweep import")
         results.append(True)
     except Exception as e:

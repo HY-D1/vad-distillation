@@ -90,7 +90,6 @@ scripts/compare_methods.py  # Legacy wrapper
 local/
 logs/
 wandb/
-checkpoints/
 *.bz2
 
 # Jupyter
@@ -125,48 +124,3 @@ scripts/platform/windows/*.bat
 analysis/comparison/
 outputs/pilot/frame_probs/
 teacher_probs_fixed/
-
-# =============================================================================
-# Training outputs - selectively tracked for cross-device workflow
-# Large binary files are handled by Git LFS (see .gitattributes)
-# =============================================================================
-
-# Ignore all outputs by default
-outputs/*
-!outputs/.gitkeep
-
-# Allow production_cuda summaries and checkpoints (tracked via LFS)
-!outputs/production_cuda/
-outputs/production_cuda/logs/*.npz
-outputs/production_cuda/archive/
-
-# Allow small text files (logs, summaries, configs) globally
-!outputs/**/*.json
-!outputs/**/*.csv
-!outputs/**/*.yaml
-!outputs/**/*.txt
-!outputs/**/*.md
-!outputs/**/*.log
-
-# Keep these ignored (too large or temporary)
-outputs/**/wandb/
-outputs/**/tmp/
-outputs/**/temp/
-outputs/**/cache/
-outputs/**/__pycache__/
-outputs/TRAINING_STATUS.md
-
-# Baseline outputs (can be regenerated)
-outputs/baselines/*
-!outputs/baselines/.gitkeep
-
-# Archive/old outputs
-outputs/archive/*
-!outputs/archive/.gitkeep
-
-# Ignore large binary checkpoint files (use LFS for these)
-outputs/**/*.pt
-outputs/**/*.pth
-outputs/**/*.ckpt
-outputs/**/*.npz
-outputs/**/*.onnx
