@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-24T14:28:11",
+  "timestamp": "2026-03-25T13:24:05",
   "inference": {
     "processed": 5,
     "skipped": 0,
@@ -52,15 +52,15 @@
         "num_frames": 319,
         "student_mean_prob": 0.9623862504959106,
         "baseline_mean_prob": 0.37421277165412903,
-        "correlation": 0.08146210140809483,
-        "mse": 0.43741026520729065
+        "correlation": 0.08146210232334031,
+        "mse": 0.4374103248119354
       },
       {
         "utt_id": "F01_Session1_0002",
         "num_frames": 294,
         "student_mean_prob": 0.822754442691803,
         "baseline_mean_prob": 0.2948286533355713,
-        "correlation": 0.2448819160243172,
+        "correlation": 0.24488189650391157,
         "mse": 0.42129361629486084
       },
       {
@@ -68,7 +68,7 @@
         "num_frames": 241,
         "student_mean_prob": 0.8126478791236877,
         "baseline_mean_prob": 0.29540112614631653,
-        "correlation": 0.14672300427123044,
+        "correlation": 0.1467230141575984,
         "mse": 0.44725775718688965
       },
       {
@@ -76,7 +76,7 @@
         "num_frames": 300,
         "student_mean_prob": 0.6897611618041992,
         "baseline_mean_prob": 0.36723488569259644,
-        "correlation": 0.06287402673808604,
+        "correlation": 0.06287404287172613,
         "mse": 0.38941171765327454
       },
       {
@@ -84,7 +84,7 @@
         "num_frames": 240,
         "student_mean_prob": 0.9934558868408203,
         "baseline_mean_prob": 0.5025988221168518,
-        "correlation": -0.03204036460449484,
+        "correlation": -0.032040187632475514,
         "mse": 0.2648991048336029
       }
     ]

@@ -12,6 +12,7 @@ build/
 venv/
 .env
 .venv
+.claude/
 
 # Data and outputs (large files)
 data/torgo_raw/

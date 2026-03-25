@@ -2,22 +2,22 @@
   "examples": [
     {
       "utt_id": "F01_Session1_0002",
-      "correlation": 0.2448819160243172,
+      "correlation": 0.24488189650391157,
       "mse": 0.42129361629486084,
       "reason": "best_agreement",
       "description": "Highest correlation with student model"
     },
     {
       "utt_id": "F01_Session1_0005",
-      "correlation": -0.03204036460449484,
+      "correlation": -0.032040187632475514,
       "mse": 0.2648991048336029,
       "reason": "worst_agreement",
       "description": "Lowest correlation (most disagreement)"
     },
     {
       "utt_id": "F01_Session1_0001",
-      "correlation": 0.08146210140809483,
-      "mse": 0.43741026520729065,
+      "correlation": 0.08146210232334031,
+      "mse": 0.4374103248119354,
       "reason": "representative",
       "description": "Median correlation (typical case)"
     }

@@ -10,7 +10,7 @@ Metric: MSE (Mean Squared Error) between Energy VAD and Student
 Goal: Minimize MSE to find Energy VAD settings most similar to Student
 
 Settings Evaluated: 90
-Timestamp: 2026-03-24 14:28:15
+Timestamp: 2026-03-25 13:24:08
 
 ======================================================================
 BEST SETTING
