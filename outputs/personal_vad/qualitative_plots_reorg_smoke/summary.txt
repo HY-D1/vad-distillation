@@ -1,0 +1,49 @@
+======================================================================
+QUALITATIVE COMPARISON PLOTS - SUMMARY
+======================================================================
+
+SELECTION METHOD
+----------------------------------------------------------------------
+Examples selected based on correlation with student model
+from TASK-003 comparison results.
+
+ALIGNMENT METHOD
+----------------------------------------------------------------------
+Student model: ~31 fps (due to CNN 4x downsampling)
+Energy baseline: ~100 fps (10ms hop)
+Alignment: Linear interpolation to baseline time grid
+
+EXAMPLES SELECTED
+----------------------------------------------------------------------
+
+1. F01_Session1_0001
+   Reason: Best Agreement
+   Description: Highest correlation with student model
+   Correlation: 0.081
+   MSE: 0.4374
+
+2. F01_Session1_0001
+   Reason: Worst Agreement
+   Description: Lowest correlation (most disagreement)
+   Correlation: 0.081
+   MSE: 0.4374
+
+3. F01_Session1_0001
+   Reason: Representative
+   Description: Median correlation (typical case)
+   Correlation: 0.081
+   MSE: 0.4374
+
+======================================================================
+PLOT FILES
+======================================================================
+
+1. F01_Session1_0001.png
+   Shows: Audio waveform + VAD predictions comparison
+
+2. F01_Session1_0001.png
+   Shows: Audio waveform + VAD predictions comparison
+
+3. F01_Session1_0001.png
+   Shows: Audio waveform + VAD predictions comparison
+

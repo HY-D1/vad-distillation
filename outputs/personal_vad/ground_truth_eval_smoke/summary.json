@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-03-25T15:56:47",
+  "fold_id": "F01",
+  "eval_split": "test",
+  "gate": {
+    "min_labeled_utterances": 30,
+    "min_coverage": 0.6,
+    "passed": true,
+    "reasons": []
+  },
+  "evaluation": {
+    "utterances_evaluated": 5,
+    "methods": {
+      "student": {
+        "precision": 0.5449117341640706,
+        "recall": 0.8875264270613108,
+        "f1": 0.6752452951584366,
+        "accuracy": 0.5478163493840985,
+        "auc_mean_utterance": 0.6443212753042104,
+        "tp": 2099,
+        "tn": 347,
+        "fp": 1753,
+        "fn": 266,
+        "segment_iou_mean": 0.5060025678361815,
+        "utterance_count": 5
+      },
+      "energy_default": {
+        "precision": 0.394705174488568,
+        "recall": 0.1386892177589852,
+        "f1": 0.20525657071339173,
+        "accuracy": 0.4311310190369541,
+        "auc_mean_utterance": 0.5444369920681216,
+        "tp": 328,
+        "tn": 1597,
+        "fp": 503,
+        "fn": 2037,
+        "segment_iou_mean": 0.09199619293824822,
+        "utterance_count": 5
+      }
+    },
+    "notes": [
+      "Ground-truth claims are PHN-derived and should be interpreted with label-source uncertainty.",
+      "Validation split should be used for selection; test split for final reporting only."
+    ]
+  },
+  "coverage": {
+    "val": {
+      "total_utterances": 577,
+      "manifest_utterances": 577,
+      "labeled_utterances": 538,
+      "coverage": 0.9324090121317158
+    },
+    "test": {
+      "total_utterances": 134,
+      "manifest_utterances": 134,
+      "labeled_utterances": 134,
+      "coverage": 1.0
+    }
+  }
+}

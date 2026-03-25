@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-03-25T16:08:33",
+  "input": "outputs/personal_vad/ground_truth_eval/results.csv",
+  "num_rows": 60,
+  "grouped_metrics": "outputs/personal_vad/error_analysis/grouped_metrics.csv",
+  "representative_examples": {
+    "student": {
+      "best": {
+        "utt_id": "F01_Session1_0020",
+        "split": "test",
+        "f1": 0.9166666666666666
+      },
+      "worst": {
+        "utt_id": "F01_Session1_0005",
+        "split": "test",
+        "f1": 0.0
+      },
+      "typical": {
+        "utt_id": "F01_Session1_0018",
+        "split": "test",
+        "f1": 0.6716417910447761
+      }
+    },
+    "energy_default": {
+      "best": {
+        "utt_id": "F01_Session1_0023",
+        "split": "test",
+        "f1": 0.8323699421965317
+      },
+      "worst": {
+        "utt_id": "F01_Session1_0005",
+        "split": "test",
+        "f1": 0.0
+      },
+      "typical": {
+        "utt_id": "F01_Session1_0004",
+        "split": "test",
+        "f1": 0.20100502512562815
+      }
+    }
+  },
+  "hardest_groups": {
+    "speaker": {
+      "energy_default": {
+        "factor": "speaker",
+        "group": "F01",
+        "method": "energy_default",
+        "count": 30,
+        "mean_f1": 0.28471779508297207,
+        "mean_accuracy": 0.6021923761362171,
+        "mean_segment_iou": 0.20221853026554124,
+        "mean_miss_rate": 0.7460897031480084
+      },
+      "student": {
+        "factor": "speaker",
+        "group": "F01",
+        "method": "student",
+        "count": 30,
+        "mean_f1": 0.5511268491755225,
+        "mean_accuracy": 0.6292637407877284,
+        "mean_segment_iou": 0.4332230294360549,
+        "mean_miss_rate": 0.32498814731583586
+      }
+    },
+    "duration": {
+      "energy_default": {
+        "factor": "duration",
+        "group": "short(<2s)",
+        "method": "energy_default",
+        "count": 9,
+        "mean_f1": 0.18576461605933392,
+        "mean_accuracy": 0.6374652088196916,
+        "mean_segment_iou": 0.13450725604385266,
+        "mean_miss_rate": 0.8469505959799316
+      },
+      "student": {
+        "factor": "duration",
+        "group": "short(<2s)",
+        "method": "student",
+        "count": 9,
+        "mean_f1": 0.40617108905881644,
+        "mean_accuracy": 0.5595090012262736,
+        "mean_segment_iou": 0.2838441964964746,
+        "mean_miss_rate": 0.4888690019675783
+      }
+    },
+    "speech_ratio": {
+      "energy_default": {
+        "factor": "speech_ratio",
+        "group": "speech-heavy(>0.7)",
+        "method": "energy_default",
+        "count": 2,
+        "mean_f1": 0.2551279618854878,
+        "mean_accuracy": 0.3485013690493143,
+        "mean_segment_iou": 0.14900535843189516,
+        "mean_miss_rate": 0.8463203463203464
+      },
+      "student": {
+        "factor": "speech_ratio",
+        "group": "silence-heavy(<0.3)",
+        "method": "student",
+        "count": 13,
+        "mean_f1": 0.4104691433473458,
+        "mean_accuracy": 0.6235426409186082,
+        "mean_segment_iou": 0.31395448260691794,
+        "mean_miss_rate": 0.40523884350222605
+      }
+    }
+  },
+  "limitations": [
+    "Analysis quality depends on PHN coverage and label fidelity.",
+    "If only one split is present, cross-split conclusions are limited.",
+    "Per-utterance summary metrics can hide fine-grained boundary errors."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-03-25T16:08:32",
+  "selection_metric": "f1",
+  "candidates": [
+    {
+      "method": "energy_default",
+      "val_count": 0,
+      "val_f1": "",
+      "val_accuracy": "",
+      "val_precision": "",
+      "val_recall": "",
+      "test_count": 30,
+      "test_f1": 0.2810269254852849,
+      "test_accuracy": 0.5167508417508417,
+      "test_precision": 0.4876140808344198,
+      "test_recall": 0.19739619985925405
+    },
+    {
+      "method": "student",
+      "val_count": 0,
+      "val_f1": "",
+      "val_accuracy": "",
+      "val_precision": "",
+      "val_recall": "",
+      "test_count": 30,
+      "test_f1": 0.6613021214337966,
+      "test_accuracy": 0.6102693602693603,
+      "test_precision": 0.5659904833458552,
+      "test_recall": 0.7952146375791695
+    }
+  ],
+  "selection": null,
+  "status": "blocked",
+  "plot": "outputs/personal_vad/model_selection/candidate_comparison.png"
+}

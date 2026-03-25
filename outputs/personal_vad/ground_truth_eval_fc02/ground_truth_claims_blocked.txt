@@ -1,0 +1,15 @@
+GROUND-TRUTH METRIC CLAIMS BLOCKED
+============================================================
+
+Coverage audit completed, but metric claims are disabled by gate.
+Evaluated split: test
+Labeled utterances: 0
+Coverage: 0.00%
+Gate requirements: min_labeled=30, min_coverage=60%
+
+Blocking reasons:
+- labeled_utterances=0 < min_labeled_utterances=30
+- coverage=0.000 < min_coverage=0.600
+
+No ground-truth performance claim is made in this run.
+Use split_coverage_summary.json and coverage_report.csv as evidence artifacts.

@@ -1,0 +1,36 @@
+============================================================
+PERSONAL VAD MILESTONE: MODEL VS BASELINE COMPARISON
+============================================================
+
+INFERENCE RESULTS
+----------------------------------------
+Utterances processed: 1
+Utterances skipped: 0
+Utterances failed: 0
+
+CHECKPOINT METRICS
+----------------------------------------
+epoch: 2
+val_auc: None
+model_size_mb: 0.4617
+num_parameters: 120933
+
+COMPARISON WITH BASELINE
+----------------------------------------
+Common utterances: 1
+Student only: 0
+Baseline only: 49
+
+SAMPLE COMPARISONS (first 10):
+----------------------------------------
+
+Utterance: F01_Session1_0001
+  Frames: 319
+  Student mean prob: 0.962
+  Baseline mean prob: 0.374
+  Correlation: 0.081
+  MSE: 0.437410
+
+============================================================
+NOTES
+============================================================

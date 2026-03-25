@@ -1,0 +1,11 @@
+======================================================================
+MODEL SELECTION SUMMARY
+======================================================================
+
+Selection metric: f1
+Validation split is used for selection; test split is used for final reporting.
+
+SELECTION BLOCKED
+----------------------------------------------------------------------
+No candidates have validation rows in the input results.
+Run ground-truth evaluation with validation split evidence before selecting a winner.

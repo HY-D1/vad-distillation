@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-03-25T16:08:36",
+  "inference": {
+    "processed": 1,
+    "skipped": 0,
+    "failed": 0,
+    "predictions": [
+      {
+        "utt_id": "F01_Session1_0001",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0001.wav",
+        "num_frames": 319,
+        "mean_prob": 0.9623862504959106,
+        "max_prob": 0.9948274493217468
+      }
+    ]
+  },
+  "comparison": {
+    "common_utterances": 1,
+    "student_only": 0,
+    "baseline_only": 49,
+    "utterance_comparisons": [
+      {
+        "utt_id": "F01_Session1_0001",
+        "num_frames": 319,
+        "student_mean_prob": 0.9623862504959106,
+        "baseline_mean_prob": 0.37421277165412903,
+        "correlation": 0.08146210232334031,
+        "mse": 0.4374103248119354
+      }
+    ]
+  },
+  "checkpoint_metrics": {
+    "epoch": 2,
+    "val_auc": null,
+    "model_size_mb": 0.4616584777832031,
+    "num_parameters": 120933
+  },
+  "notes": []
+}

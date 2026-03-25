@@ -1,0 +1,39 @@
+======================================================================
+GROUND-TRUTH EVALUATION (COVERAGE-GATED)
+======================================================================
+
+Fold: F01
+Evaluated split: test
+Gate passed: True
+Utterances evaluated: 30
+
+SPLIT COVERAGE
+----------------------------------------------------------------------
+val: total=577, labeled=538, coverage=93.24%
+test: total=134, labeled=134, coverage=100.00%
+
+METHOD METRICS
+----------------------------------------------------------------------
+student
+  precision: 0.5660
+  recall: 0.7952
+  f1: 0.6613
+  accuracy: 0.6103
+  auc (mean utterance): 0.625734
+  segment_iou (mean): 0.4332
+  confusion: tp=4520, tn=2730, fp=3466, fn=1164
+
+energy_default
+  precision: 0.4876
+  recall: 0.1974
+  f1: 0.2810
+  accuracy: 0.5168
+  auc (mean utterance): 0.596145
+  segment_iou (mean): 0.2022
+  confusion: tp=1122, tn=5017, fp=1179, fn=4562
+
+LIMITATIONS / NEGATIVE FINDINGS
+----------------------------------------------------------------------
+- PHN-derived labels are best-available proxy for VAD boundaries, not perfect oracle labels.
+- Coverage is incomplete across TORGO speakers; claims are gated and split-specific.
+- Proxy-based tuning from earlier milestone remains non-definitive for true generalization.

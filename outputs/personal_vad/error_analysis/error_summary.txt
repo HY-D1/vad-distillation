@@ -1,0 +1,29 @@
+======================================================================
+ERROR ANALYSIS SUMMARY
+======================================================================
+
+Input rows: 60
+Grouped metrics: outputs/personal_vad/error_analysis/grouped_metrics.csv
+
+HARDEST GROUPS BY FACTOR
+----------------------------------------------------------------------
+speaker:
+  energy_default: F01 | mean_f1=0.2847 | count=30
+  student: F01 | mean_f1=0.5511 | count=30
+duration:
+  energy_default: short(<2s) | mean_f1=0.1858 | count=9
+  student: short(<2s) | mean_f1=0.4062 | count=9
+speech_ratio:
+  energy_default: speech-heavy(>0.7) | mean_f1=0.2551 | count=2
+  student: silence-heavy(<0.3) | mean_f1=0.4105 | count=13
+
+REPRESENTATIVE EXAMPLES
+----------------------------------------------------------------------
+student: best=F01_Session1_0020 (0.9167), worst=F01_Session1_0005 (0.0000), typical=F01_Session1_0018 (0.6716)
+energy_default: best=F01_Session1_0023 (0.8324), worst=F01_Session1_0005 (0.0000), typical=F01_Session1_0004 (0.2010)
+
+LIMITATIONS / CONFOUNDERS
+----------------------------------------------------------------------
+- PHN-derived labels can disagree with perceived VAD boundaries.
+- Missing labels for some speakers can skew grouped comparisons.
+- Metrics are aggregated and may hide timing-level boundary misses.

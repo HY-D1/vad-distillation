@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-03-25T15:56:45",
+  "fold_id": "F01",
+  "eval_split": "test",
+  "gate": {
+    "min_labeled_utterances": 30,
+    "min_coverage": 0.6,
+    "passed": true,
+    "reasons": []
+  },
+  "split_stats": {
+    "val": {
+      "total_utterances": 577,
+      "manifest_utterances": 577,
+      "labeled_utterances": 538,
+      "coverage": 0.9324090121317158
+    },
+    "test": {
+      "total_utterances": 134,
+      "manifest_utterances": 134,
+      "labeled_utterances": 134,
+      "coverage": 1.0
+    }
+  },
+  "label_source": {
+    "type": "PHN files under session-level phn_* directories",
+    "silence_phones": [
+      "sil",
+      "noi",
+      "noio",
+      "sp",
+      "spn",
+      "pau"
+    ],
+    "notes": "PHN labels are used as best-available reference and may not perfectly match VAD boundaries."
+  }
+}

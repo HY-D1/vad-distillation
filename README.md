@@ -28,13 +28,13 @@ This repository serves as an individual milestone project demonstrating:
 
 The following scripts represent original personal work for this milestone:
 
-### `scripts/personal/run_my_experiment.py`
+### `milestones/personal_vad/scripts/run_my_experiment.py`
 Loads a trained TinyVAD checkpoint, runs inference on audio files, and compares frame-level predictions against energy baseline outputs. Handles frame rate mismatch through linear interpolation and computes MSE and correlation metrics.
 
-### `scripts/personal/tune_energy_vad.py`
+### `milestones/personal_vad/scripts/tune_energy_vad.py`
 Performs a systematic sweep of 90 energy VAD parameter configurations (threshold, hysteresis, smoothing) to analyze which parameters affect frame-level probability outputs versus segment detection.
 
-### `scripts/personal/plot_model_vs_energy.py`
+### `milestones/personal_vad/scripts/plot_model_vs_energy.py`
 Generates qualitative comparison plots showing student model predictions, energy baseline predictions, and audio waveforms for selected utterances with best, worst, and representative agreement.
 
 ## Starter / Reused Infrastructure
@@ -52,12 +52,12 @@ The personal contribution is the **comparison, tuning, and visualization workflo
 ## Repository Structure
 
 ```
-├── scripts/personal/              # Personal milestone scripts
+├── milestones/personal_vad/scripts/              # Personal milestone scripts
 │   ├── run_my_experiment.py       # Model comparison workflow
 │   ├── tune_energy_vad.py         # Parameter tuning analysis
 │   └── plot_model_vs_energy.py    # Visualization generation
 │
-├── outputs/personal/              # Personal milestone outputs
+├── outputs/personal_vad/              # Personal milestone outputs
 │   ├── comparison/                # Model vs baseline comparison
 │   │   ├── summary.txt            # MSE and correlation metrics
 │   │   ├── summary.json           # Detailed per-utterance results
@@ -87,16 +87,16 @@ The personal contribution is the **comparison, tuning, and visualization workflo
 
 ## Key Outputs
 
-### Model Comparison (`outputs/personal/comparison/`)
+### Model Comparison (`outputs/personal_vad/comparison/`)
 - Frame-level prediction comparison for 20 utterances
 - MSE and correlation metrics between methods
 - Model size verification (472 KB within 500 KB target)
 
-### Parameter Tuning (`outputs/personal/energy_tuning/`)
+### Parameter Tuning (`outputs/personal_vad/energy_tuning/`)
 - 90 parameter configurations evaluated
 - Key finding: smoothing_window affects frame probabilities; threshold/hysteresis affect segment detection only
 
-### Visual Comparisons (`outputs/personal/qualitative_plots/`)
+### Visual Comparisons (`outputs/personal_vad/qualitative_plots/`)
 - 3 comparison plots showing predictions vs audio
 - Examples selected by agreement quality (best, worst, representative)
 
@@ -115,29 +115,29 @@ pip install -r requirements.txt  # PyTorch, NumPy, matplotlib, etc.
 Run the comparison on 5 utterances:
 
 ```bash
-python scripts/personal/run_my_experiment.py --max-utterances 5
+python milestones/personal_vad/scripts/run_my_experiment.py --max-utterances 5
 ```
 
 **Expected output**:
 - Model loaded: 120,933 parameters
 - Model size: 472.7 KB
-- Comparison summary saved to `outputs/personal/comparison/`
+- Comparison summary saved to `outputs/personal_vad/comparison/`
 
 ### Full Reproduction
 
 1. **Run comparison on full pilot set**:
 ```bash
-python scripts/personal/run_my_experiment.py --max-utterances 50
+python milestones/personal_vad/scripts/run_my_experiment.py --max-utterances 50
 ```
 
 2. **Run parameter tuning** (~2 minutes):
 ```bash
-python scripts/personal/tune_energy_vad.py --max-utterances 20
+python milestones/personal_vad/scripts/tune_energy_vad.py --max-utterances 20
 ```
 
 3. **Generate plots** (~5 seconds):
 ```bash
-python scripts/personal/plot_model_vs_energy.py
+python milestones/personal_vad/scripts/plot_model_vs_energy.py
 ```
 
 ## Known Limitations

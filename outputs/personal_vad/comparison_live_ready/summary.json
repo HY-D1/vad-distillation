@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-03-25T14:30:08",
+  "inference": {
+    "processed": 5,
+    "skipped": 0,
+    "failed": 0,
+    "predictions": [
+      {
+        "utt_id": "F01_Session1_0001",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0001.wav",
+        "num_frames": 319,
+        "mean_prob": 0.9623862504959106,
+        "max_prob": 0.9948274493217468
+      },
+      {
+        "utt_id": "F01_Session1_0002",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0002.wav",
+        "num_frames": 294,
+        "mean_prob": 0.822754442691803,
+        "max_prob": 0.9937576055526733
+      },
+      {
+        "utt_id": "F01_Session1_0003",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0003.wav",
+        "num_frames": 241,
+        "mean_prob": 0.8126478791236877,
+        "max_prob": 0.9948616623878479
+      },
+      {
+        "utt_id": "F01_Session1_0004",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0004.wav",
+        "num_frames": 300,
+        "mean_prob": 0.6897611618041992,
+        "max_prob": 0.9946619868278503
+      },
+      {
+        "utt_id": "F01_Session1_0005",
+        "audio_path": "data/torgo_raw/F01/Session1/wav_headMic/0005.wav",
+        "num_frames": 240,
+        "mean_prob": 0.9934558868408203,
+        "max_prob": 0.9946160912513733
+      }
+    ]
+  },
+  "comparison": {
+    "common_utterances": 5,
+    "student_only": 0,
+    "baseline_only": 676,
+    "utterance_comparisons": [
+      {
+        "utt_id": "F01_Session1_0001",
+        "num_frames": 319,
+        "student_mean_prob": 0.9623862504959106,
+        "baseline_mean_prob": 0.37421277165412903,
+        "correlation": 0.08146210232334031,
+        "mse": 0.4374103248119354
+      },
+      {
+        "utt_id": "F01_Session1_0002",
+        "num_frames": 294,
+        "student_mean_prob": 0.822754442691803,
+        "baseline_mean_prob": 0.2948286533355713,
+        "correlation": 0.24488189650391157,
+        "mse": 0.42129361629486084
+      },
+      {
+        "utt_id": "F01_Session1_0003",
+        "num_frames": 241,
+        "student_mean_prob": 0.8126478791236877,
+        "baseline_mean_prob": 0.29540112614631653,
+        "correlation": 0.1467230141575984,
+        "mse": 0.44725775718688965
+      },
+      {
+        "utt_id": "F01_Session1_0004",
+        "num_frames": 300,
+        "student_mean_prob": 0.6897611618041992,
+        "baseline_mean_prob": 0.36723488569259644,
+        "correlation": 0.06287404287172613,
+        "mse": 0.38941171765327454
+      },
+      {
+        "utt_id": "F01_Session1_0005",
+        "num_frames": 240,
+        "student_mean_prob": 0.9934558868408203,
+        "baseline_mean_prob": 0.5025988221168518,
+        "correlation": -0.032040187632475514,
+        "mse": 0.2648991048336029
+      }
+    ]
+  },
+  "checkpoint_metrics": {
+    "epoch": 2,
+    "val_auc": null,
+    "model_size_mb": 0.4616584777832031,
+    "num_parameters": 120933
+  },
+  "notes": []
+}

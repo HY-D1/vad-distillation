@@ -1,0 +1,2090 @@
+{
+  "timestamp": "2026-03-25T16:08:48",
+  "num_settings_evaluated": 90,
+  "all_results": [
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.44682259007890135,
+      "avg_correlation": 0.3077166911662149,
+      "median_mse": 0.44682259007890135,
+      "median_correlation": 0.3077166911662149,
+      "all_mses": [
+        0.44682259007890135
+      ],
+      "all_correlations": [
+        0.3077166911662149
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 1,
+      "failed": 0,
+      "avg_mse": 0.4463938815755641,
+      "avg_correlation": 0.3091673881072601,
+      "median_mse": 0.4463938815755641,
+      "median_correlation": 0.3091673881072601,
+      "all_mses": [
+        0.4463938815755641
+      ],
+      "all_correlations": [
+        0.3091673881072601
+      ]
+    }
+  ],
+  "best_setting": {
+    "threshold": 0.3,
+    "hysteresis_high": 0.5,
+    "hysteresis_low": 0.2,
+    "smoothing_window": 5,
+    "frame_hop_ms": 10,
+    "min_speech_dur": 0.25,
+    "min_silence_dur": 0.25
+  },
+  "best_metrics": {
+    "avg_mse": 0.4463938815755641,
+    "avg_correlation": 0.3091673881072601,
+    "processed": 1
+  }
+}

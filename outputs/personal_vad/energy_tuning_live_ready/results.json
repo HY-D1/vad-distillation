@@ -1,0 +1,2810 @@
+{
+  "timestamp": "2026-03-25T14:30:11",
+  "num_settings_evaluated": 90,
+  "all_results": [
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.3,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.4,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.5,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.6,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.5,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.6,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.2,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.3,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 3,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39384675929952995,
+      "avg_correlation": 0.3683765203284836,
+      "median_mse": 0.4235614851345247,
+      "median_correlation": 0.47560023499670556,
+      "all_mses": [
+        0.44682259007890135,
+        0.4235614851345247,
+        0.4592545286637845,
+        0.26324518991196744,
+        0.3763500027084719
+      ],
+      "all_correlations": [
+        0.3077166911662149,
+        0.5252543312306766,
+        0.47560023499670556,
+        0.6614033499041369,
+        -0.12809200565531584
+      ]
+    },
+    {
+      "setting": {
+        "threshold": 0.7,
+        "hysteresis_high": 0.7,
+        "hysteresis_low": 0.4,
+        "smoothing_window": 5,
+        "frame_hop_ms": 10,
+        "min_speech_dur": 0.25,
+        "min_silence_dur": 0.25
+      },
+      "processed": 5,
+      "failed": 0,
+      "avg_mse": 0.39388417862202474,
+      "avg_correlation": 0.3626545353293931,
+      "median_mse": 0.4235337030825278,
+      "median_correlation": 0.4769625372004664,
+      "all_mses": [
+        0.4463938815755641,
+        0.4235337030825278,
+        0.45939483216405297,
+        0.2625266867087291,
+        0.37757178957925
+      ],
+      "all_correlations": [
+        0.3091673881072601,
+        0.526332959766734,
+        0.4769625372004664,
+        0.6636257851456012,
+        -0.1628159935730959
+      ]
+    }
+  ],
+  "best_setting": {
+    "threshold": 0.3,
+    "hysteresis_high": 0.5,
+    "hysteresis_low": 0.2,
+    "smoothing_window": 3,
+    "frame_hop_ms": 10,
+    "min_speech_dur": 0.25,
+    "min_silence_dur": 0.25
+  },
+  "best_metrics": {
+    "avg_mse": 0.39384675929952995,
+    "avg_correlation": 0.3683765203284836,
+    "processed": 5
+  }
+}
