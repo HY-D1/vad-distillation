@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-25T16:08:32",
+  "timestamp": "2026-03-25T16:27:21",
   "selection_metric": "f1",
   "candidates": [
     {
@@ -31,5 +31,5 @@
   ],
   "selection": null,
   "status": "blocked",
-  "plot": "outputs/personal_vad/model_selection/candidate_comparison.png"
+  "plot": "../../../outputs/personal_vad/model_selection/candidate_comparison.png"
 }

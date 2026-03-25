@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-03-25T16:08:33",
-  "input": "outputs/personal_vad/ground_truth_eval/results.csv",
+  "timestamp": "2026-03-25T16:27:23",
+  "input": "../../../outputs/personal_vad/ground_truth_eval/results.csv",
   "num_rows": 60,
-  "grouped_metrics": "outputs/personal_vad/error_analysis/grouped_metrics.csv",
+  "grouped_metrics": "../../../outputs/personal_vad/error_analysis/grouped_metrics.csv",
   "representative_examples": {
     "student": {
       "best": {

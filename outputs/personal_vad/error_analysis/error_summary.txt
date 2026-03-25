@@ -3,7 +3,7 @@ ERROR ANALYSIS SUMMARY
 ======================================================================
 
 Input rows: 60
-Grouped metrics: outputs/personal_vad/error_analysis/grouped_metrics.csv
+Grouped metrics: ../../../outputs/personal_vad/error_analysis/grouped_metrics.csv
 
 HARDEST GROUPS BY FACTOR
 ----------------------------------------------------------------------
