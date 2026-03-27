@@ -1,5 +1,5 @@
 {
-  "benchmark_timestamp": "2026-03-27 12:51:15",
+  "benchmark_timestamp": "2026-03-27 15:32:17",
   "targets": {
     "max_latency_ms_per_frame": 10.0,
     "max_model_size_kb": 500.0
@@ -17,49 +17,49 @@
           "duration_sec": 1,
           "audio_samples": 16000,
           "num_frames": 31,
-          "total_time_ms": 8.961695799371228,
-          "ms_per_frame": 0.2890869612700396,
-          "ms_per_second_audio": 8.961695799371228,
-          "real_time_factor": 0.008961695799371228,
-          "throughput_fps": 3459.166735181418
+          "total_time_ms": 19.83019589970354,
+          "ms_per_frame": 0.6396837387001142,
+          "ms_per_second_audio": 19.83019589970354,
+          "real_time_factor": 0.01983019589970354,
+          "throughput_fps": 1563.2725040534497
         },
         {
           "duration_sec": 5,
           "audio_samples": 80000,
           "num_frames": 156,
-          "total_time_ms": 22.032016699085943,
-          "ms_per_frame": 0.14123087627619194,
-          "ms_per_second_audio": 4.406403339817189,
-          "real_time_factor": 0.004406403339817189,
-          "throughput_fps": 7080.604655064195
+          "total_time_ms": 23.491241698502563,
+          "ms_per_frame": 0.15058488268270873,
+          "ms_per_second_audio": 4.698248339700513,
+          "real_time_factor": 0.004698248339700513,
+          "throughput_fps": 6640.772846415527
         },
         {
           "duration_sec": 10,
           "audio_samples": 160000,
           "num_frames": 312,
-          "total_time_ms": 40.79297080170363,
-          "ms_per_frame": 0.13074670128751165,
-          "ms_per_second_audio": 4.079297080170363,
-          "real_time_factor": 0.004079297080170363,
-          "throughput_fps": 7648.3765185096545
+          "total_time_ms": 37.93763330031652,
+          "ms_per_frame": 0.12159497852665552,
+          "ms_per_second_audio": 3.793763330031652,
+          "real_time_factor": 0.003793763330031652,
+          "throughput_fps": 8224.023821680963
         },
         {
           "duration_sec": 30,
           "audio_samples": 480000,
           "num_frames": 937,
-          "total_time_ms": 116.80050000140909,
-          "ms_per_frame": 0.12465368196521781,
-          "ms_per_second_audio": 3.89335000004697,
-          "real_time_factor": 0.0038933500000469697,
-          "throughput_fps": 8022.225932155221
+          "total_time_ms": 61.78524169954471,
+          "ms_per_frame": 0.06593942550645114,
+          "ms_per_second_audio": 2.0595080566514903,
+          "real_time_factor": 0.0020595080566514906,
+          "throughput_fps": 15165.433916347449
         }
       ],
       "summary": {
-        "avg_latency_ms": 0.17142955519974024,
-        "min_latency_ms": 0.12465368196521781,
-        "max_latency_ms": 0.2890869612700396,
-        "std_latency_ms": 0.06818779643604624,
-        "avg_rtf": 0.005335186554851437,
+        "avg_latency_ms": 0.2444507563539824,
+        "min_latency_ms": 0.06593942550645114,
+        "max_latency_ms": 0.6396837387001142,
+        "std_latency_ms": 0.2302062933331773,
+        "avg_rtf": 0.007595428906521799,
         "latency_target_met": true,
         "size_target_met": true
       }
@@ -76,49 +76,49 @@
           "duration_sec": 1,
           "audio_samples": 16000,
           "num_frames": 101,
-          "total_time_ms": 0.1522749982541427,
-          "ms_per_frame": 0.001507673250041017,
-          "ms_per_second_audio": 0.1522749982541427,
-          "real_time_factor": 0.0001522749982541427,
-          "throughput_fps": 663273.6900868902
+          "total_time_ms": 0.1035916997352615,
+          "ms_per_frame": 0.0010256603934184307,
+          "ms_per_second_audio": 0.1035916997352615,
+          "real_time_factor": 0.0001035916997352615,
+          "throughput_fps": 974981.5888542726
         },
         {
           "duration_sec": 5,
           "audio_samples": 80000,
           "num_frames": 501,
-          "total_time_ms": 0.15352079935837537,
-          "ms_per_frame": 0.00030642874123428215,
-          "ms_per_second_audio": 0.030704159871675074,
-          "real_time_factor": 3.070415987167507e-05,
-          "throughput_fps": 3263401.455007261
+          "total_time_ms": 0.12261249939911067,
+          "ms_per_frame": 0.0002447355277427359,
+          "ms_per_second_audio": 0.024522499879822135,
+          "real_time_factor": 2.4522499879822136e-05,
+          "throughput_fps": 4086043.4495280646
         },
         {
           "duration_sec": 10,
           "audio_samples": 160000,
           "num_frames": 1001,
-          "total_time_ms": 0.3992374986410141,
-          "ms_per_frame": 0.0003988386599810331,
-          "ms_per_second_audio": 0.03992374986410141,
-          "real_time_factor": 3.992374986410141e-05,
-          "throughput_fps": 2507279.510084492
+          "total_time_ms": 0.41803750209510326,
+          "ms_per_frame": 0.00041761988221289035,
+          "ms_per_second_audio": 0.041803750209510326,
+          "real_time_factor": 4.1803750209510324e-05,
+          "throughput_fps": 2394522.010545057
         },
         {
           "duration_sec": 30,
           "audio_samples": 480000,
           "num_frames": 3001,
-          "total_time_ms": 1.2639624997973442,
-          "ms_per_frame": 0.0004211804397858528,
-          "ms_per_second_audio": 0.04213208332657814,
-          "real_time_factor": 4.213208332657814e-05,
-          "throughput_fps": 2374279.300597258
+          "total_time_ms": 1.2207874999148771,
+          "ms_per_frame": 0.0004067935687820317,
+          "ms_per_second_audio": 0.04069291666382924,
+          "real_time_factor": 4.0692916663829236e-05,
+          "throughput_fps": 2458249.285980773
         }
       ],
       "summary": {
-        "avg_latency_ms": 0.0006585302727605463,
-        "min_latency_ms": 0.00030642874123428215,
-        "max_latency_ms": 0.001507673250041017,
-        "std_latency_ms": 0.0004921366581878001,
-        "avg_rtf": 6.625874782912432e-05,
+        "avg_latency_ms": 0.0005237023430390221,
+        "min_latency_ms": 0.0002447355277427359,
+        "max_latency_ms": 0.0010256603934184307,
+        "std_latency_ms": 0.00029778579481333934,
+        "avg_rtf": 5.2652716622105796e-05,
         "latency_target_met": true,
         "size_target_met": true
       }

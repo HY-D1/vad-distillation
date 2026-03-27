@@ -490,7 +490,31 @@ Final-metrics policy:
 
 Use this sequence for final claims. It enforces independent frame-level labels and blocks proxy paths.
 
-1. Audit independent frame labels:
+1. Generate MFA alignments (example):
+
+```bash
+# Example only: replace dictionary/acoustic model names with your MFA assets.
+mfa align \
+  data/torgo_raw \
+  english_us_arpa \
+  english_us_mfa \
+  data/forced_alignments \
+  --clean --overwrite
+```
+
+2. Build frame labels from MFA TextGrid outputs:
+
+```bash
+python scripts/data/build_true_frame_labels_mfa.py \
+  --manifest manifests/torgo_sentences.csv \
+  --alignments-root data/forced_alignments \
+  --labels-dir data/true_frame_labels \
+  --output-dir outputs/evaluation/true_label_build \
+  --frame-hz 125 \
+  --strict
+```
+
+3. Audit independent frame labels:
 
 ```bash
 python scripts/data/validate_true_frame_labels.py \
@@ -502,19 +526,19 @@ python scripts/data/validate_true_frame_labels.py \
 
 Stop here if this command fails. Do not run strict training unless coverage is 100% and invalid labels are 0.
 
-2. Strict smoke check (single fold):
+4. Strict smoke check (single fold):
 
 ```bash
 python train_loso.py --config configs/quick_test_strict.yaml --fold F01 --device cuda --test
 ```
 
-3. Strict full LOSO training:
+5. Strict full LOSO training:
 
 ```bash
 python scripts/core/run_all_folds.py --config configs/production_cuda_strict.yaml --resume
 ```
 
-4. Fresh baseline + strict comparison (no reuse):
+6. Fresh baseline + strict comparison (no reuse):
 
 ```bash
 python scripts/core/run_full_comparison.py \
@@ -525,7 +549,7 @@ python scripts/core/run_full_comparison.py \
   --no-skip-existing
 ```
 
-5. CPU latency benchmark for report packaging:
+7. CPU latency benchmark for report packaging:
 
 ```bash
 python scripts/analysis/benchmark_latency.py --compare-baselines --device cpu

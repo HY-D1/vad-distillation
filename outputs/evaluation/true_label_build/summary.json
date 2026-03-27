@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-03-27T15:28:19",
+  "manifest": "manifests/torgo_sentences.csv",
+  "alignments_root": "data/forced_alignments",
+  "alignments_root_exists": false,
+  "labels_dir": "data/true_frame_labels",
+  "frame_hz": 125.0,
+  "strict": true,
+  "totals": {
+    "rows": 8218,
+    "built_rows": 0,
+    "missing_rows": 8218,
+    "error_rows": 0,
+    "coverage_pct": 0.0
+  },
+  "output_files": {
+    "summary_json": "outputs/evaluation/true_label_build/summary.json",
+    "missing_alignments_csv": "outputs/evaluation/true_label_build/missing_alignments.csv",
+    "build_errors_csv": "outputs/evaluation/true_label_build/build_errors.csv"
+  }
+}

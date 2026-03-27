@@ -1,0 +1,81 @@
+{
+  "F01": {
+    "success": false,
+    "message": "Exit code 1: bly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for FC03_Session1_268 in data/true_frame_labels\n\n",
+    "duration": 14.432261228561401
+  },
+  "F03": {
+    "success": false,
+    "message": "Exit code 1: bly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for MC04_Session1_642 in data/true_frame_labels\n\n",
+    "duration": 13.37304401397705
+  },
+  "F04": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for FC03_Session2_77 in data/true_frame_labels\n\n",
+    "duration": 14.505257844924927
+  },
+  "M01": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for FC03_Session2_96 in data/true_frame_labels\n\n",
+    "duration": 15.581599950790405
+  },
+  "M02": {
+    "success": false,
+    "message": "Exit code 1: sibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for F04_Session2_17 in data/true_frame_labels\n\n",
+    "duration": 14.421731948852539
+  },
+  "M03": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for MC03_Session2_11 in data/true_frame_labels\n\n",
+    "duration": 13.906485080718994
+  },
+  "M04": {
+    "success": false,
+    "message": "Exit code 1: sibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for F04_Session2_82 in data/true_frame_labels\n\n",
+    "duration": 13.74932074546814
+  },
+  "M05": {
+    "success": false,
+    "message": "Exit code 1: bly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for MC04_Session1_457 in data/true_frame_labels\n\n",
+    "duration": 17.265507698059082
+  },
+  "FC01": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for M03_Session2_162 in data/true_frame_labels\n\n",
+    "duration": 14.4951651096344
+  },
+  "FC02": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for M03_Session2_139 in data/true_frame_labels\n\n",
+    "duration": 13.450241088867188
+  },
+  "FC03": {
+    "success": false,
+    "message": "Exit code 1: bly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for FC02_Session3_929 in data/true_frame_labels\n\n",
+    "duration": 13.35819697380066
+  },
+  "MC01": {
+    "success": false,
+    "message": "Exit code 1: bly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for MC04_Session1_627 in data/true_frame_labels\n\n",
+    "duration": 13.58268404006958
+  },
+  "MC02": {
+    "success": false,
+    "message": "Exit code 1: sibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for M05_Session1_57 in data/true_frame_labels\n\n",
+    "duration": 13.719795942306519
+  },
+  "MC03": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for F03_Session3_117 in data/true_frame_labels\n\n",
+    "duration": 13.68333888053894
+  },
+  "MC04": {
+    "success": false,
+    "message": "Exit code 1: ibly-undefined]\n           ^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/miniconda3/lib/python3.12/site-packages/torch/utils/data/_utils/fetch.py\", line 54, in fetch\n    data = [self.dataset[idx] for idx in possibly_batched_index]\n            ~~~~~~~~~~~~^^^^^\n  File \"/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/data/torgo_dataset.py\", line 775, in __getitem__\n    raise FileNotFoundError(\nFileNotFoundError: Missing frame-level hard labels for M02_Session2_142 in data/true_frame_labels\n\n",
+    "duration": 13.44343113899231
+  },
+  "_meta": {
+    "total_duration": 212.9793860912323,
+    "completed_at": "2026-03-27T15:32:08.616531"
+  }
+}
