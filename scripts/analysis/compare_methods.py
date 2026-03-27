@@ -113,6 +113,12 @@ Examples:
         help='Directory with frame-level hard labels (.npy) when --proxy-labels hard'
     )
     parser.add_argument(
+        '--true-label-dir',
+        type=str,
+        default=None,
+        help='Directory with independent true frame labels (.npy) when --proxy-labels none'
+    )
+    parser.add_argument(
         '--threshold',
         type=float,
         default=0.5,
@@ -232,9 +238,8 @@ def load_ground_truth_labels(
             # Assume all frames are speech (will be set when we know the length)
             labels_dict[file_id] = None  # Placeholder
         elif proxy_type == 'none':
-            # Expect true labels in manifest (rarely available)
-            # Look for label file or annotation
-            labels_dict[file_id] = None  # Not implemented
+            # No implicit fallback in strict mode.
+            labels_dict[file_id] = None
     
     return labels_dict
 
@@ -334,6 +339,7 @@ def evaluate_method(
     proxy_type: str,
     teacher_dir: Path,
     hard_label_dir: Optional[Path],
+    true_label_dir: Optional[Path],
     threshold: float = 0.5
 ) -> Dict[str, Any]:
     """
@@ -389,8 +395,15 @@ def evaluate_method(
             # All frames are speech
             labels = np.ones(len(probs), dtype=int)
         elif proxy_type == 'none':
-            # Would need true labels from manifest (not implemented)
-            labels = np.ones(len(probs), dtype=int)  # Fallback
+            if true_label_dir is None:
+                raise ValueError(
+                    "proxy-label mode 'none' requires --true-label-dir with frame-level labels"
+                )
+            true_labels = load_frame_probs(true_label_dir, file_id)
+            if true_labels is None:
+                missing_count += 1
+                continue
+            labels = (true_labels >= 0.5).astype(int)
         
         # Ensure same length
         min_len = min(len(probs), len(labels))
@@ -765,6 +778,15 @@ def main():
     # Load optional timing and size data
     timing_data = load_timing_data(args.timing_file)
     size_data = load_model_sizes(args.model_size_file)
+    true_label_dir = Path(args.true_label_dir) if args.true_label_dir else None
+
+    if args.proxy_labels == 'none':
+        if true_label_dir is None:
+            print("Error: --proxy-labels none requires --true-label-dir")
+            sys.exit(1)
+        if not true_label_dir.exists():
+            print(f"Error: true label directory not found: {true_label_dir}")
+            sys.exit(1)
     
     # Evaluate each method
     results = []
@@ -789,6 +811,7 @@ def main():
             args.proxy_labels,
             teacher_dir,
             hard_label_dir if args.proxy_labels == 'hard' else None,
+            true_label_dir if args.proxy_labels == 'none' else None,
             args.threshold
         )
         eval_time = time.time() - start_time

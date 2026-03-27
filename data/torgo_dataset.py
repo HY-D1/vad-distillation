@@ -3,8 +3,9 @@
 TORGO dataset class for VAD knowledge distillation.
 
 This module provides a PyTorch Dataset for loading TORGO dysarthric speech data
-with mel spectrograms, hard labels (from transcripts), and teacher probabilities
-(from a pre-trained teacher model).
+with mel spectrograms, frame-level hard labels, and teacher probabilities.
+When frame-level labels are unavailable, transcript-derived proxy labels can be
+enabled for smoke testing only.
 
 Enhanced with comprehensive caching support.
 """
@@ -111,12 +112,9 @@ def create_hard_labels_from_transcript(
     """
     Create frame-level hard labels from transcript text.
     
-    TODO: This is a simplified version that assumes the entire utterance is speech.
-    In reality, we need proper timestamp alignment from forced alignment or similar.
-    Future improvements:
-        - Use Montreal Forced Aligner (MFA) or similar for word-level timestamps
-        - Parse phoneme-level alignments if available
-        - Use silence detection heuristics
+    IMPORTANT:
+        This is a proxy-label generator intended for smoke testing only. It is
+        not a valid source of independent frame-level ground truth.
     
     Args:
         text: Transcript text (can be NaN/None)
@@ -323,6 +321,18 @@ class TORGODataset(Dataset):
             (self.cache_dir / 'mel').mkdir(parents=True, exist_ok=True)
             (self.cache_dir / 'mfcc').mkdir(parents=True, exist_ok=True)
             (self.cache_dir / 'raw').mkdir(parents=True, exist_ok=True)
+
+        if (not self.allow_proxy_hard_labels) and self.hard_labels_dir is None:
+            raise ValueError(
+                "Strict hard-label mode requires hard_labels_dir. "
+                "Set allow_proxy_hard_labels=true only for smoke testing."
+            )
+
+        if self.allow_proxy_hard_labels:
+            logger.warning(
+                "Proxy transcript labels are enabled. "
+                "Do not use this mode for final frame-level metrics."
+            )
 
         # Resolve hard label directory if provided and nested thresholds exist.
         if self.hard_labels_dir:

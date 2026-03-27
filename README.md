@@ -16,7 +16,7 @@ Develop a lightweight VAD (≤ 500 KB) that maintains competitive accuracy on at
 | Atypical Miss Rate | Lower than Silero baseline | **0.3741 vs 0.0005** (not met) |
 
 Latest verified artifacts (2026-03-27):
-- `outputs/evaluation/comparison_table.csv` (`--label-source hard`, threshold 0.5)
+- `outputs/evaluation/comparison_table.csv` (legacy proxy-label run; not final-metrics compliant)
 - `outputs/evaluation/benchmark_report.md`
 
 ## Quick Start
@@ -478,8 +478,13 @@ python scripts/analysis/compare_methods.py \
   --methods outputs/baselines/energy/,outputs/baselines/speechbrain/,outputs/pilot/ \
   --method-names "Energy,SpeechBrain,Our Model" \
   --output-dir analysis/comparison \
-  --proxy-labels teacher
+  --proxy-labels none \
+  --true-label-dir path/to/true_frame_labels
 ```
+
+Final-metrics policy:
+- `--proxy-labels teacher|hard|all_speech` are proxies and should not be used for final claims.
+- Use `--proxy-labels none --true-label-dir <independent_frame_labels_dir>`.
 
 **View comparison table:**
 

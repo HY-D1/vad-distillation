@@ -129,6 +129,84 @@ def load_fold_config(fold_path: str) -> Dict:
         return json.load(f)
 
 
+def hard_labels_are_teacher_derived(hard_labels_dir: Optional[Path]) -> Tuple[bool, str]:
+    """
+    Detect teacher-derived hard labels by path and metadata markers.
+    """
+    if hard_labels_dir is None:
+        return False, "hard label path not provided"
+
+    hard_labels_dir = hard_labels_dir.resolve()
+    hard_dir_lower = str(hard_labels_dir).lower()
+    if 'teacher_hard_labels' in hard_dir_lower:
+        return True, f"path suggests teacher-derived labels: {hard_labels_dir}"
+
+    meta_candidates = [
+        hard_labels_dir / 'meta.json',
+        hard_labels_dir.parent / 'meta_all_thresholds.json',
+    ]
+    for meta_path in meta_candidates:
+        if not meta_path.exists():
+            continue
+        try:
+            with open(meta_path, 'r') as f:
+                payload = json.load(f)
+        except Exception:
+            continue
+
+        if isinstance(payload, dict) and payload.get('teacher_probs_dir'):
+            return True, f"{meta_path} contains teacher_probs_dir"
+
+        summaries = payload.get('summaries')
+        if isinstance(summaries, list):
+            for summary in summaries:
+                if isinstance(summary, dict) and summary.get('teacher_probs_dir'):
+                    return True, f"{meta_path} summary contains teacher_probs_dir"
+
+    return False, "no teacher-derived metadata marker found"
+
+
+def validate_label_policy(config: Dict) -> None:
+    """
+    Enforce optional strict label-policy gate.
+
+    When require_true_frame_labels is enabled, training refuses transcript proxy
+    labels and teacher-derived hard labels.
+    """
+    require_true_frame_labels = bool(config.get('require_true_frame_labels', False))
+    if not require_true_frame_labels:
+        return
+
+    if 'data' in config:
+        data_config = config.get('data', {})
+        hard_labels_dir_raw = data_config.get('hard_labels_dir')
+        allow_proxy = bool(data_config.get('allow_proxy_hard_labels', True))
+    else:
+        hard_labels_dir_raw = config.get('hard_labels_dir')
+        allow_proxy = bool(config.get('allow_proxy_hard_labels', True))
+
+    if allow_proxy:
+        raise ValueError(
+            "require_true_frame_labels=true requires allow_proxy_hard_labels=false"
+        )
+
+    if not hard_labels_dir_raw:
+        raise ValueError(
+            "require_true_frame_labels=true requires hard_labels_dir"
+        )
+
+    hard_labels_dir = Path(hard_labels_dir_raw)
+    if not hard_labels_dir.exists():
+        raise FileNotFoundError(f"hard_labels_dir not found: {hard_labels_dir}")
+
+    teacher_derived, evidence = hard_labels_are_teacher_derived(hard_labels_dir)
+    if teacher_derived:
+        raise ValueError(
+            "require_true_frame_labels=true blocks teacher-derived hard labels "
+            f"({evidence})"
+        )
+
+
 def create_dataloaders(config: Dict, fold_config: Dict) -> Tuple[DataLoader, DataLoader, DataLoader]:
     """
     Create train/val/test dataloaders from fold configuration.
@@ -813,6 +891,13 @@ def main():
             config['training'] = {}
         config['training']['early_stopping_patience'] = args.patience
         print(f"Overriding early_stopping_patience to {args.patience}")
+
+    # Optional strict label-policy gate for final-metrics experiments.
+    try:
+        validate_label_policy(config)
+    except Exception as e:
+        print(f"ERROR: {e}")
+        sys.exit(1)
     
     # Set device
     if args.device:

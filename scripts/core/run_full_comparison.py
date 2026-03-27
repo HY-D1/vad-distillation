@@ -92,6 +92,97 @@ def check_baseline_exists(baseline_dir: Path, method: str) -> bool:
     return frame_probs_dir.exists() and meta_file.exists()
 
 
+def _resolve_meta_manifest_path(raw_manifest: str, meta_file: Path) -> Path:
+    """
+    Resolve a manifest path recorded in baseline metadata.
+
+    Baseline metadata historically stores relative manifest paths. Resolve against
+    PROJECT_ROOT first to match repository usage, then fallback to meta parent.
+    """
+    manifest_path = Path(raw_manifest)
+    if manifest_path.is_absolute():
+        return manifest_path.resolve()
+
+    repo_relative = (PROJECT_ROOT / manifest_path).resolve()
+    if repo_relative.exists():
+        return repo_relative
+
+    return (meta_file.parent / manifest_path).resolve()
+
+
+def validate_baseline_manifest_compatibility(
+    method_dir: Path,
+    expected_manifest_path: Path
+) -> Tuple[bool, str]:
+    """
+    Check whether an existing baseline output matches the target manifest.
+
+    Returns:
+        (is_compatible, reason)
+    """
+    meta_file = method_dir / 'meta.json'
+    if not meta_file.exists():
+        return False, f"missing metadata file: {meta_file}"
+
+    try:
+        with open(meta_file, 'r') as f:
+            meta = json.load(f)
+    except Exception as exc:
+        return False, f"failed to parse {meta_file}: {exc}"
+
+    raw_manifest = meta.get('config', {}).get('manifest')
+    if not raw_manifest:
+        return False, f"missing config.manifest in {meta_file}"
+
+    actual_manifest = _resolve_meta_manifest_path(raw_manifest, meta_file)
+    expected_manifest = expected_manifest_path.resolve()
+
+    if actual_manifest != expected_manifest:
+        return False, (
+            f"baseline manifest mismatch (expected {expected_manifest}, "
+            f"found {actual_manifest})"
+        )
+
+    return True, "manifest matches"
+
+
+def hard_labels_are_teacher_derived(hard_labels_dir: Path) -> Tuple[bool, str]:
+    """
+    Detect whether a hard-label directory is derived from teacher probabilities.
+
+    Returns:
+        (is_teacher_derived, evidence_message)
+    """
+    meta_candidates = [
+        hard_labels_dir / 'meta.json',
+        hard_labels_dir.parent / 'meta_all_thresholds.json',
+    ]
+
+    for meta_path in meta_candidates:
+        if not meta_path.exists():
+            continue
+        try:
+            with open(meta_path, 'r') as f:
+                payload = json.load(f)
+        except Exception:
+            continue
+
+        if isinstance(payload, dict) and payload.get('teacher_probs_dir'):
+            return True, f"{meta_path} contains teacher_probs_dir"
+
+        summaries = payload.get('summaries')
+        if isinstance(summaries, list):
+            for summary in summaries:
+                if isinstance(summary, dict) and summary.get('teacher_probs_dir'):
+                    return True, f"{meta_path} summary contains teacher_probs_dir"
+
+    hard_dir_lower = str(hard_labels_dir).lower()
+    if 'teacher_hard_labels' in hard_dir_lower:
+        return True, f"path suggests teacher-derived labels: {hard_labels_dir}"
+
+    return False, "no teacher-derived metadata marker found"
+
+
 def run_command(cmd: List[str], cwd: Optional[str] = None, 
                 description: str = "") -> Tuple[bool, str]:
     """Run a shell command and return success status and output."""
@@ -339,9 +430,25 @@ def run_all_baselines(
         
         # Check if already exists
         if skip_existing and check_baseline_exists(baselines_dir, method):
-            logger.info(f"\n{method}: Already exists, skipping (use --no-skip-existing to override)")
+            compatible, reason = validate_baseline_manifest_compatibility(
+                method_output_dir,
+                manifest_path
+            )
+            if not compatible:
+                logger.error(
+                    f"\n{method}: Existing baseline is stale/incompatible; refusing to reuse. "
+                    f"{reason}. Re-run with --no-skip-existing."
+                )
+                results[method] = False
+                continue
+
+            logger.info(f"\n{method}: Already exists and is compatible, skipping.")
             results[method] = True
             continue
+
+        # When regenerating, remove stale directory to avoid mixed artifacts.
+        if method_output_dir.exists() and not skip_existing:
+            shutil.rmtree(method_output_dir)
         
         # Run the baseline
         success = run_baseline(
@@ -368,6 +475,7 @@ def run_comparison(
     teacher_probs_dir: Path,
     hard_labels_dir: Path,
     label_source: str,
+    true_label_dir: Optional[Path],
     timing_file: Optional[Path],
     model_size_file: Optional[Path],
     threshold: float = 0.5
@@ -409,6 +517,8 @@ def run_comparison(
         '--hard-label-dir', str(hard_labels_dir),
         '--threshold', str(threshold)
     ]
+    if true_label_dir is not None:
+        cmd.extend(['--true-label-dir', str(true_label_dir)])
     if timing_file is not None and timing_file.exists():
         cmd.extend(['--timing-file', str(timing_file)])
     if model_size_file is not None and model_size_file.exists():
@@ -572,13 +682,21 @@ Examples:
         type=str,
         default='auto',
         choices=['auto', 'hard', 'teacher', 'all_speech', 'none'],
-        help='Label source for evaluation (default: auto -> hard if available, else teacher)'
+        help='Label source for evaluation. For final metrics, only "none" '
+             '(with --true-label-dir) is accepted.'
     )
     parser.add_argument(
         '--hard-label-dir',
         type=str,
         default=DEFAULT_CONFIG['hard_labels_dir'],
         help=f'Frame-level hard-label directory (default: {DEFAULT_CONFIG["hard_labels_dir"]})'
+    )
+    parser.add_argument(
+        '--true-label-dir',
+        type=str,
+        default=None,
+        help='Directory containing independent true frame labels (.npy). '
+             'Required when --label-source none.'
     )
     
     # Debug options
@@ -606,6 +724,7 @@ def main():
     model_size_file = Path(args.model_size_file).resolve() if args.model_size_file else None
     teacher_probs_dir = Path(DEFAULT_CONFIG['teacher_probs_dir']).resolve()
     hard_labels_dir = Path(args.hard_label_dir).resolve()
+    true_label_dir = Path(args.true_label_dir).resolve() if args.true_label_dir else None
     
     # Validate inputs
     if not manifest_path.exists():
@@ -635,12 +754,45 @@ def main():
     logger.info(f"Device: {device}")
 
     if args.label_source == 'auto':
-        label_source = 'hard' if hard_labels_dir.exists() else 'teacher'
+        label_source = 'none'
     else:
         label_source = args.label_source
     logger.info(f"Evaluation labels: {label_source}")
     if label_source == 'hard':
         logger.info(f"Hard labels dir: {hard_labels_dir}")
+    if true_label_dir is not None:
+        logger.info(f"True labels dir: {true_label_dir}")
+
+    # Final-metrics policy: prohibit proxy labels and require independent labels.
+    if label_source != 'none':
+        logger.error(
+            "Proxy-label evaluation is blocked for final metrics. "
+            "Use --label-source none --true-label-dir <dir>."
+        )
+        sys.exit(1)
+
+    if true_label_dir is None:
+        logger.error(
+            "Missing --true-label-dir. Final metrics require independent "
+            "frame-level labels."
+        )
+        sys.exit(1)
+    if not true_label_dir.exists():
+        logger.error(f"True label directory not found: {true_label_dir}")
+        sys.exit(1)
+
+    true_labels_teacher_derived, true_label_evidence = hard_labels_are_teacher_derived(true_label_dir)
+    if true_labels_teacher_derived:
+        logger.error(
+            "True-label directory appears teacher-derived and is blocked for final metrics: "
+            f"{true_label_evidence}"
+        )
+        sys.exit(1)
+
+    if hard_labels_dir.exists():
+        teacher_derived, evidence = hard_labels_are_teacher_derived(hard_labels_dir)
+        if teacher_derived:
+            logger.info(f"Detected teacher-derived hard labels ({evidence}); these are blocked.")
     
     if args.dry_run:
         logger.info("\n[DRY RUN MODE - No actual execution]")
@@ -693,11 +845,23 @@ def main():
         if not baseline_methods:
             logger.info("\nNo baselines to run (only comparing our_model)")
         step_results['baselines'] = {}
+
+    baseline_gate_failed = any(
+        not success for success in step_results.get('baselines', {}).values()
+    )
+    if baseline_gate_failed:
+        logger.error(
+            "Baseline integrity gate failed. Aborting before comparison to avoid "
+            "publishing invalid cross-method metrics."
+        )
+        step_results['comparison'] = False
     
     # ==========================================================================
     # Step 5: Run Comparison
     # ==========================================================================
-    if args.dry_run:
+    if baseline_gate_failed:
+        logger.info("\nSkipping comparison due to baseline gate failure.")
+    elif args.dry_run:
         logger.info(f"\n[DRY RUN] Would run comparison analysis")
         step_results['comparison'] = True
     else:
@@ -734,6 +898,7 @@ def main():
                 teacher_probs_dir=teacher_probs_dir,
                 hard_labels_dir=hard_labels_dir,
                 label_source=label_source,
+                true_label_dir=true_label_dir,
                 timing_file=timing_file,
                 model_size_file=model_size_file,
                 threshold=args.threshold
