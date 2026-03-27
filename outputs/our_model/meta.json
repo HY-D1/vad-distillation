@@ -1,0 +1,8 @@
+{
+  "source": "/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/outputs/production_cuda",
+  "num_folds": 15,
+  "extracted_count": 8217,
+  "skipped_count": 0,
+  "error_count": 0,
+  "manifest": "/Users/harrydai/Desktop/HD/CS 6140/project/group/vad-distillation/manifests/torgo_sentences.csv"
+}

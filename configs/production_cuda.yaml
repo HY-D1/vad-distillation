@@ -32,6 +32,9 @@ lr_scheduler:
 
 manifest: manifests/torgo_sentences.csv
 teacher_probs_dir: teacher_probs/
+hard_labels_dir: teacher_hard_labels/thresh_0.5/
+allow_proxy_hard_labels: false
+drop_missing_hard_labels: true
 output_dir: outputs/production_cuda/
 
 log_interval: 50

@@ -95,15 +95,22 @@ Examples:
     parser.add_argument(
         '--proxy-labels',
         type=str,
-        choices=['teacher', 'all_speech', 'none'],
+        choices=['teacher', 'hard', 'all_speech', 'none'],
         default='teacher',
-        help='Type of proxy labels: teacher (load teacher_probs), all_speech (all 1s), none (use manifest labels)'
+        help='Label source: teacher (thresholded teacher_probs), hard (frame-level hard labels), '
+             'all_speech (all 1s), none (use manifest labels when available)'
     )
     parser.add_argument(
         '--teacher-dir',
         type=str,
         default='teacher_probs',
         help='Directory with teacher probabilities (for teacher proxy)'
+    )
+    parser.add_argument(
+        '--hard-label-dir',
+        type=str,
+        default='teacher_hard_labels/thresh_0.5',
+        help='Directory with frame-level hard labels (.npy) when --proxy-labels hard'
     )
     parser.add_argument(
         '--threshold',
@@ -326,6 +333,7 @@ def evaluate_method(
     manifest_rows: List[Dict],
     proxy_type: str,
     teacher_dir: Path,
+    hard_label_dir: Optional[Path],
     threshold: float = 0.5
 ) -> Dict[str, Any]:
     """
@@ -336,6 +344,7 @@ def evaluate_method(
         manifest_rows: List of manifest rows
         proxy_type: Type of proxy labels
         teacher_dir: Directory with teacher probabilities
+        hard_label_dir: Directory with frame-level hard labels
         threshold: Classification threshold
     
     Returns:
@@ -367,6 +376,15 @@ def evaluate_method(
                 missing_count += 1
                 continue
             labels = (teacher_probs >= 0.5).astype(int)
+        elif proxy_type == 'hard':
+            if hard_label_dir is None:
+                missing_count += 1
+                continue
+            hard_labels = load_frame_probs(hard_label_dir, file_id)
+            if hard_labels is None:
+                missing_count += 1
+                continue
+            labels = (hard_labels >= 0.5).astype(int)
         elif proxy_type == 'all_speech':
             # All frames are speech
             labels = np.ones(len(probs), dtype=int)
@@ -751,6 +769,7 @@ def main():
     # Evaluate each method
     results = []
     teacher_dir = Path(args.teacher_dir)
+    hard_label_dir = Path(args.hard_label_dir)
     
     print(f"Evaluating {len(method_dirs)} methods:")
     print("-" * 60)
@@ -769,6 +788,7 @@ def main():
             manifest_rows,
             args.proxy_labels,
             teacher_dir,
+            hard_label_dir if args.proxy_labels == 'hard' else None,
             args.threshold
         )
         eval_time = time.time() - start_time

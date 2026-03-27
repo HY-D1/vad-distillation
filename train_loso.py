@@ -146,6 +146,9 @@ def create_dataloaders(config: Dict, fold_config: Dict) -> Tuple[DataLoader, Dat
         training_config = config.get('training', {})
         manifest = data_config.get('manifest', data_config.get('manifest_path', 'manifests/torgo_pilot.csv'))
         teacher_probs_dir = data_config.get('teacher_probs_dir', 'teacher_probs/')
+        hard_labels_dir = data_config.get('hard_labels_dir')
+        allow_proxy_hard_labels = data_config.get('allow_proxy_hard_labels', True)
+        drop_missing_hard_labels = data_config.get('drop_missing_hard_labels', True)
         n_mels = data_config.get('n_mels', 40)
         batch_size = training_config.get('batch_size', 16)
         num_workers = training_config.get('num_workers', 0)
@@ -153,6 +156,9 @@ def create_dataloaders(config: Dict, fold_config: Dict) -> Tuple[DataLoader, Dat
         # Flat config (e.g., pilot.yaml)
         manifest = config.get('manifest', 'manifests/torgo_pilot.csv')
         teacher_probs_dir = config.get('teacher_probs_dir', 'teacher_probs/')
+        hard_labels_dir = config.get('hard_labels_dir')
+        allow_proxy_hard_labels = config.get('allow_proxy_hard_labels', True)
+        drop_missing_hard_labels = config.get('drop_missing_hard_labels', True)
         n_mels = config.get('n_mels', 40)
         batch_size = config.get('batch_size', 8)
         num_workers = config.get('num_workers', 0)
@@ -161,6 +167,9 @@ def create_dataloaders(config: Dict, fold_config: Dict) -> Tuple[DataLoader, Dat
     dataset_kwargs = {
         'manifest_path': manifest,
         'teacher_probs_dir': teacher_probs_dir,
+        'hard_labels_dir': hard_labels_dir,
+        'allow_proxy_hard_labels': allow_proxy_hard_labels,
+        'drop_missing_hard_labels': drop_missing_hard_labels,
         'n_mels': n_mels,
     }
     
@@ -269,6 +278,69 @@ def create_model(config: Dict) -> nn.Module:
         model = create_student_model(model_params)
     
     return model
+
+
+def normalize_training_config(config: Dict) -> Dict:
+    """
+    Normalize legacy and current config schemas into one training config dict.
+
+    Supported sources:
+    - legacy flat keys: learning_rate, num_epochs, scheduler, checkpoint_interval
+    - nested keys: training.{...}
+    - current project keys: lr_scheduler, early_stopping, save_interval
+    """
+    base = dict(config.get('training', {})) if 'training' in config else {}
+
+    def get_val(key: str, default=None):
+        if key in base:
+            return base[key]
+        return config.get(key, default)
+
+    training_config = {
+        'learning_rate': get_val('learning_rate', 0.001),
+        'weight_decay': get_val('weight_decay', 0.0),
+        'num_epochs': get_val('num_epochs', 20),
+        'batch_size': get_val('batch_size', 8),
+        'num_workers': get_val('num_workers', 0),
+        'scheduler': get_val('scheduler'),
+        'early_stopping_patience': get_val('early_stopping_patience'),
+        'checkpoint_interval': get_val('checkpoint_interval'),
+    }
+
+    # Map current schema lr_scheduler -> scheduler
+    lr_scheduler_cfg = config.get('lr_scheduler', {})
+    if training_config['scheduler'] is None and isinstance(lr_scheduler_cfg, dict):
+        scheduler_type = str(lr_scheduler_cfg.get('type', 'ReduceLROnPlateau')).lower()
+        if scheduler_type in ('reducelronplateau', 'plateau', 'reduceonplateau'):
+            training_config['scheduler'] = 'plateau'
+        elif scheduler_type in ('cosineannealinglr', 'cosine'):
+            training_config['scheduler'] = 'cosine'
+        elif scheduler_type in ('steplr', 'step'):
+            training_config['scheduler'] = 'step'
+        else:
+            training_config['scheduler'] = 'none'
+
+    if training_config['scheduler'] is None:
+        training_config['scheduler'] = 'plateau'
+
+    # Map current schema early_stopping -> early_stopping_patience
+    early_stopping_cfg = config.get('early_stopping', {})
+    if training_config['early_stopping_patience'] is None:
+        if isinstance(early_stopping_cfg, dict):
+            enabled = early_stopping_cfg.get('enabled', True)
+            if enabled:
+                training_config['early_stopping_patience'] = early_stopping_cfg.get('patience', 10)
+            else:
+                # Effectively disable early stopping while keeping loop logic simple.
+                training_config['early_stopping_patience'] = int(training_config['num_epochs']) + 1
+        else:
+            training_config['early_stopping_patience'] = 10
+
+    # Map current schema save_interval -> checkpoint_interval
+    if training_config['checkpoint_interval'] is None:
+        training_config['checkpoint_interval'] = get_val('save_interval', 10)
+
+    return training_config
 
 
 # =============================================================================
@@ -413,11 +485,12 @@ def validate(model: nn.Module,
             
             labels = (labels_pooled > 0.5).long()  # Convert back to binary
         
-        # Determine output type: TinyVAD outputs single probabilities (sigmoid)
-        # while 2-class models output logits for 2 classes (softmax)
+        # Determine output type:
+        # - TinyVAD single-output returns logits (batch, time)
+        # - 2-class models output class logits (batch, time, 2)
         if output.dim() == 2:
-            # TinyVAD: output is (batch, time) single probabilities from sigmoid
-            probs = output
+            # TinyVAD: convert logits to probabilities
+            probs = torch.sigmoid(output)
             predictions = (probs > threshold).long()
         else:
             # 2-class model: output is (batch, time, 2) logits
@@ -498,7 +571,11 @@ def load_checkpoint(path: str,
                     model: nn.Module, 
                     optimizer: Optional[optim.Optimizer] = None) -> Tuple[int, Dict[str, float]]:
     """Load training checkpoint."""
-    checkpoint = torch.load(path, map_location='cpu')
+    try:
+        checkpoint = torch.load(path, map_location='cpu', weights_only=False)
+    except TypeError:
+        # Backward compatibility with older torch versions.
+        checkpoint = torch.load(path, map_location='cpu')
     
     model.load_state_dict(checkpoint['model_state_dict'])
     
@@ -795,20 +872,22 @@ def main():
     print(f"Model parameters: {num_params:,}")
     print(f"Model size: {model_size_mb:.2f} MB")
     
-    # Create optimizer - handle both flat and nested configs
-    if 'training' in config:
-        training_config = config['training']
-    else:
-        training_config = config  # Flat config
+    # Create optimizer - handle both legacy and current config schemas
+    training_config = normalize_training_config(config)
     learning_rate = training_config.get('learning_rate', 0.001)
     weight_decay = training_config.get('weight_decay', 0.0)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
     
     # Create scheduler
     scheduler_type = training_config.get('scheduler', 'plateau')
+    lr_scheduler_cfg = config.get('lr_scheduler', {}) if isinstance(config.get('lr_scheduler', {}), dict) else {}
     if scheduler_type == 'plateau':
         scheduler = ReduceLROnPlateau(
-            optimizer, mode='max', factor=0.5, patience=5
+            optimizer,
+            mode='max',
+            factor=lr_scheduler_cfg.get('factor', 0.5),
+            patience=lr_scheduler_cfg.get('patience', 5),
+            min_lr=lr_scheduler_cfg.get('min_lr', 0.0),
         )
     elif scheduler_type == 'cosine':
         scheduler = CosineAnnealingLR(
@@ -973,7 +1052,8 @@ def main():
         lengths = batch['lengths']  # Actual lengths before padding
         
         with torch.no_grad():
-            probs = model(mels)  # TinyVAD outputs probabilities directly
+            logits = model(mels)
+            probs = torch.sigmoid(logits)
             predictions = (probs > 0.5).long()
         
         # Handle sequence dimension - process per utterance to handle variable lengths

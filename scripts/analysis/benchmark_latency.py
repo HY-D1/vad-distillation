@@ -71,6 +71,7 @@ from models.tinyvad_student import TinyVAD, create_student_model
 
 DEFAULT_CHECKPOINT_DIR = PROJECT_ROOT / "outputs" / "production_cuda" / "checkpoints"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "analysis"
+DEFAULT_EVALUATION_DIR = PROJECT_ROOT / "outputs" / "evaluation"
 DEFAULT_DURATIONS = [1, 5, 10, 30]  # seconds
 DEFAULT_ITERATIONS = 10
 WARMUP_ITERATIONS = 3
@@ -204,6 +205,12 @@ Examples:
         type=str,
         default=str(DEFAULT_OUTPUT_DIR),
         help=f"Output directory for results (default: {DEFAULT_OUTPUT_DIR})"
+    )
+    parser.add_argument(
+        "--evaluation-dir",
+        type=str,
+        default=str(DEFAULT_EVALUATION_DIR),
+        help=f"Directory to copy final evaluation artifacts (default: {DEFAULT_EVALUATION_DIR})"
     )
     parser.add_argument(
         "--compare-baselines",
@@ -843,6 +850,43 @@ def generate_markdown_report(benchmarks: List[ModelBenchmark], output_path: Path
     print(f"📝 Markdown report saved: {output_path}")
 
 
+def save_summary_metadata(benchmarks: List[ModelBenchmark], output_dir: Path):
+    """
+    Save lightweight timing/model-size metadata used by comparison scripts.
+    """
+    name_map = {
+        "TinyVAD Student": "Our Model",
+        "Energy VAD (Baseline)": "Energy",
+    }
+
+    timing = {}
+    model_sizes = {}
+
+    for bench in benchmarks:
+        if not bench.results:
+            continue
+        method_name = name_map.get(bench.model_name, bench.model_name)
+        avg_latency = float(np.mean([r.ms_per_frame for r in bench.results]))
+        timing[method_name] = {
+            "latency_ms": avg_latency,
+            "source": "benchmark_latency.py",
+        }
+        model_sizes[method_name] = {
+            "size_kb": float(bench.model_size_kb),
+            "source": "benchmark_latency.py",
+        }
+
+    timing_path = output_dir / "timing.json"
+    size_path = output_dir / "model_sizes.json"
+    with open(timing_path, 'w') as f:
+        json.dump(timing, f, indent=2)
+    with open(size_path, 'w') as f:
+        json.dump(model_sizes, f, indent=2)
+
+    print(f"📄 Timing metadata saved: {timing_path}")
+    print(f"📄 Model-size metadata saved: {size_path}")
+
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -880,7 +924,9 @@ def main():
     
     # Save outputs
     output_dir = Path(args.output_dir)
+    evaluation_dir = Path(args.evaluation_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    evaluation_dir.mkdir(parents=True, exist_ok=True)
     
     # JSON report
     json_path = output_dir / "benchmark_results.json"
@@ -889,11 +935,19 @@ def main():
     # Markdown report
     md_path = output_dir / "benchmark_report.md"
     generate_markdown_report(benchmarks, md_path)
+    save_summary_metadata(benchmarks, output_dir)
     
     # Plot (if not disabled)
     if not args.json_only and MATPLOTLIB_AVAILABLE:
         plot_path = output_dir / "latency_comparison.png"
         plot_latency_comparison(benchmarks, plot_path)
+
+    # Copy final benchmark artifacts for report packaging.
+    for src in [json_path, md_path, output_dir / "latency_comparison.png"]:
+        if src.exists():
+            dst = evaluation_dir / src.name
+            dst.write_bytes(src.read_bytes())
+            print(f"📦 Copied to evaluation artifacts: {dst}")
     
     # Final summary
     print("\n" + "=" * 70)

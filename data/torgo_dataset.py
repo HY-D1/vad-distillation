@@ -249,6 +249,9 @@ class TORGODataset(Dataset):
         self,
         manifest_path: Union[str, Path],
         teacher_probs_dir: Union[str, Path],
+        hard_labels_dir: Optional[Union[str, Path]] = None,
+        allow_proxy_hard_labels: bool = True,
+        drop_missing_hard_labels: bool = True,
         fold_config: Optional[Union[str, Path, Dict]] = None,
         mode: str = 'train',
         feature_type: str = 'mel',
@@ -271,6 +274,12 @@ class TORGODataset(Dataset):
                 - duration: Duration in seconds (optional)
                 - text: Transcript text
             teacher_probs_dir: Directory containing teacher probability .npy files
+            hard_labels_dir: Optional directory containing frame-level hard labels (.npy).
+                If provided, labels are loaded from files instead of transcript proxy labels.
+            allow_proxy_hard_labels: If True, fall back to transcript proxy labels when frame-level
+                labels are missing. If False, missing frame-level labels raise FileNotFoundError.
+            drop_missing_hard_labels: If True and allow_proxy_hard_labels=False, drop utterances
+                that do not have frame-level hard-label files.
             fold_config: Optional fold configuration for LOSO splits. Can be:
                 - Path to JSON file (e.g., 'splits/fold_F01.json')
                 - Dict with 'train_utterances', 'val_utterances', 'test_utterances'
@@ -297,6 +306,9 @@ class TORGODataset(Dataset):
         
         self.manifest_path = Path(manifest_path)
         self.teacher_probs_dir = Path(teacher_probs_dir)
+        self.hard_labels_dir = Path(hard_labels_dir) if hard_labels_dir else None
+        self.allow_proxy_hard_labels = allow_proxy_hard_labels
+        self.drop_missing_hard_labels = drop_missing_hard_labels
         self.mode = mode
         self.feature_type = feature_type
         self.n_mels = n_mels
@@ -311,6 +323,11 @@ class TORGODataset(Dataset):
             (self.cache_dir / 'mel').mkdir(parents=True, exist_ok=True)
             (self.cache_dir / 'mfcc').mkdir(parents=True, exist_ok=True)
             (self.cache_dir / 'raw').mkdir(parents=True, exist_ok=True)
+
+        # Resolve hard label directory if provided and nested thresholds exist.
+        if self.hard_labels_dir:
+            self.hard_labels_dir = self._resolve_hard_labels_dir(self.hard_labels_dir)
+            logger.info(f"Using frame-level hard labels from: {self.hard_labels_dir}")
         
         # Load manifest
         if not self.manifest_path.exists():
@@ -334,12 +351,41 @@ class TORGODataset(Dataset):
                 lambda row: f"{row['speaker_id']}_{row.get('session', 'unknown')}_{int(row['utt_id']):04d}",
                 axis=1
             )
+
+        # In strict hard-label mode, drop rows without frame-level label files.
+        if self.hard_labels_dir and (not self.allow_proxy_hard_labels) and self.drop_missing_hard_labels:
+            self.manifest = self._filter_manifest_for_hard_labels(self.manifest)
         
         # Statistics
         logger.info(f"TORGO {mode} dataset: {len(self.manifest)} utterances")
         if len(self.manifest) > 0:
             speaker_counts = self.manifest['speaker_id'].value_counts()
             logger.info(f"  Speakers: {len(speaker_counts)} ({list(speaker_counts.index)})")
+
+    def _resolve_hard_labels_dir(self, hard_labels_dir: Path) -> Path:
+        """
+        Resolve a usable hard-label directory.
+
+        If the provided directory does not contain .npy labels directly but has thresholded
+        subdirectories (e.g., thresh_0.5), prefer thresh_0.5, else use the first threshold dir.
+        """
+        if not hard_labels_dir.exists():
+            raise FileNotFoundError(f"Hard labels directory not found: {hard_labels_dir}")
+
+        if any(hard_labels_dir.glob('*.npy')):
+            return hard_labels_dir
+
+        preferred = hard_labels_dir / 'thresh_0.5'
+        if preferred.exists() and any(preferred.glob('*.npy')):
+            return preferred
+
+        threshold_dirs = sorted(
+            d for d in hard_labels_dir.glob('thresh_*') if d.is_dir() and any(d.glob('*.npy'))
+        )
+        if threshold_dirs:
+            return threshold_dirs[0]
+
+        return hard_labels_dir
     
     def _apply_fold_split(
         self,
@@ -422,6 +468,58 @@ class TORGODataset(Dataset):
         
         # Return first pattern (will fail later with warning)
         return self.teacher_probs_dir / patterns[0]
+
+    def _filter_manifest_for_hard_labels(self, manifest: pd.DataFrame) -> pd.DataFrame:
+        """
+        Keep only rows that have corresponding frame-level hard labels.
+        """
+        keep_mask = []
+        missing = 0
+        for _, row in manifest.iterrows():
+            speaker_id = str(row['speaker_id'])
+            utt_id = str(int(row['utt_id']))
+            session = row.get('session', None)
+            label_path = self._get_hard_label_path(speaker_id, utt_id, session)
+            has_label = label_path.exists()
+            keep_mask.append(has_label)
+            if not has_label:
+                missing += 1
+
+        if missing > 0:
+            logger.warning(
+                f"Dropping {missing} utterances without frame-level hard labels "
+                f"(strict mode, source={self.hard_labels_dir})"
+            )
+        filtered = manifest[np.array(keep_mask, dtype=bool)].copy()
+        return filtered
+
+    def _get_hard_label_path(self, speaker_id: str, utt_id: str, session: str = None) -> Path:
+        """
+        Get path to frame-level hard-label file.
+
+        Tries the same naming conventions as teacher probabilities.
+        """
+        if self.hard_labels_dir is None:
+            return Path("")
+
+        utt_id_str = str(int(utt_id)).zfill(4)
+        patterns = []
+        if session:
+            patterns.extend([
+                f"{speaker_id}_{session}_{utt_id_str}.npy",
+                f"{speaker_id}_{session}_{utt_id}.npy",
+            ])
+        patterns.extend([
+            f"{speaker_id}_{utt_id_str}.npy",
+            f"{speaker_id}_{utt_id}.npy",
+        ])
+
+        for pattern in patterns:
+            path = self.hard_labels_dir / pattern
+            if path.exists():
+                return path
+
+        return self.hard_labels_dir / patterns[0]
     
     def _load_teacher_probs(self, prob_path: Path, expected_frames: int) -> np.ndarray:
         """
@@ -471,6 +569,37 @@ class TORGODataset(Dataset):
         except Exception as e:
             logger.warning(f"Failed to load teacher probs {prob_path}: {e}. Using zeros.")
             return np.zeros(expected_frames, dtype=np.float32)
+
+    def _load_hard_labels(self, label_path: Path, expected_frames: int) -> Optional[np.ndarray]:
+        """
+        Load frame-level hard labels from .npy file.
+
+        Returns None if file is missing/corrupt so caller can decide whether to fallback or fail.
+        """
+        if not label_path.exists():
+            return None
+
+        try:
+            labels = np.load(label_path)
+            labels = labels.astype(np.float32)
+            labels = (labels >= 0.5).astype(np.float32)
+
+            if len(labels) != expected_frames:
+                if len(labels) == 0:
+                    return np.zeros(expected_frames, dtype=np.float32)
+                if len(labels) < expected_frames:
+                    labels = np.interp(
+                        np.linspace(0, len(labels) - 1, expected_frames),
+                        np.arange(len(labels)),
+                        labels
+                    ).astype(np.float32)
+                    labels = (labels >= 0.5).astype(np.float32)
+                else:
+                    labels = labels[:expected_frames]
+            return labels
+        except Exception as e:
+            logger.warning(f"Failed to load hard labels {label_path}: {e}")
+            return None
     
     def _get_cached_feature_path(self, row: pd.Series, feature_type: str = 'mel') -> Optional[Path]:
         """
@@ -625,9 +754,20 @@ class TORGODataset(Dataset):
         
         num_frames = mel_spec.shape[0]
         
-        # Create hard labels from transcript (handle NaN text values)
-        text_value = row.get('text', '')
-        hard_labels = create_hard_labels_from_transcript(text_value, num_frames)
+        # Load frame-level hard labels when available; otherwise fallback to transcript proxy.
+        hard_labels = None
+        if self.hard_labels_dir is not None:
+            hard_label_path = self._get_hard_label_path(speaker_id, utt_id, session)
+            hard_labels = self._load_hard_labels(hard_label_path, num_frames)
+
+        if hard_labels is None:
+            if not self.allow_proxy_hard_labels:
+                raise FileNotFoundError(
+                    f"Missing frame-level hard labels for {speaker_id}_{session}_{utt_id} in "
+                    f"{self.hard_labels_dir}"
+                )
+            text_value = row.get('text', '')
+            hard_labels = create_hard_labels_from_transcript(text_value, num_frames)
         
         # Load teacher probabilities
         prob_path = self._get_teacher_prob_path(speaker_id, utt_id, session)
@@ -719,7 +859,16 @@ class TORGODataset(Dataset):
                 else:
                     est_frames = 100  # Default estimate
                 
-                labels = create_hard_labels_from_transcript(text, est_frames)
+                labels = None
+                if self.hard_labels_dir is not None:
+                    hard_label_path = self._get_hard_label_path(
+                        row['speaker_id'],
+                        str(int(row['utt_id'])),
+                        row.get('session', None)
+                    )
+                    labels = self._load_hard_labels(hard_label_path, est_frames)
+                if labels is None:
+                    labels = create_hard_labels_from_transcript(text, est_frames)
                 total_speech += labels.sum()
                 total_frames += len(labels)
             

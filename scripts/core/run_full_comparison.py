@@ -39,6 +39,11 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import yaml
 
+# Add project root to path for direct script execution.
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from utils.common import get_device
 
 # Setup logging
@@ -58,8 +63,12 @@ DEFAULT_CONFIG = {
     'student_output_dir': 'outputs/our_model',
     'baselines_dir': 'outputs/baselines',
     'analysis_dir': 'analysis/comparison',
+    'evaluation_csv': 'outputs/evaluation/comparison_table.csv',
+    'timing_file': 'analysis/timing.json',
+    'model_size_file': 'analysis/model_sizes.json',
     'manifest': 'manifests/torgo_sentences.csv',
     'teacher_probs_dir': 'teacher_probs',
+    'hard_labels_dir': 'teacher_hard_labels/thresh_0.5',
     'device': None,  # Auto-detect
 }
 
@@ -183,23 +192,27 @@ def extract_student_predictions(
             
             if 'probs' in data:
                 probs = data['probs']
-                
-                # Load the corresponding summary to get metadata
-                summary_file = pred_file.parent / f"{fold_name}_summary.json"
-                if summary_file.exists():
-                    with open(summary_file, 'r') as f:
-                        summary = json.load(f)
+                utt_ids = data['utt_ids'] if 'utt_ids' in data else None
+
+                if utt_ids is not None and len(utt_ids) == len(probs):
+                    # Reconstruct per-utterance frame probability files expected by compare_methods.py.
+                    by_utt = {}
+                    for utt_id, prob in zip(utt_ids, probs):
+                        utt_key = utt_id.decode('utf-8') if isinstance(utt_id, bytes) else str(utt_id)
+                        by_utt.setdefault(utt_key, []).append(float(prob))
+
+                    for utt_key, utt_probs in by_utt.items():
+                        output_file = frame_probs_dir / f"{utt_key}.npy"
+                        np.save(output_file, np.asarray(utt_probs, dtype=np.float32))
+                        extracted_count += 1
+
+                    logger.info(f"  Saved {len(by_utt)} utterance files for {fold_name}")
                 else:
-                    summary = {}
-                
-                # For now, save the entire fold's predictions as a single file
-                # The comparison script can load and process these
-                output_file = frame_probs_dir / f"{fold_name}.npz"
-                # Don't duplicate 'probs' key - it might already be in data
-                np.savez(output_file, **{k: data[k] for k in data.keys()})
-                extracted_count += 1
-                
-                logger.info(f"  Saved predictions to {output_file}")
+                    # Fallback for legacy prediction format.
+                    output_file = frame_probs_dir / f"{fold_name}.npz"
+                    np.savez(output_file, **{k: data[k] for k in data.keys()})
+                    extracted_count += 1
+                    logger.info(f"  Saved fallback predictions to {output_file}")
             else:
                 logger.warning(f"  No 'probs' key in {pred_file}")
                 skipped_count += 1
@@ -353,6 +366,10 @@ def run_comparison(
     method_names: List[str],
     output_dir: Path,
     teacher_probs_dir: Path,
+    hard_labels_dir: Path,
+    label_source: str,
+    timing_file: Optional[Path],
+    model_size_file: Optional[Path],
     threshold: float = 0.5
 ) -> bool:
     """
@@ -387,10 +404,15 @@ def run_comparison(
         '--methods', methods_str,
         '--method-names', method_names_str,
         '--output-dir', str(output_dir),
-        '--proxy-labels', 'teacher',
+        '--proxy-labels', label_source,
         '--teacher-dir', str(teacher_probs_dir),
+        '--hard-label-dir', str(hard_labels_dir),
         '--threshold', str(threshold)
     ]
+    if timing_file is not None and timing_file.exists():
+        cmd.extend(['--timing-file', str(timing_file)])
+    if model_size_file is not None and model_size_file.exists():
+        cmd.extend(['--model-size-file', str(model_size_file)])
     
     success, output = run_command(cmd, description="Run comparison analysis")
     
@@ -488,6 +510,24 @@ Examples:
         default=DEFAULT_CONFIG['analysis_dir'],
         help=f'Where to save comparison results (default: {DEFAULT_CONFIG["analysis_dir"]})'
     )
+    parser.add_argument(
+        '--evaluation-csv',
+        type=str,
+        default=DEFAULT_CONFIG['evaluation_csv'],
+        help=f'Where to write final comparison CSV copy (default: {DEFAULT_CONFIG["evaluation_csv"]})'
+    )
+    parser.add_argument(
+        '--timing-file',
+        type=str,
+        default=DEFAULT_CONFIG['timing_file'],
+        help=f'Optional timing metadata JSON (default: {DEFAULT_CONFIG["timing_file"]})'
+    )
+    parser.add_argument(
+        '--model-size-file',
+        type=str,
+        default=DEFAULT_CONFIG['model_size_file'],
+        help=f'Optional model-size metadata JSON (default: {DEFAULT_CONFIG["model_size_file"]})'
+    )
     
     # Method selection
     parser.add_argument(
@@ -527,6 +567,19 @@ Examples:
         default=0.5,
         help='Classification threshold (default: 0.5)'
     )
+    parser.add_argument(
+        '--label-source',
+        type=str,
+        default='auto',
+        choices=['auto', 'hard', 'teacher', 'all_speech', 'none'],
+        help='Label source for evaluation (default: auto -> hard if available, else teacher)'
+    )
+    parser.add_argument(
+        '--hard-label-dir',
+        type=str,
+        default=DEFAULT_CONFIG['hard_labels_dir'],
+        help=f'Frame-level hard-label directory (default: {DEFAULT_CONFIG["hard_labels_dir"]})'
+    )
     
     # Debug options
     parser.add_argument(
@@ -548,7 +601,11 @@ def main():
     student_output_dir = Path(args.student_output_dir).resolve()
     baselines_dir = Path(args.baselines_dir).resolve()
     analysis_dir = Path(args.analysis_dir).resolve()
+    evaluation_csv = Path(args.evaluation_csv).resolve()
+    timing_file = Path(args.timing_file).resolve() if args.timing_file else None
+    model_size_file = Path(args.model_size_file).resolve() if args.model_size_file else None
     teacher_probs_dir = Path(DEFAULT_CONFIG['teacher_probs_dir']).resolve()
+    hard_labels_dir = Path(args.hard_label_dir).resolve()
     
     # Validate inputs
     if not manifest_path.exists():
@@ -576,6 +633,14 @@ def main():
     logger.info(f"Methods to compare: {', '.join(methods)}")
     logger.info(f"Manifest: {manifest_path}")
     logger.info(f"Device: {device}")
+
+    if args.label_source == 'auto':
+        label_source = 'hard' if hard_labels_dir.exists() else 'teacher'
+    else:
+        label_source = args.label_source
+    logger.info(f"Evaluation labels: {label_source}")
+    if label_source == 'hard':
+        logger.info(f"Hard labels dir: {hard_labels_dir}")
     
     if args.dry_run:
         logger.info("\n[DRY RUN MODE - No actual execution]")
@@ -667,9 +732,24 @@ def main():
                 method_names=method_names,
                 output_dir=analysis_dir,
                 teacher_probs_dir=teacher_probs_dir,
+                hard_labels_dir=hard_labels_dir,
+                label_source=label_source,
+                timing_file=timing_file,
+                model_size_file=model_size_file,
                 threshold=args.threshold
             )
             step_results['comparison'] = success
+            if success:
+                generated_csv = analysis_dir / 'comparison_table.csv'
+                generated_md = analysis_dir / 'comparison_table.md'
+                if generated_csv.exists():
+                    evaluation_csv.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(generated_csv, evaluation_csv)
+                    logger.info(f"Copied final CSV to: {evaluation_csv}")
+                if generated_md.exists():
+                    eval_md = evaluation_csv.parent / 'comparison_table.md'
+                    shutil.copy2(generated_md, eval_md)
+                    logger.info(f"Copied final Markdown to: {eval_md}")
     
     # ==========================================================================
     # Summary

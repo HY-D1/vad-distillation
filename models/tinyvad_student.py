@@ -123,7 +123,7 @@ class TinyVAD(nn.Module):
             x: Input mel spectrogram (batch, time, n_mels)
         
         Returns:
-            probs: Speech probabilities (batch, time_frames)
+            logits: Raw speech logits (batch, time_frames)
         """
         batch_size, time_steps, n_mels = x.shape
         
@@ -144,10 +144,7 @@ class TinyVAD(nn.Module):
         # Output: (batch, time', 1)
         logits = self.fc(x).squeeze(-1)  # (batch, time')
         
-        # Sigmoid for probability
-        probs = torch.sigmoid(logits)
-        
-        return probs
+        return logits
     
     def predict(
         self,
@@ -203,7 +200,8 @@ class TinyVAD(nn.Module):
         mels_tensor = torch.from_numpy(mels).float().to(device)
         
         with torch.no_grad():
-            probs = self.forward(mels_tensor)
+            logits = self.forward(mels_tensor)
+            probs = torch.sigmoid(logits)
         
         # Convert to numpy if requested
         if return_numpy:
@@ -384,10 +382,10 @@ class TinyVAD(nn.Module):
                     opset_version=opset_version,
                     do_constant_folding=True,
                     input_names=['mel_spectrogram'],
-                    output_names=['speech_probability'],
+                    output_names=['speech_logits'],
                     dynamic_axes={
                         'mel_spectrogram': {0: 'batch_size', 1: 'time'},
-                        'speech_probability': {0: 'batch_size', 1: 'time'}
+                        'speech_logits': {0: 'batch_size', 1: 'time'}
                     }
                 )
             except Exception as e:
@@ -402,7 +400,7 @@ class TinyVAD(nn.Module):
                         opset_version=opset_version,
                         do_constant_folding=False,
                         input_names=['mel_spectrogram'],
-                        output_names=['speech_probability'],
+                        output_names=['speech_logits'],
                     )
                 else:
                     raise
@@ -544,12 +542,11 @@ def test_forward_pass(model: TinyVAD, batch_size: int = 2, time_steps: int = 100
     """Test that forward pass works correctly."""
     try:
         x = torch.randn(batch_size, time_steps, model.n_mels)
-        probs = model(x)
+        logits = model(x)
         
         expected_time = time_steps // model.cnn_time_stride
-        assert probs.shape == (batch_size, expected_time), \
-            f"Expected shape {(batch_size, expected_time)}, got {probs.shape}"
-        assert torch.all((probs >= 0) & (probs <= 1)), "Probabilities not in [0, 1]"
+        assert logits.shape == (batch_size, expected_time), \
+            f"Expected shape {(batch_size, expected_time)}, got {logits.shape}"
         return True
     except Exception as e:
         print(f"  ✗ Forward pass failed: {e}")
