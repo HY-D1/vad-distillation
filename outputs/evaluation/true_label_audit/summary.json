@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-03-27T12:50:58",
+  "manifest": "manifests/torgo_sentences.csv",
+  "labels_dir": "data/true_frame_labels",
+  "labels_dir_exists": false,
+  "strict": true,
+  "teacher_derived_detected": false,
+  "teacher_derived_evidence": "labels directory missing",
+  "totals": {
+    "rows": 8218,
+    "covered_rows": 0,
+    "missing_rows": 8218,
+    "invalid_rows": 0,
+    "binary_rows": 0,
+    "thresholdable_rows": 0,
+    "coverage_pct": 0.0
+  },
+  "output_files": {
+    "coverage_by_speaker_csv": "outputs/evaluation/true_label_audit/coverage_by_speaker.csv",
+    "missing_labels_csv": "outputs/evaluation/true_label_audit/missing_labels.csv",
+    "invalid_labels_csv": "outputs/evaluation/true_label_audit/invalid_labels.csv",
+    "summary_json": "outputs/evaluation/true_label_audit/summary.json"
+  }
+}
