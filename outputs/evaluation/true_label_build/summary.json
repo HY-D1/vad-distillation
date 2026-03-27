@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-27T15:28:19",
+  "timestamp": "2026-03-27T15:42:08",
   "manifest": "manifests/torgo_sentences.csv",
   "alignments_root": "data/forced_alignments",
   "alignments_root_exists": false,
